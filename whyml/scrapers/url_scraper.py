@@ -133,9 +133,27 @@ class URLScraper:
     
     def _extract_metadata(self, soup: BeautifulSoup, url: str) -> Dict[str, Any]:
         """Extract metadata from HTML head."""
+        title = self._get_title(soup)
+        description = self._get_meta_content(soup, 'description')
+        
+        # Ensure description is always present - generate one if missing
+        if not description:
+            # Try to extract from Open Graph first
+            og_data = self._extract_open_graph(soup)
+            description = og_data.get('description') if og_data else None
+            
+            # If still no description, generate a default one
+            if not description:
+                from urllib.parse import urlparse
+                domain = urlparse(url).netloc
+                if title:
+                    description = f"Content from {title} - scraped from {domain}"
+                else:
+                    description = f"Web content scraped from {domain}"
+        
         metadata = {
-            'title': self._get_title(soup),
-            'description': self._get_meta_content(soup, 'description'),
+            'title': title or f"Content from {urlparse(url).netloc}",
+            'description': description,
             'keywords': self._get_meta_content(soup, 'keywords'),
             'author': self._get_meta_content(soup, 'author'),
             'source_url': url,

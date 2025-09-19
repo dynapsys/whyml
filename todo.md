@@ -64,7 +64,12 @@ Deploy production: Use Caddy integration for HTTPS deployment
 
 
 
-
+Fix PWA generators to only cache existing assets and provide default icons
+Add RSS feed functionality for --watch changes
+Implement template variable substitution ({{VAR}} and )
+Update HTML converter to support external_content, variables, config, dependencies
+Add support for loading multiple manifests with dependencies
+Add sitemap.xml generation capability
 
 
 

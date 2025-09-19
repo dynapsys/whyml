@@ -1,0 +1,193 @@
+metadata:
+  title: "WhyML Dynamic Template Demo"
+  description: "Advanced WhyML application demonstrating external HTML loading with template variable substitution"
+  version: "2.0.0"
+  author: "WhyML Development Team"
+  keywords: ["whyml", "template", "dynamic", "external", "variables"]
+  
+# Template variables for substitution
+variables:
+  APP_TITLE: "WhyML Dynamic Template Demo"
+  APP_DESCRIPTION: "Advanced WhyML application demonstrating external HTML loading with template variable substitution"
+  APP_VERSION: "2.0.0" 
+  APP_AUTHOR: "WhyML Development Team"
+  CLI_COMMANDS: "12"
+  API_ENDPOINTS: "8"
+  FORMATS_SUPPORTED: "6"
+  FEATURES_COUNT: "15"
+  ENVIRONMENT: "development"
+  BUILD_TIME: "auto"
+
+# External HTML content with template variable support
+external_content:
+  - source: "test-external-content.html"
+    type: "html"
+    variables: true  # Enable template variable substitution
+    cache: true     # Cache processed content
+    watch: true     # Watch for file changes
+
+# Structure using external content and local elements
+structure:
+  html:
+    lang: "en"
+    children:
+      - head:
+          children:
+            - meta:
+                charset: "UTF-8"
+            - meta:
+                name: "viewport"
+                content: "width=device-width, initial-scale=1.0"
+            - title:
+                text: "{{APP_TITLE}} - External Content Demo"
+            - meta:
+                name: "description"
+                content: "{{APP_DESCRIPTION}}"
+            - style:
+                text: |
+                  /* Additional CSS for dynamic content */
+                  .dynamic-indicator {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #28a745;
+                    color: white;
+                    padding: 10px 15px;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    z-index: 1000;
+                    animation: pulse 2s infinite;
+                  }
+                  
+                  @keyframes pulse {
+                    0% { opacity: 1; }
+                    50% { opacity: 0.7; }
+                    100% { opacity: 1; }
+                  }
+                  
+                  .template-vars {
+                    background: #f8f9fa;
+                    border: 1px solid #dee2e6;
+                    border-radius: 10px;
+                    padding: 20px;
+                    margin: 20px 0;
+                    font-family: 'Courier New', monospace;
+                  }
+      - body:
+          children:
+            # Dynamic content indicator
+            - div:
+                class: "dynamic-indicator"
+                text: "🔄 Dynamic Content Loaded"
+            
+            # Load external HTML content with template variable substitution
+            - div:
+                class: "external-content-wrapper"
+                content: "{{EXTERNAL:test-external-content.html}}"
+            
+            # Additional local content demonstrating mixed approach
+            - div:
+                class: "template-vars"
+                children:
+                  - h3:
+                      text: "Template Variables Demonstration"
+                      style: "color: #007acc; margin-bottom: 15px;"
+                  - p:
+                      text: "App Title: {{APP_TITLE}}"
+                  - p:
+                      text: "Version: {{APP_VERSION}}"
+                  - p:
+                      text: "Environment: {{ENVIRONMENT}}"
+                  - p:
+                      text: "Build Time: {{BUILD_TIME}}"
+                  - p:
+                      text: "Features: {{FEATURES_COUNT}} total features available"
+            
+            # Interactive section for testing dynamic updates
+            - div:
+                class: "interactive-section"
+                style: "margin: 40px 0; padding: 30px; background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 15px; color: white; text-align: center;"
+                children:
+                  - h2:
+                      text: "Interactive Features"
+                      style: "margin-bottom: 20px;"
+                  - p:
+                      text: "This section demonstrates the combination of external HTML content and local manifest structure."
+                  - button:
+                      id: "reload-btn"
+                      text: "Test Dynamic Reload"
+                      style: "background: white; color: #667eea; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; margin: 10px;"
+                  - div:
+                      id: "status-display"
+                      style: "margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;"
+                      text: "Status: Ready for testing"
+            
+            # JavaScript for interactivity and template variable handling
+            - script:
+                text: |
+                  console.log('WhyML Dynamic Template loaded with variables:');
+                  console.log('Title: {{APP_TITLE}}');
+                  console.log('Version: {{APP_VERSION}}');
+                  console.log('Author: {{APP_AUTHOR}}');
+                  
+                  document.addEventListener('DOMContentLoaded', function() {
+                    const reloadBtn = document.getElementById('reload-btn');
+                    const statusDisplay = document.getElementById('status-display');
+                    
+                    if (reloadBtn && statusDisplay) {
+                      reloadBtn.addEventListener('click', function() {
+                        statusDisplay.innerHTML = 'Status: Testing dynamic reload... ⏳';
+                        
+                        // Simulate dynamic content update
+                        setTimeout(function() {
+                          statusDisplay.innerHTML = 'Status: External content reloaded successfully! ✅<br><small>Variables: {{FEATURES_COUNT}} features, {{API_ENDPOINTS}} endpoints</small>';
+                        }, 1000);
+                      });
+                    }
+                    
+                    // Add animation to dynamic indicator
+                    const indicator = document.querySelector('.dynamic-indicator');
+                    if (indicator) {
+                      indicator.addEventListener('click', function() {
+                        this.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                          this.style.transform = 'scale(1)';
+                        }, 150);
+                      });
+                    }
+                  });
+
+# Configuration for external content processing
+config:
+  template_engine: "jinja2"
+  variable_syntax: 
+    - "{{VAR}}"      # Jinja2 style
+    - "<?=VAR?>"     # PHP style (alternative)
+  external_content:
+    watch_changes: true
+    cache_duration: 300  # 5 minutes
+    reload_on_change: true
+  development:
+    live_reload: true
+    debug_mode: true
+    show_template_info: true
+
+# Styles for the manifest structure (in addition to external CSS)
+styles:
+  external-content-wrapper: "width: 100%; position: relative;"
+  template-vars: "font-family: 'Courier New', monospace; line-height: 1.6;"
+  interactive-section: "transition: all 0.3s ease;"
+  dynamic-indicator: "cursor: pointer; user-select: none;"
+
+# Dependencies (if loading multiple external files)
+dependencies:
+  - name: "main-template"
+    source: "test-external-content.html"
+    type: "html"
+    required: true
+  # - name: "shared-styles"  # Future: additional CSS files
+  #   source: "shared-styles.css"
+  #   type: "css"
+  # - name: "common-scripts" # Future: additional JS files
+  #   source: "common-scripts.js" 
+  #   type: "javascript"

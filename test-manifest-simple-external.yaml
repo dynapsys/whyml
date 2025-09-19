@@ -1,0 +1,26 @@
+metadata:
+  title: "WhyML External Content Test"
+  description: "Simple test for external HTML content loading"
+  version: "1.0.0"
+  author: "WhyML Team"
+
+# Simple structure that should work with existing converter
+structure:
+  div:
+    class: "container"
+    children:
+      - h1:
+          text: "External Content Test"
+          class: "title"
+      - p:
+          text: "This is a simplified test for external content loading."
+          class: "description"
+      - div:
+          class: "external-placeholder"
+          text: "External content would be loaded here."
+
+styles:
+  container: "max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;"
+  title: "color: #007acc; font-size: 2rem; margin-bottom: 1rem;"
+  description: "color: #333; font-size: 1.1rem; margin-bottom: 2rem;"
+  external-placeholder: "background: #f0f0f0; padding: 20px; border-radius: 8px; color: #666;"

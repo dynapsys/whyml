@@ -177,17 +177,26 @@ def generate_service_worker(manifest: Dict[str, Any], config: Dict[str, Any]) ->
     app_name = manifest.get('metadata', {}).get('title', 'WhyML App')
     version = manifest.get('metadata', {}).get('version', '1.0.0')
     
+    # Only cache essential files that are guaranteed to exist
+    cache_files = [
+        '/',
+        '/index.html',
+        '/manifest.json',
+        '/offline.html'
+    ]
+    
+    # Add any additional static assets if specified in config
+    additional_assets = config.get('cache_assets', [])
+    if additional_assets:
+        cache_files.extend(additional_assets)
+    
+    cache_list = ',\n    '.join(f"'{asset}'" for asset in cache_files)
+    
     return f"""
 // Service Worker for {app_name} v{version}
 const CACHE_NAME = '{app_name.lower().replace(' ', '-')}-v{version}';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/manifest.json',
-    '/offline.html',
-    // Add your static assets here
-    '/assets/css/style.css',
-    '/assets/js/app.js',
+    {cache_list}
 ];
 
 // Install event
@@ -244,6 +253,28 @@ def generate_web_manifest(manifest: Dict[str, Any], config: Dict[str, Any]) -> D
     
     metadata = manifest.get('metadata', {})
     
+    # Get icons from config or use data URLs for default icons
+    icons = config.get('icons', [])
+    if not icons:
+        # Generate default icons using data URLs to avoid 404 errors
+        default_icon_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="%23007acc"/><text x="256" y="280" font-family="Arial,sans-serif" font-size="200" fill="white" text-anchor="middle">W</text></svg>"""
+        default_icon_data_url = f"data:image/svg+xml;base64,{__import__('base64').b64encode(default_icon_svg.encode()).decode()}"
+        
+        icons = [
+            {
+                "src": default_icon_data_url,
+                "sizes": "192x192",
+                "type": "image/svg+xml",
+                "purpose": "any maskable"
+            },
+            {
+                "src": default_icon_data_url,
+                "sizes": "512x512", 
+                "type": "image/svg+xml",
+                "purpose": "any maskable"
+            }
+        ]
+    
     return {
         "name": metadata.get('title', 'WhyML App'),
         "short_name": metadata.get('short_name', metadata.get('title', 'App')[:12]),
@@ -251,20 +282,9 @@ def generate_web_manifest(manifest: Dict[str, Any], config: Dict[str, Any]) -> D
         "start_url": "/",
         "display": "standalone",
         "background_color": metadata.get('background_color', '#ffffff'),
-        "theme_color": metadata.get('theme_color', '#000000'),
+        "theme_color": metadata.get('theme_color', '#007acc'),
         "orientation": "portrait-primary",
-        "icons": [
-            {
-                "src": "/icon-192x192.png",
-                "sizes": "192x192",
-                "type": "image/png"
-            },
-            {
-                "src": "/icon-512x512.png",
-                "sizes": "512x512",
-                "type": "image/png"
-            }
-        ],
+        "icons": icons,
         "categories": ["productivity", "utilities"],
         "screenshots": [],
         "related_applications": [],

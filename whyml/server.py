@@ -92,6 +92,7 @@ class WhyMLServer:
         self.app = web.Application()
         self.websockets: Set[web.WebSocketResponse] = set()
         self._pending_changes = []  # Store file changes when no event loop is available
+        self._file_changes_log = []  # Log of file changes for RSS feed
         
         self._observer: Optional[Observer] = None
         self.api_handlers = APIHandlers(self)  # Initialize API handlers
@@ -119,6 +120,9 @@ class WhyMLServer:
         self.app.router.add_get('/api/info', self.api_handlers.handle_info)
         self.app.router.add_post('/api/validate', self.api_handlers.handle_validate)
         self.app.router.add_get('/api/debug/logs', self.api_handlers.handle_debug_logs)
+        
+        # RSS feed for file changes
+        self.app.router.add_get('/rss/changes.xml', self._handle_rss_feed)
         
         # Catch-all for SPA routing
         self.app.router.add_get('/{path:.*}', self._handle_spa_fallback)
