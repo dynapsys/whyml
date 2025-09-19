@@ -302,21 +302,69 @@ structure:
 
 ## CLI Usage
 
-```bash
-# Convert manifest to HTML
-whyml convert manifest.yaml --format html --output output.html
+### Development Server (`whyml run`)
 
-# Convert to multiple formats
-whyml convert manifest.yaml --format all --output-dir ./dist
+```bash
+# Start development server (default: manifest.yaml on port 8080)
+whyml run
+
+# Custom manifest and port
+whyml run -f manifest.yaml -p 8080 -h localhost
+
+# Production deployment with TLS
+whyml run -f manifest.yaml --port 443 --host yourdomain.com --tls-provider letsencrypt
+
+# Development with file watching and auto-reload
+whyml run -f manifest.yaml --watch --caddy-config Caddyfile.json
+```
+
+### Natural Language Conversion
+
+```bash
+# Convert using intuitive syntax
+whyml convert --from manifest.yaml --to index.html -as html
+whyml convert --from manifest.yaml --to App.tsx -as react
+whyml convert --from manifest.yaml --to App.vue -as vue
+whyml convert --from manifest.yaml --to app.html -as spa
+whyml convert --from manifest.yaml --to pwa-app.html -as pwa
+
+# With environment variables and configuration
+whyml convert --from manifest.yaml --to app.html -as pwa --env-file .env --config pwa.json
+```
+
+### Application Generation
+
+```bash
+# Generate Progressive Web App
+whyml generate pwa -f manifest.yaml -o ./pwa-app
+
+# Generate Single Page Application
+whyml generate spa -f manifest.yaml -o ./spa-app
+
+# Generate mobile app configuration (APK via Capacitor)
+whyml generate apk -f manifest.yaml -o ./mobile-app
+
+# Generate desktop app (Tauri)
+whyml generate tauri -f manifest.yaml -o ./desktop-app
+
+# Generate Docker configuration
+whyml generate docker -f manifest.yaml -o ./docker-config
+
+# Generate Caddy server configuration
+whyml generate caddy -f manifest.yaml -o ./Caddyfile.json
+```
+
+### Legacy Commands (Still Supported)
+
+```bash
+# Validate manifest
+whyml validate manifest.yaml
 
 # Scrape website to manifest
 whyml scrape https://example.com --output scraped-manifest.yaml
 
-# Validate manifest
-whyml validate manifest.yaml
-
-# Start development server
-whyml serve --port 3000 --watch ./manifests
+# Alternative server command (alias for run)
+whyml serve -f manifest.yaml --port 3000 --watch
 ```
 
 ## API Server

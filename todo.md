@@ -1,4 +1,52 @@
 
+udokumentuj zmiany i stworz dokumentacje z linkowaniami  z README.md i docs/*.md, plan był jak poniżej, co zostało już zaimplementowane?
+w examples rozbuduj o kolejen przykłady z ostatnimi zmianami
+
+uzywaj komendy whyml run, ktora domyslnie uruchomi manifest.yaml ze strona
+lub 
+whyml run -f manifest.yaml -p 8080 -h localhost
+lub
+whyml run -f manifest.yaml --port 80 --host web.local --tls-provider letsencrypt
+komdnea powinna korzystac z caddy i generowac pliki caddy aby mozna bylo potem uzyc tego do produkcji
+
+dodatkowo do konwersji używaj takiej bliskiej naturalnego języka nomenklatury
+whyml --from manifest.yaml --to index.html -as spa
+
+pozwalaj w manifescie zalaczac po prostu pliki html, vue, react, rozne theme, templates, itd
+- stworz generator aplikacji artefaktów PWA SPA APK, SVG (as PWA app), docker service, tauri app
+- pozwol na integracje roznych danych, typu globalne zmienne z .env ze wskazaniem pliku, np config.json, package.json, ...
+
+CDN Integration: Automated asset deployment
+Real-Time Collaboration: Multi-user manifest editing
+Visual Editor: GUI for manifest creation
+
+
+tutaj jest stara wersja: /home/tom/github/tom-sapletta-com/webpage.yaml
+jesli to pomoże to sprawdz co może juz zostało poporawnie zaimplementowano albo zainsiipruj sie rozwizaniami
+ktore tutaj trzeba bedzieie zaimplementować
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Oto zestaw kolejnych promptów, które mogą poprowadzić rozwój WhyML w kierunku pełnej konkurencyjności względem rozwiązań enterprise, OCI i manifestów w ekosystemie Kubernetes:
 
 ***

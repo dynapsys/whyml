@@ -9,7 +9,11 @@ Licensed under the Apache License, Version 2.0
 """
 
 import asyncio
-from typing import Any, Dict, List, Optional, Union
+import json
+import yaml
+import os
+import tempfile
+from typing import Any, Dict, List, Optional, Union, Tuple
 from pathlib import Path
 
 from .manifest_loader import ManifestLoader
@@ -20,6 +24,14 @@ from .converters import (
 )
 from .scrapers import URLScraper, WebpageAnalyzer
 from .exceptions import WhyMLError, ConversionError
+from .caddy import CaddyConfig
+from .generators import (
+    enhance_for_spa, enhance_for_pwa, generate_service_worker,
+    generate_web_manifest, generate_offline_page, generate_spa_router,
+    generate_capacitor_config, generate_capacitor_package_json,
+    generate_dockerfile, generate_docker_compose, generate_dockerignore,
+    generate_tauri_config, generate_cargo_toml, generate_tauri_main_rs
+)
 
 
 class WhyMLProcessor:
@@ -37,7 +49,8 @@ class WhyMLProcessor:
                  cache_size: int = 1000,
                  cache_ttl: int = 3600,
                  enable_validation: bool = True,
-                 optimize_output: bool = True):
+                 optimize_output: bool = True,
+                 config: Optional[Dict[str, Any]] = None):
         """
         Initialize WhyML processor.
         
@@ -51,6 +64,7 @@ class WhyMLProcessor:
         self.cache_ttl = cache_ttl
         self.enable_validation = enable_validation
         self.optimize_output = optimize_output
+        self.config = config or {}
         
         # Initialize core components
         self.loader = ManifestLoader(
@@ -313,8 +327,309 @@ class WhyMLProcessor:
         
         return [r for r in results if isinstance(r, ConversionResult)]
     
+    async def convert_to_spa(self,
+                            source: Union[str, Path, Dict[str, Any]],
+                            **kwargs) -> ConversionResult:
+        """
+        Convert manifest to Single Page Application.
+        
+        Args:
+            source: Manifest source (file path, URL, or dict)
+            **kwargs: Additional conversion options
+            
+        Returns:
+            ConversionResult with SPA content
+        """
+        if isinstance(source, dict):
+            manifest = source
+        else:
+            manifest = await self.load_manifest(source)
+        
+        # Generate HTML with SPA routing
+        html_result = self.html_converter.convert(manifest, spa_mode=True, **kwargs)
+        
+        # Add SPA-specific enhancements
+        spa_content = self._enhance_for_spa(html_result.content, manifest)
+        
+        return ConversionResult(
+            content=spa_content,
+            filename=f"{manifest.get('metadata', {}).get('title', 'app').lower().replace(' ', '-')}.html",
+            format='spa',
+            metadata=html_result.metadata
+        )
+    
+    async def convert_to_pwa(self,
+                            source: Union[str, Path, Dict[str, Any]],
+                            **kwargs) -> ConversionResult:
+        """
+        Convert manifest to Progressive Web Application.
+        
+        Args:
+            source: Manifest source (file path, URL, or dict)
+            **kwargs: Additional conversion options
+            
+        Returns:
+            ConversionResult with PWA content
+        """
+        if isinstance(source, dict):
+            manifest = source
+        else:
+            manifest = await self.load_manifest(source)
+        
+        # Generate SPA first
+        spa_result = await self.convert_to_spa(source, **kwargs)
+        
+        # Add PWA-specific features
+        pwa_content = self._enhance_for_pwa(spa_result.content, manifest)
+        
+        return ConversionResult(
+            content=pwa_content,
+            filename=f"pwa-{spa_result.filename}",
+            format='pwa',
+            metadata={**spa_result.metadata, 'pwa_enabled': True}
+        )
+    
+    async def generate_pwa(self,
+                          source: Union[str, Path, Dict[str, Any]],
+                          output: Optional[str] = None,
+                          config: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Generate complete PWA artifact with all necessary files.
+        
+        Args:
+            source: Manifest source
+            output: Output directory path
+            config: PWA configuration
+            
+        Returns:
+            Path to generated PWA directory
+        """
+        if isinstance(source, dict):
+            manifest = source
+        else:
+            manifest = await self.load_manifest(source)
+        
+        output_dir = Path(output) if output else Path(f"pwa-{manifest.get('metadata', {}).get('title', 'app').lower().replace(' ', '-')}")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Generate main PWA files
+        pwa_result = await self.convert_to_pwa(source)
+        
+        # Write main HTML file
+        (output_dir / "index.html").write_text(pwa_result.content)
+        
+        # Generate service worker
+        sw_content = self._generate_service_worker(manifest, config or {})
+        (output_dir / "sw.js").write_text(sw_content)
+        
+        # Generate web manifest
+        web_manifest = self._generate_web_manifest(manifest, config or {})
+        (output_dir / "manifest.json").write_text(json.dumps(web_manifest, indent=2))
+        
+        # Generate offline page
+        offline_content = self._generate_offline_page(manifest)
+        (output_dir / "offline.html").write_text(offline_content)
+        
+        return str(output_dir)
+    
+    async def generate_spa(self,
+                          source: Union[str, Path, Dict[str, Any]],
+                          output: Optional[str] = None,
+                          config: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Generate complete SPA artifact.
+        
+        Args:
+            source: Manifest source
+            output: Output directory path
+            config: SPA configuration
+            
+        Returns:
+            Path to generated SPA directory
+        """
+        if isinstance(source, dict):
+            manifest = source
+        else:
+            manifest = await self.load_manifest(source)
+        
+        output_dir = Path(output) if output else Path(f"spa-{manifest.get('metadata', {}).get('title', 'app').lower().replace(' ', '-')}")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Generate SPA
+        spa_result = await self.convert_to_spa(source)
+        
+        # Write main HTML file
+        (output_dir / "index.html").write_text(spa_result.content)
+        
+        # Generate router configuration
+        router_content = self._generate_spa_router(manifest, config or {})
+        (output_dir / "router.js").write_text(router_content)
+        
+        return str(output_dir)
+    
+    async def generate_apk(self,
+                          source: Union[str, Path, Dict[str, Any]],
+                          output: Optional[str] = None,
+                          config: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Generate APK build configuration using Capacitor.
+        
+        Args:
+            source: Manifest source
+            output: Output directory path
+            config: APK configuration
+            
+        Returns:
+            Path to generated APK project directory
+        """
+        if isinstance(source, dict):
+            manifest = source
+        else:
+            manifest = await self.load_manifest(source)
+        
+        output_dir = Path(output) if output else Path(f"apk-{manifest.get('metadata', {}).get('title', 'app').lower().replace(' ', '-')}")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Generate PWA first
+        pwa_dir = await self.generate_pwa(source, str(output_dir / "www"))
+        
+        # Generate Capacitor configuration
+        capacitor_config = self._generate_capacitor_config(manifest, config or {})
+        (output_dir / "capacitor.config.json").write_text(json.dumps(capacitor_config, indent=2))
+        
+        # Generate package.json for Capacitor
+        package_json = self._generate_capacitor_package_json(manifest)
+        (output_dir / "package.json").write_text(json.dumps(package_json, indent=2))
+        
+        return str(output_dir)
+    
+    async def generate_docker(self,
+                             source: Union[str, Path, Dict[str, Any]],
+                             output: Optional[str] = None,
+                             config: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Generate Docker configuration for the application.
+        
+        Args:
+            source: Manifest source
+            output: Output directory path
+            config: Docker configuration
+            
+        Returns:
+            Path to generated Docker configuration
+        """
+        if isinstance(source, dict):
+            manifest = source
+        else:
+            manifest = await self.load_manifest(source)
+        
+        output_dir = Path(output) if output else Path(f"docker-{manifest.get('metadata', {}).get('title', 'app').lower().replace(' ', '-')}")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Generate Dockerfile
+        dockerfile_content = self._generate_dockerfile(manifest, config or {})
+        (output_dir / "Dockerfile").write_text(dockerfile_content)
+        
+        # Generate docker-compose.yml
+        compose_content = self._generate_docker_compose(manifest, config or {})
+        (output_dir / "docker-compose.yml").write_text(compose_content)
+        
+        # Generate .dockerignore
+        dockerignore_content = self._generate_dockerignore()
+        (output_dir / ".dockerignore").write_text(dockerignore_content)
+        
+        return str(output_dir)
+    
+    async def generate_tauri(self,
+                            source: Union[str, Path, Dict[str, Any]],
+                            output: Optional[str] = None,
+                            config: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Generate Tauri application configuration.
+        
+        Args:
+            source: Manifest source
+            output: Output directory path
+            config: Tauri configuration
+            
+        Returns:
+            Path to generated Tauri project directory
+        """
+        if isinstance(source, dict):
+            manifest = source
+        else:
+            manifest = await self.load_manifest(source)
+        
+        output_dir = Path(output) if output else Path(f"tauri-{manifest.get('metadata', {}).get('title', 'app').lower().replace(' ', '-')}")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Generate frontend (SPA)
+        spa_dir = await self.generate_spa(source, str(output_dir / "dist"))
+        
+        # Create Tauri project structure
+        (output_dir / "src-tauri").mkdir(exist_ok=True)
+        
+        # Generate Tauri configuration
+        tauri_config = self._generate_tauri_config(manifest, config or {})
+        (output_dir / "src-tauri" / "tauri.conf.json").write_text(json.dumps(tauri_config, indent=2))
+        
+        # Generate Cargo.toml
+        cargo_toml = self._generate_cargo_toml(manifest)
+        (output_dir / "src-tauri" / "Cargo.toml").write_text(cargo_toml)
+        
+        # Generate main.rs
+        main_rs = self._generate_tauri_main_rs(manifest)
+        (output_dir / "src-tauri" / "src").mkdir(exist_ok=True)
+        (output_dir / "src-tauri" / "src" / "main.rs").write_text(main_rs)
+        
+        return str(output_dir)
+    
+    async def generate_caddy_config(self,
+                                   source: Union[str, Path, Dict[str, Any]],
+                                   output: Optional[str] = None,
+                                   config: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Generate Caddy configuration for the application.
+        
+        Args:
+            source: Manifest source
+            output: Output file path
+            config: Caddy configuration options
+            
+        Returns:
+            Path to generated Caddy configuration file
+        """
+        if isinstance(source, dict):
+            manifest = source
+        else:
+            manifest = await self.load_manifest(source)
+        
+        caddy_config = CaddyConfig()
+        
+        # Extract configuration options
+        caddy_opts = config or {}
+        domain = caddy_opts.get('domain', 'localhost')
+        host = caddy_opts.get('host', 'localhost')
+        port = caddy_opts.get('port', 8080)
+        tls_provider = caddy_opts.get('tls_provider')
+        
+        # Generate configuration
+        config_content = await caddy_config.generate_config(
+            manifest_file=str(source) if not isinstance(source, dict) else 'manifest.yaml',
+            host=host,
+            port=port,
+            domain=domain,
+            tls_provider=tls_provider
+        )
+        
+        # Write to file
+        output_file = Path(output) if output else Path("Caddyfile.json")
+        output_file.write_text(config_content)
+        
+        return str(output_file)
+    
     async def validate_manifest(self,
-                               source: Union[str, Path, Dict[str, Any]]) -> Dict[str, Any]:
+                               source: Union[str, Path, Dict[str, Any]]) -> Tuple[bool, List[str]]:
         """
         Validate a manifest and return validation results.
         
@@ -322,7 +637,7 @@ class WhyMLProcessor:
             source: Manifest source
             
         Returns:
-            Validation results dictionary
+            Tuple of (is_valid, error_list)
         """
         try:
             if isinstance(source, dict):
@@ -330,26 +645,30 @@ class WhyMLProcessor:
             else:
                 manifest = await self.load_manifest(source)
             
-            # Perform validation
-            validation_results = {
-                'valid': True,
-                'errors': [],
-                'warnings': [],
-                'metadata': manifest.get('metadata', {}),
-                'structure_complexity': self._analyze_structure_complexity(manifest),
-                'style_count': len(manifest.get('styles', {})),
-                'dependency_count': len(manifest.get('dependencies', []))
-            }
+            # Perform basic validation
+            errors = []
             
-            return validation_results
+            # Check required fields
+            if 'metadata' not in manifest:
+                errors.append("Missing required 'metadata' section")
+            
+            if 'structure' not in manifest:
+                errors.append("Missing required 'structure' section")
+            
+            # Validate metadata
+            metadata = manifest.get('metadata', {})
+            if not metadata.get('title'):
+                errors.append("Missing 'title' in metadata")
+            
+            # Validate structure
+            structure = manifest.get('structure', {})
+            if not structure:
+                errors.append("Empty structure section")
+            
+            return len(errors) == 0, errors
             
         except Exception as e:
-            return {
-                'valid': False,
-                'errors': [str(e)],
-                'warnings': [],
-                'error_type': type(e).__name__
-            }
+            return False, [str(e)]
     
     def _analyze_structure_complexity(self, manifest: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze the complexity of the manifest structure."""
