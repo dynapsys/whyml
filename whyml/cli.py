@@ -80,6 +80,11 @@ def create_parser() -> argparse.ArgumentParser:
         action='store_true',
         help='Enable file watching and auto-reload'
     )
+    run_parser.add_argument(
+        '--api-debug',
+        action='store_true',
+        help='Enable API debug endpoints and enhanced logging'
+    )
     
     # Natural language conversion syntax
     convert_parser = subparsers.add_parser(
@@ -225,7 +230,8 @@ async def run_command(args) -> int:
             manifest_file=args.file,
             host=args.host,
             port=args.port,
-            watch=getattr(args, 'watch', False)
+            watch=getattr(args, 'watch', False),
+            api_debug=getattr(args, 'api_debug', False)
         )
         
         print(f"Starting WhyML server on http://{args.host}:{args.port}")

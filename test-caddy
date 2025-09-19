@@ -1,0 +1,137 @@
+{
+  "apps": {
+    "http": {
+      "servers": {
+        "localhost": {
+          "listen": [
+            ":8080"
+          ],
+          "routes": [
+            {
+              "match": [
+                {
+                  "path": [
+                    "/*"
+                  ]
+                }
+              ],
+              "handle": [
+                {
+                  "handler": "headers",
+                  "response": {
+                    "set": {
+                      "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                      ],
+                      "X-Frame-Options": [
+                        "DENY"
+                      ],
+                      "X-Content-Type-Options": [
+                        "nosniff"
+                      ],
+                      "Referrer-Policy": [
+                        "strict-origin-when-cross-origin"
+                      ],
+                      "X-XSS-Protection": [
+                        "1; mode=block"
+                      ],
+                      "Permissions-Policy": [
+                        "geolocation=(), microphone=(), camera=()"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "match": [
+                {
+                  "path_regexp": {
+                    "pattern": "\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2)$"
+                  }
+                }
+              ],
+              "handle": [
+                {
+                  "handler": "headers",
+                  "response": {
+                    "set": {
+                      "Cache-Control": [
+                        "public, max-age=3600"
+                      ],
+                      "Expires": [
+                        "{http.time_format (http.time_add (now) (duration \"1h\"))}"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "handler": "file_server",
+                  "root": "./assets"
+                }
+              ]
+            },
+            {
+              "match": [
+                {
+                  "path": [
+                    "/ws"
+                  ]
+                }
+              ],
+              "handle": [
+                {
+                  "handler": "reverse_proxy",
+                  "upstreams": [
+                    {
+                      "dial": "localhost:8080"
+                    }
+                  ],
+                  "headers": {
+                    "Connection": [
+                      "Upgrade"
+                    ],
+                    "Upgrade": [
+                      "websocket"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "match": [
+                {
+                  "path": [
+                    "/*"
+                  ]
+                }
+              ],
+              "handle": [
+                {
+                  "handler": "reverse_proxy",
+                  "upstreams": [
+                    {
+                      "dial": "localhost:8080"
+                    }
+                  ],
+                  "load_balancing": {
+                    "selection_policy": {
+                      "policy": "weighted_round_robin"
+                    }
+                  },
+                  "health_checks": {
+                    "active": {
+                      "path": "/api/health",
+                      "interval": "30s",
+                      "timeout": "5s"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

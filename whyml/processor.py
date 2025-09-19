@@ -498,11 +498,13 @@ class WhyMLProcessor:
         pwa_dir = await self.generate_pwa(source, str(output_dir / "www"))
         
         # Generate Capacitor configuration
-        capacitor_config = self._generate_capacitor_config(manifest, config or {})
+        from .generators import generate_capacitor_config
+        capacitor_config = generate_capacitor_config(manifest, config or {})
         (output_dir / "capacitor.config.json").write_text(json.dumps(capacitor_config, indent=2))
         
         # Generate package.json for Capacitor
-        package_json = self._generate_capacitor_package_json(manifest)
+        from .generators import generate_capacitor_package_json
+        package_json = generate_capacitor_package_json(manifest)
         (output_dir / "package.json").write_text(json.dumps(package_json, indent=2))
         
         return str(output_dir)

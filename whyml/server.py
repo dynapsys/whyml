@@ -24,6 +24,7 @@ from watchdog.events import FileSystemEventHandler
 from .processor import WhyMLProcessor
 from .exceptions import WhyMLError
 from . import __version__
+from .api_handlers import APIHandlers
 
 
 class ManifestFileHandler(FileSystemEventHandler):
@@ -51,7 +52,17 @@ class ManifestFileHandler(FileSystemEventHandler):
         
         # Check if it's a file we care about
         if file_path.endswith(('.yaml', '.yml', '.json', '.html', '.css', '.js')):
-            asyncio.create_task(self.server._handle_file_change(file_path))
+            # Use thread-safe approach to schedule the coroutine
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    asyncio.run_coroutine_threadsafe(self.server._handle_file_change(file_path), loop)
+                else:
+                    # If no loop is running, store the change for later processing
+                    self.server._pending_changes.append(file_path)
+            except RuntimeError:
+                # No event loop in current thread, store for later processing
+                self.server._pending_changes.append(file_path)
     
     def on_created(self, event):
         """Handle file creation events."""
@@ -67,19 +78,23 @@ class WhyMLServer:
         host: str = 'localhost',
         port: int = 8080,
         watch: bool = True,
-        auto_reload: bool = True
+        auto_reload: bool = True,
+        api_debug: bool = False
     ):
         self.manifest_file = Path(manifest_file)
         self.host = host
         self.port = port
         self.watch_enabled = watch
         self.auto_reload = auto_reload
+        self.api_debug = api_debug
         
         self.processor = WhyMLProcessor()
         self.app = web.Application()
         self.websockets: Set[web.WebSocketResponse] = set()
+        self._pending_changes = []  # Store file changes when no event loop is available
         
         self._observer: Optional[Observer] = None
+        self.api_handlers = APIHandlers(self)  # Initialize API handlers
         self._setup_routes()
     
     def _setup_routes(self):
@@ -100,9 +115,10 @@ class WhyMLServer:
         self.app.router.add_get('/assets/{path:.*}', self._handle_static)
         
         # API endpoints
-        self.app.router.add_get('/api/health', self._handle_health)
-        self.app.router.add_get('/api/info', self._handle_info)
-        self.app.router.add_post('/api/validate', self._handle_validate)
+        self.app.router.add_get('/api/health', self.api_handlers.handle_health)
+        self.app.router.add_get('/api/info', self.api_handlers.handle_info)
+        self.app.router.add_post('/api/validate', self.api_handlers.handle_validate)
+        self.app.router.add_get('/api/debug/logs', self.api_handlers.handle_debug_logs)
         
         # Catch-all for SPA routing
         self.app.router.add_get('/{path:.*}', self._handle_spa_fallback)
