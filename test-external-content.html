@@ -120,26 +120,26 @@
             <h2 style="margin-bottom: 30px; color: #333;">Project Statistics</h2>
             <div class="stats-grid">
                 <div class="stat-item">
-                    <span class="stat-number">{{CLI_COMMANDS:12}}</span>
+                    <span class="stat-number">{{CLI_COMMANDS|default('12')}}</span>
                     <div class="stat-label">CLI Commands</div>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">{{API_ENDPOINTS:8}}</span>
+                    <span class="stat-number">{{API_ENDPOINTS|default('8')}}</span>
                     <div class="stat-label">API Endpoints</div>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">{{FORMATS_SUPPORTED:6}}</span>
+                    <span class="stat-number">{{FORMATS_SUPPORTED|default('6')}}</span>
                     <div class="stat-label">Output Formats</div>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">{{FEATURES_COUNT:15}}</span>
+                    <span class="stat-number">{{FEATURES_COUNT|default('15')}}</span>
                     <div class="stat-label">Features</div>
                 </div>
             </div>
         </div>
 
         <div style="margin-top: 40px; text-align: center; color: #666;">
-            <p>Environment: {{ENVIRONMENT:development}} | Build: {{BUILD_TIME:auto}}</p>
+            <p>Environment: {{ENVIRONMENT|default('development')}} | Build: {{BUILD_TIME|default('auto')}}</p>
             <p>This template demonstrates external HTML loading with variable substitution in {{APP_TITLE}}.</p>
         </div>
     </div>

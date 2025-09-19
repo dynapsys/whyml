@@ -52,6 +52,9 @@ class ManifestFileHandler(FileSystemEventHandler):
         
         # Check if it's a file we care about
         if file_path.endswith(('.yaml', '.yml', '.json', '.html', '.css', '.js')):
+            # Log the file change for RSS feed
+            self.server._log_file_change(file_path, "modified")
+            
             # Use thread-safe approach to schedule the coroutine
             try:
                 loop = asyncio.get_event_loop()
@@ -79,7 +82,8 @@ class WhyMLServer:
         port: int = 8080,
         watch: bool = True,
         auto_reload: bool = True,
-        api_debug: bool = False
+        api_debug: bool = False,
+        rss_enabled: bool = False
     ):
         self.manifest_file = Path(manifest_file)
         self.host = host
@@ -87,6 +91,7 @@ class WhyMLServer:
         self.watch_enabled = watch
         self.auto_reload = auto_reload
         self.api_debug = api_debug
+        self.rss_enabled = rss_enabled
         
         self.processor = WhyMLProcessor()
         self.app = web.Application()
@@ -559,6 +564,75 @@ class WhyMLServer:
                 self._observer.stop()
                 self._observer.join()
             await runner.cleanup()
+
+    async def _handle_rss_feed(self, request: web.Request) -> web.Response:
+        """Handle RSS feed for file changes."""
+        try:
+            from datetime import datetime
+            import xml.etree.ElementTree as ET
+            
+            # Create RSS XML structure
+            rss = ET.Element("rss", version="2.0")
+            channel = ET.SubElement(rss, "channel")
+            
+            # RSS channel metadata
+            ET.SubElement(channel, "title").text = f"WhyML File Changes - {self.manifest_file.name}"
+            ET.SubElement(channel, "description").text = "Real-time file changes from WhyML development server"
+            ET.SubElement(channel, "link").text = f"http://{self.host}:{self.port}"
+            ET.SubElement(channel, "lastBuildDate").text = datetime.now().strftime("%a, %d %b %Y %H:%M:%S %z")
+            ET.SubElement(channel, "generator").text = f"WhyML Server v{__version__}"
+            
+            # Add recent file changes as RSS items (limit to last 50)
+            recent_changes = self._file_changes_log[-50:] if self._file_changes_log else []
+            
+            for change in reversed(recent_changes):  # Most recent first
+                item = ET.SubElement(channel, "item")
+                ET.SubElement(item, "title").text = f"File changed: {change['file']}"
+                ET.SubElement(item, "description").text = f"File '{change['file']}' was {change['action']} at {change['timestamp']}"
+                ET.SubElement(item, "pubDate").text = change['pub_date']
+                ET.SubElement(item, "guid").text = f"{change['file']}#{change['timestamp']}"
+                ET.SubElement(item, "link").text = f"http://{self.host}:{self.port}"
+            
+            # If no changes yet, add a placeholder item
+            if not recent_changes:
+                item = ET.SubElement(channel, "item")
+                ET.SubElement(item, "title").text = "WhyML Server Started"
+                ET.SubElement(item, "description").text = f"WhyML development server started and watching {self.manifest_file}"
+                ET.SubElement(item, "pubDate").text = datetime.now().strftime("%a, %d %b %Y %H:%M:%S %z")
+                ET.SubElement(item, "guid").text = f"server-start#{getattr(self, '_start_time', time.time())}"
+            
+            # Convert to XML string
+            xml_content = ET.tostring(rss, encoding='unicode', method='xml')
+            xml_content = f'<?xml version="1.0" encoding="UTF-8"?>\n{xml_content}'
+            
+            return web.Response(
+                text=xml_content,
+                content_type='application/rss+xml; charset=utf-8'
+            )
+            
+        except Exception as e:
+            return web.Response(
+                text=f"<?xml version='1.0' encoding='UTF-8'?>\n<error>RSS feed error: {e}</error>",
+                content_type='application/xml; charset=utf-8',
+                status=500
+            )
+    
+    def _log_file_change(self, file_path: str, action: str = "modified"):
+        """Log a file change for RSS feed."""
+        from datetime import datetime
+        
+        change_entry = {
+            'file': str(file_path),
+            'action': action,
+            'timestamp': datetime.now().isoformat(),
+            'pub_date': datetime.now().strftime("%a, %d %b %Y %H:%M:%S %z")
+        }
+        
+        self._file_changes_log.append(change_entry)
+        
+        # Keep only last 100 changes to prevent memory issues
+        if len(self._file_changes_log) > 100:
+            self._file_changes_log = self._file_changes_log[-100:]
 
 
 # Convenience function for quick server startup

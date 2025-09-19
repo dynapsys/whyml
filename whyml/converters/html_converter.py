@@ -9,6 +9,7 @@ Licensed under the Apache License, Version 2.0
 """
 
 import re
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from html import escape
 import logging
@@ -78,10 +79,19 @@ class HTMLConverter(BaseConverter):
             styles = self.extract_styles(manifest)
             imports = self.extract_imports(manifest)
             structure = manifest.get('structure', {})
+            variables = manifest.get('variables', {})
+            config = manifest.get('config', {})
+            external_content = manifest.get('external_content', {})
+            dependencies = manifest.get('dependencies', [])
+            
+            # Process external content and create content map for {{EXTERNAL:...}} syntax
+            self._external_content_map = {}
+            if external_content:
+                structure, self._external_content_map = self._process_external_content(structure, external_content, variables, config)
             
             # Generate HTML components
-            head_html = self._generate_head(metadata, styles, imports)
-            body_html = self._generate_body(structure, styles)
+            head_html = self._generate_head(metadata, styles, imports, dependencies, config)
+            body_html = self._generate_body(structure, styles, variables, config)
             
             # Combine into complete HTML document
             html_content = self._generate_document(head_html, body_html)
@@ -111,6 +121,125 @@ class HTMLConverter(BaseConverter):
         except Exception as e:
             raise self.handle_conversion_error(e, "HTML conversion")
     
+    def _process_external_content(self, 
+                                structure: Dict[str, Any], 
+                                external_content: Dict[str, Any], 
+                                variables: Dict[str, Any], 
+                                config: Dict[str, Any]) -> tuple[Dict[str, Any], Dict[str, str]]:
+        """Process external content by loading and integrating it into structure.
+        
+        Returns:
+            tuple: (processed_structure, external_content_map)
+                - processed_structure: Structure with external content integrated
+                - external_content_map: Map of filename to processed content for {{EXTERNAL:...}} syntax
+        """
+        try:
+            from pathlib import Path
+            import requests
+            from ..manifest_processor import TemplateProcessor
+            
+            processor = TemplateProcessor()
+            external_content_map = {}
+            
+            # Handle both list and dict formats for external_content
+            if isinstance(external_content, list):
+                content_items = enumerate(external_content)
+            else:
+                content_items = external_content.items()
+            
+            for content_key, content_config in content_items:
+                if isinstance(content_config, str):
+                    # Simple URL or file path
+                    source = content_config
+                    target_element = f"external_content_{content_key}" if isinstance(external_content, list) else content_key
+                elif isinstance(content_config, dict):
+                    source = content_config.get('source', content_config.get('url', ''))
+                    target_element = content_config.get('target', f"external_content_{content_key}" if isinstance(external_content, list) else content_key)
+                else:
+                    continue
+                
+                if not source:
+                    continue
+                
+                # Load external content
+                content = self._load_external_content(source)
+                
+                # Apply variable substitution to loaded content
+                if variables or config:
+                    content = processor.substitute_template_variables(content, variables, config)
+                
+                # Store in external content map for {{EXTERNAL:...}} syntax processing
+                # Extract filename from source path for the map key
+                filename = Path(source).name if not source.startswith('http') else source
+                external_content_map[filename] = content
+                
+                # Integrate content into structure at target element
+                self._integrate_external_content(structure, target_element, content)
+            
+            return structure, external_content_map
+            
+        except Exception as e:
+            logger.warning(f"Failed to process external content: {e}")
+            return structure, {}
+    
+    def _load_external_content(self, source: str) -> str:
+        """Load content from external source (file or URL)."""
+        try:
+            from pathlib import Path
+            import requests
+            
+            if source.startswith(('http://', 'https://')):
+                # Load from URL
+                response = requests.get(source, timeout=10)
+                response.raise_for_status()
+                return response.text
+            else:
+                # Load from file path
+                file_path = Path(source)
+                if file_path.exists():
+                    return file_path.read_text(encoding='utf-8')
+                else:
+                    logger.warning(f"External content file not found: {source}")
+                    return ""
+        except Exception as e:
+            logger.warning(f"Failed to load external content from {source}: {e}")
+            return ""
+    
+    def _integrate_external_content(self, structure: Dict[str, Any], target: str, content: str):
+        """Integrate external content into structure at specified target."""
+        # Create a simple div container for the external content
+        # This avoids the unhashable dict issues by using a straightforward approach
+        try:
+            # Parse the loaded HTML content and create a simple integration
+            if not content.strip():
+                return
+                
+            # For simplicity, add external content as a new div element in the structure
+            external_element = {
+                'tag': 'div',
+                'attributes': {'class': f'external-content-{target.replace("_", "-")}'},
+                'content': content,
+                'type': 'raw_html'
+            }
+            
+            # Add to structure in a safe way
+            if 'external_content_container' not in structure:
+                structure['external_content_container'] = {
+                    'tag': 'div',
+                    'attributes': {'class': 'external-content-wrapper'},
+                    'children': []
+                }
+            
+            if isinstance(structure['external_content_container'].get('children'), list):
+                structure['external_content_container']['children'].append(external_element)
+            else:
+                structure['external_content_container']['children'] = [external_element]
+                
+        except Exception as e:
+            logger.warning(f"Failed to integrate external content for target '{target}': {e}")
+            # Fallback: just add as simple text content
+            structure[f'external_{target}'] = {'content': content[:500] + '...' if len(content) > 500 else content}
+    
     def _generate_document(self, head_html: str, body_html: str) -> str:
         """Generate complete HTML document."""
         doctype_map = {
@@ -131,7 +260,9 @@ class HTMLConverter(BaseConverter):
     def _generate_head(self, 
                       metadata: Dict[str, Any], 
                       styles: Dict[str, str], 
-                      imports: Dict[str, List[str]]) -> str:
+                      imports: Dict[str, List[str]],
+                      dependencies: List[str] = None,
+                      config: Dict[str, Any] = None) -> str:
         """Generate HTML head section."""
         head_parts = ['<head>']
         
@@ -162,6 +293,22 @@ class HTMLConverter(BaseConverter):
             head_parts.append(f'  <link rel="preconnect" href="https://fonts.googleapis.com">')
             head_parts.append(f'  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>')
             head_parts.append(f'  <link rel="stylesheet" href="{escape(font_url)}">')
+        
+        # Dependencies (additional CSS/JS from manifest dependencies)
+        if dependencies:
+            for dep in dependencies:
+                if isinstance(dep, str):
+                    if dep.endswith('.css'):
+                        head_parts.append(f'  <link rel="stylesheet" href="{escape(dep)}">')
+                    elif dep.endswith('.js'):
+                        head_parts.append(f'  <script src="{escape(dep)}"></script>')
+                elif isinstance(dep, dict):
+                    dep_type = dep.get('type', '')
+                    dep_url = dep.get('url', dep.get('src', ''))
+                    if dep_type == 'css' or dep_url.endswith('.css'):
+                        head_parts.append(f'  <link rel="stylesheet" href="{escape(dep_url)}">')
+                    elif dep_type == 'js' or dep_url.endswith('.js'):
+                        head_parts.append(f'  <script src="{escape(dep_url)}"></script>')
         
         # Internal styles
         if styles:
@@ -248,7 +395,11 @@ class HTMLConverter(BaseConverter):
         
         return properties
     
-    def _generate_body(self, structure: Dict[str, Any], styles: Dict[str, str]) -> str:
+    def _generate_body(self, 
+                      structure: Dict[str, Any], 
+                      styles: Dict[str, str], 
+                      variables: Dict[str, Any] = None, 
+                      config: Dict[str, Any] = None) -> str:
         """Generate HTML body section."""
         body_parts = ['<body>']
         
@@ -284,6 +435,34 @@ class HTMLConverter(BaseConverter):
         else:
             return str(structure)
     
+    def _process_external_syntax(self, content: str, external_content_map: Dict[str, str]) -> str:
+        """
+        Process {{EXTERNAL:filename}} syntax before Jinja2 template substitution.
+        
+        This custom WhyML syntax allows inline insertion of external content.
+        Must be processed before Jinja2 to avoid template parsing errors.
+        
+        Args:
+            content: Content string that may contain {{EXTERNAL:...}} syntax
+            external_content_map: Map of filename to processed content
+            
+        Returns:
+            Content with {{EXTERNAL:...}} syntax replaced by actual content
+        """
+        import re
+        
+        def replace_external(match):
+            filename = match.group(1)
+            if filename in external_content_map:
+                return external_content_map[filename]
+            else:
+                # Return placeholder if external content not found
+                return f'<!-- External content not found: {filename} -->'
+        
+        # Replace {{EXTERNAL:filename}} with actual content
+        pattern = r'\{\{EXTERNAL:([^}]+)\}\}'
+        return re.sub(pattern, replace_external, content)
+
     def _convert_element_to_html(self, element: Dict[str, Any], styles: Dict[str, str], indent: int) -> str:
         """Convert a single element to HTML."""
         indent_str = '  ' * indent
@@ -295,9 +474,13 @@ class HTMLConverter(BaseConverter):
         
         for key, value in element.items():
             if key in ['text', 'content']:
-                # Text content
+                # Text content - process {{EXTERNAL:...}} syntax first
                 if isinstance(value, str):
-                    content.append(escape(value))
+                    processed_value = value
+                    # Process external syntax if we have external content available
+                    if hasattr(self, '_external_content_map') and self._external_content_map:
+                        processed_value = self._process_external_syntax(value, self._external_content_map)
+                    content.append(escape(processed_value))
                 else:
                     content.append(str(value))
             elif key == 'children':

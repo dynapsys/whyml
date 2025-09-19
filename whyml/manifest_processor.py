@@ -220,6 +220,72 @@ class TemplateProcessor:
             'bool': bool
         })
     
+    def substitute_template_variables(self, 
+                                    content: str, 
+                                    variables: Dict[str, Any], 
+                                    config: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Substitute template variables in content using both {{VAR}} and <?=VAR?> syntax.
+        
+        Args:
+            content: Content string containing template variables
+            variables: Dictionary of variables to substitute
+            config: Optional configuration for substitution behavior
+            
+        Returns:
+            Content with variables substituted
+        """
+        if not content or not variables:
+            return content
+            
+        # Prepare context with variables and config
+        context = {}
+        context.update(variables)
+        if config:
+            context.update(config)
+        
+        try:
+            # Handle {{VAR}} syntax (Jinja2 style)
+            jinja_template = self.env.from_string(content)
+            content = jinja_template.render(**context)
+            
+            # Handle <?=VAR?> syntax (PHP-like)
+            php_pattern = re.compile(r'<\?=([^?]+)\?>')
+            
+            def php_replacer(match):
+                var_expr = match.group(1).strip()
+                try:
+                    # Simple variable lookup
+                    if var_expr in context:
+                        return str(context[var_expr])
+                    
+                    # Handle dot notation like VAR.property
+                    if '.' in var_expr:
+                        parts = var_expr.split('.')
+                        value = context
+                        for part in parts:
+                            if isinstance(value, dict) and part in value:
+                                value = value[part]
+                            else:
+                                return match.group(0)  # Return original if not found
+                        return str(value)
+                    
+                    # Return original if variable not found
+                    return match.group(0)
+                except Exception:
+                    return match.group(0)  # Return original on error
+            
+            content = php_pattern.sub(php_replacer, content)
+            
+            return content
+            
+        except TemplateError as e:
+            logger.warning(f"Template substitution error: {e}")
+            return content  # Return original content on error
+        except Exception as e:
+            logger.warning(f"Variable substitution error: {e}")
+            return content
+    
     def process_template_inheritance(self, 
                                    child_manifest: Dict[str, Any],
                                    parent_manifest: Dict[str, Any]) -> Dict[str, Any]:
@@ -483,10 +549,18 @@ class ManifestProcessor:
         # Process template inheritance
         processed_manifest = self._process_inheritance(manifest_data)
         
-        # Process template variables
+        # Process template variables and config
+        variables = manifest_data.get('variables', {})
+        config = manifest_data.get('config', {})
+        
+        # Merge context with manifest variables
         if context:
-            processed_manifest = self.template_processor.substitute_variables(
-                processed_manifest, context
+            variables.update(context)
+        
+        # Apply variable substitution if variables are present
+        if variables or config:
+            processed_manifest = self._apply_variable_substitution(
+                processed_manifest, variables, config
             )
         
         # Process styles
@@ -623,6 +697,131 @@ class ManifestProcessor:
             'header', 'nav', 'main', 'section', 'article', 'aside', 'footer'
         }
         return tag_name.lower() in valid_tags
+    
+    def _apply_variable_substitution(self, 
+                                   manifest: Dict[str, Any], 
+                                   variables: Dict[str, Any], 
+                                   config: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Apply template variable substitution to manifest content.
+        
+        Args:
+            manifest: Manifest to process
+            variables: Variables for substitution
+            config: Configuration for substitution
+            
+        Returns:
+            Manifest with variables substituted
+        """
+        # First, process {{EXTERNAL:...}} syntax before Jinja2 template substitution
+        manifest = self._process_external_syntax_in_manifest(manifest)
+        
+        def substitute_recursive(obj):
+            if isinstance(obj, str):
+                return self.template_processor.substitute_template_variables(obj, variables, config)
+            elif isinstance(obj, dict):
+                return {k: substitute_recursive(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [substitute_recursive(item) for item in obj]
+            else:
+                return obj
+        
+        return substitute_recursive(manifest)
+    
+    def _process_external_syntax_in_manifest(self, manifest: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Process {{EXTERNAL:filename}} syntax in manifest before Jinja2 template substitution.
+        
+        This custom WhyML syntax allows inline insertion of external content directly
+        in the manifest structure. Must be processed before Jinja2 to avoid parsing errors.
+        
+        Args:
+            manifest: Manifest that may contain {{EXTERNAL:...}} syntax
+            
+        Returns:
+            Manifest with {{EXTERNAL:...}} syntax replaced by actual content
+        """
+        import re
+        from pathlib import Path
+        
+        # Create external content map from manifest
+        external_content_map = {}
+        external_content = manifest.get('external_content', {})
+        
+        if external_content:
+            # Handle both list and dict formats for external_content
+            if isinstance(external_content, list):
+                content_items = enumerate(external_content)
+            else:
+                content_items = external_content.items()
+            
+            for content_key, content_config in content_items:
+                if isinstance(content_config, str):
+                    source = content_config
+                elif isinstance(content_config, dict):
+                    source = content_config.get('source', content_config.get('url', ''))
+                else:
+                    continue
+                
+                if source:
+                    try:
+                        # Load external content
+                        content = self._load_external_file(source)
+                        # Extract filename for the map key
+                        filename = Path(source).name if not source.startswith('http') else source
+                        external_content_map[filename] = content
+                    except Exception as e:
+                        logger.warning(f"Failed to load external content from {source}: {e}")
+        
+        def replace_external_syntax_recursive(obj):
+            if isinstance(obj, str):
+                return self._replace_external_syntax(obj, external_content_map)
+            elif isinstance(obj, dict):
+                return {k: replace_external_syntax_recursive(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [replace_external_syntax_recursive(item) for item in obj]
+            else:
+                return obj
+        
+        return replace_external_syntax_recursive(manifest)
+    
+    def _replace_external_syntax(self, content: str, external_content_map: Dict[str, str]) -> str:
+        """Replace {{EXTERNAL:filename}} syntax with actual content."""
+        import re
+        
+        def replace_external(match):
+            filename = match.group(1)
+            if filename in external_content_map:
+                return external_content_map[filename]
+            else:
+                # Return placeholder if external content not found
+                return f'<!-- External content not found: {filename} -->'
+        
+        # Replace {{EXTERNAL:filename}} with actual content
+        pattern = r'\{\{EXTERNAL:([^}]+)\}\}'
+        return re.sub(pattern, replace_external, content)
+    
+    def _load_external_file(self, source: str) -> str:
+        """Load content from external file or URL."""
+        from pathlib import Path
+        import requests
+        
+        if source.startswith(('http://', 'https://')):
+            # Load from URL
+            response = requests.get(source, timeout=10)
+            response.raise_for_status()
+            return response.text
+        else:
+            # Load from local file
+            file_path = Path(source)
+            if not file_path.is_absolute():
+                # Make relative to current working directory or manifest location
+                file_path = Path.cwd() / file_path
+            
+            if file_path.exists():
+                return file_path.read_text(encoding='utf-8')
+            else:
+                raise FileNotFoundError(f"External content file not found: {file_path}")
     
     def _validate_manifest(self, manifest: Dict[str, Any]):
         """Validate manifest and raise appropriate errors."""

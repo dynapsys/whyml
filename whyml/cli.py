@@ -85,6 +85,11 @@ def create_parser() -> argparse.ArgumentParser:
         action='store_true',
         help='Enable API debug endpoints and enhanced logging'
     )
+    run_parser.add_argument(
+        '--rss',
+        action='store_true',
+        help='Enable RSS feed for file changes at /rss/changes.xml'
+    )
     
     # Natural language conversion syntax
     convert_parser = subparsers.add_parser(
@@ -231,7 +236,8 @@ async def run_command(args) -> int:
             host=args.host,
             port=args.port,
             watch=getattr(args, 'watch', False),
-            api_debug=getattr(args, 'api_debug', False)
+            api_debug=getattr(args, 'api_debug', False),
+            rss_enabled=getattr(args, 'rss', False)
         )
         
         print(f"Starting WhyML server on http://{args.host}:{args.port}")
