@@ -441,10 +441,10 @@ class ManifestProcessor:
         self.style_processor = StyleProcessor()
         self.strict_validation = strict_validation
     
-    async def process_manifest(self, 
-                              manifest: Union[str, Dict[str, Any], LoadedManifest],
-                              context: Dict[str, Any] = None,
-                              validate: bool = True) -> Dict[str, Any]:
+    def process_manifest(self, 
+                        manifest: Union[str, Dict[str, Any], LoadedManifest],
+                        context: Dict[str, Any] = None,
+                        validate: bool = True) -> Dict[str, Any]:
         """
         Process a manifest through the complete pipeline.
         

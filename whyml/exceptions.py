@@ -202,3 +202,11 @@ def format_error_details(error: WhyMLError) -> str:
                 lines.append(f"  {key}: {value}")
     
     return "\n".join(lines)
+
+
+# Aliases for backward compatibility and test imports
+ManifestError = LoaderError  # Alias for test compatibility
+ManifestLoadingError = LoaderError  # Alias for test compatibility
+ManifestProcessingError = WhyMLError  # Alias for test compatibility
+TemplateInheritanceError = TemplateError  # Alias for test compatibility
+DependencyResolutionError = DependencyError  # Alias for test compatibility

@@ -30,14 +30,23 @@ from .converters import (
     ReactConverter,
     VueConverter,
     PHPConverter,
-    BaseConverter
+    BaseConverter,
+    ConversionResult
 )
 
 # Scraper imports
 from .scrapers import URLScraper, WebpageAnalyzer
 
+# Main processor
+from .processor import WhyMLProcessor, convert_manifest, scrape_and_convert
+
 # Main API
 __all__ = [
+    # Main processor
+    'WhyMLProcessor',
+    'convert_manifest',
+    'scrape_and_convert',
+    
     # Core classes
     'ManifestLoader',
     'ManifestProcessor',
@@ -48,6 +57,7 @@ __all__ = [
     'VueConverter',
     'PHPConverter',
     'BaseConverter',
+    'ConversionResult',
     
     # Scrapers
     'URLScraper',
