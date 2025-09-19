@@ -20,7 +20,33 @@ from datetime import datetime, timedelta
 import hashlib
 import json
 from dataclasses import dataclass
-from cachetools import TTLCache
+try:
+    from cachetools import TTLCache
+    CACHETOOLS_AVAILABLE = True
+except ImportError:
+    CACHETOOLS_AVAILABLE = False
+    # Fallback simple cache implementation
+    class TTLCache:
+        def __init__(self, maxsize, ttl):
+            self._cache = {}
+            self._maxsize = maxsize
+            
+        def get(self, key, default=None):
+            return self._cache.get(key, default)
+            
+        def __setitem__(self, key, value):
+            if len(self._cache) >= self._maxsize:
+                # Simple eviction - remove oldest
+                if self._cache:
+                    oldest_key = next(iter(self._cache))
+                    del self._cache[oldest_key]
+            self._cache[key] = value
+            
+        def __getitem__(self, key):
+            return self._cache[key]
+            
+        def __contains__(self, key):
+            return key in self._cache
 import logging
 
 from .exceptions import (

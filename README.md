@@ -29,7 +29,11 @@ WhyML is a powerful Python package that transforms YAML manifests into multiple 
 - 🚀 **Multi-Format Conversion**: Generate HTML, React (JSX/TSX), Vue (SFC), and PHP from YAML manifests
 - 🔗 **Template Inheritance**: Advanced inheritance system with dependency resolution and circular dependency detection
 - 🎨 **CSS Integration**: Built-in support for CSS frameworks (Bootstrap, Tailwind, Foundation)
-- 🕷️ **Web Scraping**: Intelligent website-to-manifest conversion with structural analysis
+- 🕷️ **Advanced Web Scraping**: Intelligent website-to-manifest conversion with:
+  - **Structure Simplification**: Reduce HTML nesting depth and flatten unnecessary containers
+  - **Selective Section Generation**: Extract only specific sections (metadata, analysis, imports, etc.)
+  - **Page Analysis**: Automatic detection of page types, SEO analysis, and accessibility metrics
+  - **Testing Workflow**: Complete scrape → YAML → HTML comparison with accuracy metrics
 - ⚡ **Async Processing**: High-performance asynchronous manifest loading and processing
 - 🧪 **Comprehensive Testing**: Extensive test suite with 95%+ coverage
 - 🛠️ **CLI & API**: Command-line interface and FastAPI server for integration
@@ -93,6 +97,147 @@ styles:
   cta_button:
     background: "#28a745"
     padding: "15px 30px"
+    border: "none"
+    border-radius: "5px"
+    color: "white"
+    font-weight: "bold"
+    cursor: "pointer"
+
+structure:
+  main:
+    class: "hero-section"
+    children:
+      div:
+        class: "container"
+        children:
+          - h1:
+              text: "{{ hero_text }}"
+              class: "display-4"
+          - p:
+              text: "Transform your ideas into reality with our powerful platform"
+              class: "lead"
+          - button:
+              text: "{{ cta_text }}"
+              class: "btn btn-success btn-lg"
+```
+
+## Advanced Web Scraping
+
+WhyML provides powerful web scraping capabilities with advanced structure simplification and analysis features, perfect for website refactoring, monitoring, and cross-platform development.
+
+### Structure Simplification
+
+Reduce complex HTML structures while preserving content and semantic meaning:
+
+```bash
+# Limit nesting depth to reduce YAML complexity
+whyml scrape https://example.com --max-depth 3
+
+# Flatten unnecessary wrapper divs
+whyml scrape https://example.com --flatten-containers
+
+# Apply general structure simplification
+whyml scrape https://example.com --simplify-structure
+
+# Combine multiple simplification options
+whyml scrape https://blog.example.com \
+  --max-depth 2 \
+  --flatten-containers \
+  --simplify-structure
+```
+
+### Selective Section Generation
+
+Extract only the sections you need for specific use cases:
+
+```bash
+# Extract only page analysis (page type detection, SEO metrics)
+whyml scrape https://example.com --section analysis
+
+# Get metadata and imports for quick inspection
+whyml scrape https://example.com --section metadata --section imports
+
+# Perfect for monitoring - extract only essential data
+whyml scrape https://ecommerce-site.com --section analysis --section metadata
+
+# Multiple sections for refactoring projects
+whyml scrape https://legacy-site.com \
+  --section structure \
+  --section styles \
+  --max-depth 3
+```
+
+### Testing & Comparison Workflow
+
+Validate conversion accuracy with comprehensive testing:
+
+```bash
+# Complete round-trip testing: scrape → YAML → HTML → compare
+whyml scrape https://example.com --test-conversion
+
+# Save regenerated HTML for manual inspection
+whyml scrape https://example.com \
+  --test-conversion \
+  --output-html regenerated.html
+
+# Test with simplification settings
+whyml scrape https://complex-site.com \
+  --test-conversion \
+  --max-depth 2 \
+  --flatten-containers \
+  --output-html simplified.html
+```
+
+### Page Analysis Features
+
+Automatic detection and analysis of web page characteristics:
+
+- **Page Type Detection**: blog, e-commerce, landing page, portfolio, etc.
+- **Content Statistics**: word count, element count, links, images
+- **Structure Complexity**: nesting depth, semantic elements analysis
+- **SEO Analysis**: meta descriptions, heading structure, alt attributes
+- **Accessibility Metrics**: alt text coverage, heading hierarchy, language attributes
+
+### Real-World Use Cases
+
+#### Website Refactoring
+```bash
+# Create simplified representations for legacy website modernization
+whyml scrape https://legacy-corporate-site.com \
+  --simplify-structure \
+  --max-depth 3 \
+  --flatten-containers \
+  --output refactored-manifest.yaml
+```
+
+#### Cross-Platform Development
+```bash
+# Extract essential structure for mobile app development
+whyml scrape https://web-app.com \
+  --section structure \
+  --section metadata \
+  --max-depth 2 \
+  --no-preserve-semantic
+```
+
+#### Website Monitoring
+```bash
+# Track page changes with essential data only
+whyml scrape https://competitor-site.com \
+  --section analysis \
+  --section metadata \
+  --output monitoring-$(date +%Y%m%d).yaml
+```
+
+#### Content Migration
+```bash
+# Test conversion accuracy for content migration projects
+whyml scrape https://source-site.com \
+  --test-conversion \
+  --section structure \
+  --section imports \
+  --output-html migrated-preview.html
+```
     border-radius: "8px"
     font-size: "1.2rem"
 
@@ -401,6 +546,22 @@ pytest --cov=whyml --cov-report=html
 pytest tests/test_converters.py
 pytest tests/test_manifest_loader.py
 ```
+
+
+```
+# ✅ Selective section generation - WORKS NOW!
+whyml scrape https://example.com --section analysis --section metadata
+
+# ✅ Structure simplification for refactoring
+whyml scrape https://tom.sapletta.com --max-depth 3 --flatten-containers --simplify-structure
+
+# ✅ Complete testing workflow with comparison
+whyml scrape https://example.com --test-conversion --output-html regenerated.html
+
+# ✅ Monitoring-friendly simple extraction  
+whyml scrape https://blog.example.com --section analysis --max-depth 2
+```
+
 
 ## Architecture
 

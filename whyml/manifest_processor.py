@@ -34,8 +34,9 @@ logger = logging.getLogger(__name__)
 class ManifestValidator:
     """Validates manifest structure and content against schema."""
     
-    def __init__(self, schema_path: Optional[Path] = None):
-        """Initialize validator with optional custom schema."""
+    def __init__(self, schema_path: Optional[Path] = None, requested_sections: Optional[List[str]] = None):
+        """Initialize validator with optional custom schema and requested sections."""
+        self.requested_sections = requested_sections or []
         self.schema = self._load_schema(schema_path)
     
     def _load_schema(self, schema_path: Optional[Path]) -> Dict[str, Any]:
@@ -44,8 +45,8 @@ class ManifestValidator:
             with open(schema_path, 'r') as f:
                 return yaml.safe_load(f)
         
-        # Default schema
-        return {
+        # Default schema with dynamic requirements based on requested sections
+        schema = {
             "type": "object",
             "properties": {
                 "metadata": {
@@ -55,9 +56,20 @@ class ManifestValidator:
                         "description": {"type": "string"},
                         "version": {"type": "string"},
                         "extends": {"type": "string"},
-                        "template_type": {"type": "string"}
+                        "template_type": {"type": "string"},
+                        "extracted_at": {"type": "string"}
                     },
                     "required": ["title"]
+                },
+                "analysis": {
+                    "type": "object",
+                    "properties": {
+                        "page_type": {"type": "string"},
+                        "seo_analysis": {"type": "object"},
+                        "accessibility_analysis": {"type": "object"},
+                        "content_stats": {"type": "object"},
+                        "structure_complexity": {"type": "object"}
+                    }
                 },
                 "styles": {
                     "type": "object",
@@ -88,9 +100,21 @@ class ManifestValidator:
                         "^[a-zA-Z_][a-zA-Z0-9_-]*$": {"type": "string"}
                     }
                 }
-            },
-            "required": ["metadata", "structure"]
+            }
         }
+        
+        # Dynamic required sections based on what was requested
+        if self.requested_sections:
+            # If specific sections are requested, only require those sections
+            schema["required"] = []
+            for section in self.requested_sections:
+                if section in schema["properties"]:
+                    schema["required"].append(section)
+        else:
+            # If no specific sections requested, use traditional requirement
+            schema["required"] = ["metadata"]
+        
+        return schema
     
     def validate(self, manifest: Dict[str, Any]) -> Tuple[List[str], List[str]]:
         """
@@ -117,17 +141,21 @@ class ManifestValidator:
         return errors, warnings
     
     def _validate_metadata(self, manifest: Dict[str, Any], errors: List[str], warnings: List[str]):
-        """Validate metadata section."""
+        """Validate metadata section if present or required."""
         metadata = manifest.get('metadata', {})
         
-        if not metadata.get('title'):
+        # Only validate metadata if it's present or explicitly requested
+        if not metadata and self.requested_sections and 'metadata' not in self.requested_sections:
+            return
+        
+        if metadata and not metadata.get('title'):
             errors.append("Metadata must include a title")
         
-        if not metadata.get('description'):
+        if metadata and not metadata.get('description'):
             warnings.append("Consider adding a description to metadata")
         
         # Validate template inheritance
-        if 'extends' in metadata:
+        if metadata and 'extends' in metadata:
             extends = metadata['extends']
             if not isinstance(extends, str) or not extends.strip():
                 errors.append("Template 'extends' must be a non-empty string")
@@ -161,11 +189,11 @@ class ManifestValidator:
                     warnings.append(f"Style '{style_name}' may have invalid CSS: '{style_value}'")
     
     def _validate_structure(self, manifest: Dict[str, Any], errors: List[str], warnings: List[str]):
-        """Validate structure section."""
+        """Validate structure section if present."""
         structure = manifest.get('structure')
         
         if not structure:
-            errors.append("Structure is required")
+            # Structure is now optional - only validate if present
             return
         
         def validate_element(element, path="structure"):
@@ -492,7 +520,8 @@ class ManifestProcessor:
     def __init__(self, 
                  manifest_loader: Optional[ManifestLoader] = None,
                  schema_path: Optional[Path] = None,
-                 strict_validation: bool = False):
+                 strict_validation: bool = False,
+                 requested_sections: Optional[List[str]] = None):
         """
         Initialize manifest processor.
         
@@ -500,12 +529,14 @@ class ManifestProcessor:
             manifest_loader: Loader for resolving dependencies
             schema_path: Path to custom validation schema
             strict_validation: Whether to treat warnings as errors
+            requested_sections: List of sections requested for selective validation
         """
         self.loader = manifest_loader or ManifestLoader()
-        self.validator = ManifestValidator(schema_path)
+        self.validator = ManifestValidator(schema_path, requested_sections)
         self.template_processor = TemplateProcessor()
         self.style_processor = StyleProcessor()
         self.strict_validation = strict_validation
+        self.requested_sections = requested_sections or []
     
     def process_manifest(self, 
                         manifest: Union[str, Dict[str, Any], LoadedManifest],

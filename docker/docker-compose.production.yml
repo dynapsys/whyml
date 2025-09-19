@@ -1,0 +1,130 @@
+version: '3.8'
+
+services:
+  whyml-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.production
+    image: whyml:production
+    container_name: whyml-production
+    restart: unless-stopped
+    
+    # Environment variables
+    environment:
+      - PYTHONPATH=/home/whyml
+      - WHYML_LOG_LEVEL=INFO
+      - WHYML_CACHE_SIZE=2000
+      - WHYML_CACHE_TTL=7200
+      - WHYML_MAX_WORKERS=4
+    
+    # Volume mounts for persistent data
+    volumes:
+      - whyml-data:/home/whyml/data
+      - whyml-logs:/home/whyml/logs
+      - whyml-output:/home/whyml/output
+      - ./config:/home/whyml/config:ro
+    
+    # Port mapping for API/server if needed
+    ports:
+      - "8080:8080"
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "whyml", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Network
+    networks:
+      - whyml-network
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: whyml-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - whyml-network
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.1'
+
+  # Monitoring with Prometheus (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: whyml-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - whyml-network
+
+  # Grafana for metrics visualization (optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: whyml-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - whyml-network
+
+# Volumes
+volumes:
+  whyml-data:
+    driver: local
+  whyml-logs:
+    driver: local
+  whyml-output:
+    driver: local
+  redis-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+
+# Networks
+networks:
+  whyml-network:
+    driver: bridge

@@ -39,6 +39,9 @@ WhyML is a powerful CLI tool for converting manifests to various application for
    # Install all required dependencies
    pip install -r requirements.txt
    
+   # Install additional dependencies for advanced scraping
+   pip install cachetools  # Required for advanced scraping features
+   
    # Install WhyML in editable mode
    pip install -e .
    ```
@@ -95,7 +98,7 @@ WhyML provides several powerful CLI commands:
 | `generate` | Generate complete application artifacts | `whyml generate pwa -f manifest.yaml -o ./pwa-app` |
 | `serve` | Start development server | `whyml serve -f manifest.yaml -p 8080` |
 | `run` | Start production server with Caddy | `whyml run -f manifest.yaml --tls-provider letsencrypt` |
-| `scrape` | Scrape websites to generate manifests | `whyml scrape https://example.com -o manifest.yaml` |
+| `scrape` | **Advanced website scraping** with structure simplification | `whyml scrape https://example.com --simplify-structure -o manifest.yaml` |
 
 ### Conversion Formats
 
@@ -203,7 +206,33 @@ whyml run -f manifest.yaml --host myapp.com --tls-provider letsencrypt
 whyml serve -f manifest.yaml --watch -p 3000
 ```
 
-### 4. Batch Processing
+### 4. Advanced Website Scraping
+
+```bash
+# Basic website scraping
+whyml scrape https://example.com -o manifest.yaml
+
+# Structure simplification for complex sites
+whyml scrape https://blog.example.com \
+  --max-depth 3 \
+  --flatten-containers \
+  --simplify-structure \
+  -o simplified.yaml
+
+# Selective section extraction for monitoring
+whyml scrape https://competitor.com \
+  --section analysis \
+  --section metadata \
+  -o monitoring.yaml
+
+# Testing workflow for migration projects
+whyml scrape https://legacy-site.com \
+  --test-conversion \
+  --output-html modernized.html \
+  -o migration-test.yaml
+```
+
+### 5. Batch Processing
 
 ```bash
 # Convert multiple formats

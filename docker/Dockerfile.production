@@ -1,0 +1,48 @@
+# Production Dockerfile for WhyML CLI with Advanced Scraping
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies for web scraping
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for security
+RUN useradd --create-home --shell /bin/bash whyml
+USER whyml
+WORKDIR /home/whyml
+
+# Copy requirements first for better caching
+COPY --chown=whyml:whyml requirements.txt requirements-dev.txt ./
+
+# Install Python dependencies
+RUN pip install --user --no-cache-dir -r requirements.txt && \
+    pip install --user --no-cache-dir cachetools
+
+# Copy application code
+COPY --chown=whyml:whyml . .
+
+# Install WhyML in user space
+RUN pip install --user -e .
+
+# Add user's pip bin to PATH
+ENV PATH="/home/whyml/.local/bin:${PATH}"
+
+# Create directories for data and logs
+RUN mkdir -p /home/whyml/data /home/whyml/logs /home/whyml/output
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD whyml --version || exit 1
+
+# Default command
+CMD ["whyml", "--help"]
+
+# Labels
+LABEL maintainer="WhyML Team"
+LABEL version="1.0.0"
+LABEL description="WhyML CLI with Advanced Web Scraping Capabilities"

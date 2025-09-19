@@ -13,7 +13,21 @@ import asyncio
 import aiohttp
 from typing import Any, Dict, List, Optional, Union, Set
 from urllib.parse import urljoin, urlparse, urlunparse
-from bs4 import BeautifulSoup, Tag, NavigableString
+try:
+    from bs4 import BeautifulSoup, Tag, NavigableString
+    BS4_AVAILABLE = True
+except ImportError:
+    BS4_AVAILABLE = False
+    # Fallback classes for when BS4 is not available
+    class BeautifulSoup:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("beautifulsoup4 is required for web scraping. Install with: pip install beautifulsoup4")
+    
+    class Tag:
+        pass
+    
+    class NavigableString:
+        pass
 import logging
 
 from ..exceptions import NetworkError, ConversionError

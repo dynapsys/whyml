@@ -31,6 +31,21 @@ class TestURLScraper:
         )
     
     @pytest.fixture
+    def advanced_scraper(self):
+        """Create URLScraper with advanced simplification features for testing."""
+        return URLScraper(
+            user_agent="WhyML-Test/1.0",
+            timeout=10,
+            extract_styles=True,
+            extract_scripts=False,
+            max_depth=3,
+            flatten_containers=True,
+            simplify_structure=True,
+            preserve_semantic_tags=True,
+            sections=['metadata', 'analysis', 'structure']
+        )
+    
+    @pytest.fixture
     def sample_html(self):
         """Sample HTML content for testing."""
         return """
@@ -48,56 +63,804 @@ class TestURLScraper:
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
             <style>
                 .container { width: 100%; max-width: 1200px; margin: 0 auto; }
-                .header { background: #007bff; color: white; padding: 20px; }
-                .content { padding: 20px; line-height: 1.6; }
+                .hero { background: #007bff; padding: 80px 0; color: white; }
+                .btn-primary { background: #007bff; border: none; padding: 10px 20px; }
             </style>
         </head>
         <body>
-            <div class="container">
-                <header class="header">
-                    <h1>Welcome to Sample Page</h1>
-                    <nav>
-                        <ul>
-                            <li><a href="#home">Home</a></li>
-                            <li><a href="#about">About</a></li>
-                            <li><a href="#contact">Contact</a></li>
-                        </ul>
-                    </nav>
-                </header>
-                <main class="content">
-                    <section id="about">
-                        <h2>About Us</h2>
-                        <p>This is a sample paragraph with some content.</p>
-                        <img src="image.jpg" alt="Sample image" loading="lazy">
-                    </section>
-                    <section id="features">
-                        <h2>Features</h2>
-                        <div class="feature-grid">
-                            <div class="feature-item">
-                                <h3>Feature 1</h3>
-                                <p>Description of feature 1</p>
+            <div class="wrapper">
+                <div class="container">
+                    <div class="content-wrapper">
+                        <header class="hero">
+                            <div class="inner">
+                                <h1>Welcome to Our Site</h1>
+                                <p class="lead">This is a sample webpage for testing WhyML scraping</p>
+                                <button class="btn btn-primary">Get Started</button>
                             </div>
-                            <div class="feature-item">
-                                <h3>Feature 2</h3>
-                                <p>Description of feature 2</p>
-                            </div>
-                        </div>
-                    </section>
-                </main>
-                <footer>
-                    <p>&copy; 2024 Sample Company</p>
-                </footer>
+                        </header>
+                        <main class="content">
+                            <article class="post">
+                                <h2>Blog Post Title</h2>
+                                <p>This is some sample content for testing.</p>
+                                <img src="image.jpg" alt="Sample image" />
+                            </article>
+                        </main>
+                    </div>
+                </div>
             </div>
-            <script src="script.js"></script>
+            <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "WebPage",
+                "name": "Sample Page",
+                "description": "A sample webpage for testing"
+            }
+            </script>
         </body>
         </html>
         """
     
+    @pytest.fixture
+    def complex_nested_html(self):
+        """Complex nested HTML for testing structure simplification."""
+        return """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <title>Complex Structure</title>
+            <meta name="description" content="Complex nested structure">
+        </head>
+        <body>
+            <div class="outer-wrapper">
+                <div class="middle-wrapper">
+                    <div class="inner-wrapper">
+                        <div class="content-container">
+                            <div class="entry-data-wrapper entry-data-wrapper-archive">
+                                <div class="entry-header-wrapper entry-header-wrapper-archive">
+                                    <div class="entry-meta entry-meta-header-before">
+                                        <ul>
+                                            <li>
+                                                <span class="post-first-category">
+                                                    <a href="/category/idea/" title="Idea">Idea</a>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <header class="entry-header">
+                                        <h1 class="entry-title">
+                                            <a href="/post/sample">dev environment for fast development</a>
+                                        </h1>
+                                    </header>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+    @pytest.fixture 
+    def ecommerce_html(self):
+        """E-commerce HTML for page type detection testing."""
+        return """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Product Page</title>
+            <meta name="description" content="Buy our amazing product">
+        </head>
+        <body>
+            <div class="product">
+                <h1>Amazing Product</h1>
+                <span class="price">$99.99</span>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+        </body>
+        </html>
+        """
+
+    # ADVANCED SCRAPING FUNCTIONALITY TESTS
+
     @pytest.mark.asyncio
-    async def test_scraper_context_manager(self, scraper):
-        """Test URLScraper as async context manager."""
-        async with scraper as s:
-            assert s.session is not None
+    async def test_structure_simplification_max_depth(self, advanced_scraper, complex_nested_html):
+        """Test max depth limitation for structure simplification."""
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=complex_nested_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with advanced_scraper:
+                manifest = await advanced_scraper.scrape_url('https://example.com')
+                
+                # Verify max depth is applied
+                assert 'structure' in manifest
+                structure = manifest['structure']
+                
+                # Check that depth is limited (should be flatter than original)
+                def get_depth(obj, current_depth=0):
+                    if isinstance(obj, dict):
+                        if 'children' in obj:
+                            children = obj['children']
+                            if isinstance(children, (list, dict)):
+                                return get_depth(children, current_depth + 1)
+                        return current_depth
+                    elif isinstance(obj, list):
+                        max_depth = current_depth
+                        for item in obj:
+                            depth = get_depth(item, current_depth)
+                            max_depth = max(max_depth, depth)
+                        return max_depth
+                    return current_depth
+                
+                actual_depth = get_depth(structure)
+                assert actual_depth <= 4  # Should be limited by max_depth setting
+
+    @pytest.mark.asyncio
+    async def test_container_flattening(self, advanced_scraper, complex_nested_html):
+        """Test container div flattening functionality."""
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=complex_nested_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with advanced_scraper:
+                manifest = await advanced_scraper.scrape_url('https://example.com')
+                
+                # Verify wrapper divs are flattened
+                assert 'structure' in manifest
+                structure_str = str(manifest['structure'])
+                
+                # Should have fewer wrapper divs than original
+                wrapper_count = structure_str.lower().count('wrapper')
+                assert wrapper_count < 5  # Original has many wrapper divs
+
+    @pytest.mark.asyncio
+    async def test_selective_section_generation(self):
+        """Test selective section generation functionality."""
+        selective_scraper = URLScraper(
+            sections=['metadata', 'analysis']  # Only these sections
+        )
+        
+        sample_html = """
+        <html>
+        <head>
+            <title>Test Page</title>
+            <meta name="description" content="Test description">
+        </head>
+        <body>
+            <h1>Test Content</h1>
+            <p>Sample content</p>
+        </body>
+        </html>
+        """
+        
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=sample_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with selective_scraper:
+                manifest = await selective_scraper.scrape_url('https://example.com')
+                
+                # Should only have requested sections
+                assert 'metadata' in manifest
+                assert 'analysis' in manifest
+                assert 'structure' not in manifest  # Not requested
+                assert 'styles' not in manifest     # Not requested
+                assert 'imports' not in manifest    # Not requested
+
+    @pytest.mark.asyncio
+    async def test_page_analysis_detection(self, scraper, sample_html, ecommerce_html):
+        """Test page type detection and analysis features."""
+        # Test blog page detection
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=sample_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with scraper:
+                manifest = await scraper.scrape_url('https://example.com')
+                
+                assert 'analysis' in manifest
+                analysis = manifest['analysis']
+                
+                # Check page type detection
+                assert 'page_type' in analysis
+                assert analysis['page_type'] in ['blog', 'website', 'unknown']
+                
+                # Check content statistics
+                assert 'content_stats' in analysis
+                stats = analysis['content_stats']
+                assert 'word_count' in stats
+                assert 'paragraph_count' in stats
+                assert 'heading_count' in stats
+                assert 'link_count' in stats
+                assert 'image_count' in stats
+                
+                # Check structure complexity
+                assert 'structure_complexity' in analysis
+                complexity = analysis['structure_complexity']
+                assert 'max_nesting_depth' in complexity
+                assert 'total_elements' in complexity
+                assert 'div_count' in complexity
+                
+                # Check SEO analysis
+                assert 'seo_analysis' in analysis
+                seo = analysis['seo_analysis']
+                assert 'has_meta_description' in seo
+                assert 'h1_count' in seo
+                
+                # Check accessibility analysis
+                assert 'accessibility' in analysis
+                accessibility = analysis['accessibility']
+                assert 'images_with_alt_ratio' in accessibility
+                assert 'has_lang_attribute' in accessibility
+
+        # Test e-commerce page detection
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=ecommerce_html)
+            mock_response.headers = {'content-type': 'text/html'}  
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with scraper:
+                manifest = await scraper.scrape_url('https://ecommerce.com')
+                
+                assert 'analysis' in manifest
+                assert manifest['analysis']['page_type'] == 'e-commerce'
+
+    @pytest.mark.asyncio
+    async def test_semantic_tag_preservation(self):
+        """Test semantic HTML5 tag preservation during simplification."""
+        semantic_html = """
+        <html>
+        <head><title>Semantic Test</title></head>
+        <body>
+            <div class="wrapper">
+                <div class="container">
+                    <header>
+                        <h1>Header Content</h1>
+                    </header>
+                    <main>
+                        <article>
+                            <section>
+                                <h2>Article Section</h2>
+                                <p>Content</p>
+                            </section>
+                        </article>
+                    </main>
+                    <footer>
+                        <p>Footer content</p>
+                    </footer>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        semantic_scraper = URLScraper(
+            flatten_containers=True,
+            preserve_semantic_tags=True
+        )
+        
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=semantic_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with semantic_scraper:
+                manifest = await semantic_scraper.scrape_url('https://example.com')
+                
+                # Semantic tags should be preserved
+                structure_str = str(manifest['structure'])
+                assert 'header' in structure_str
+                assert 'main' in structure_str
+                assert 'article' in structure_str
+                assert 'section' in structure_str
+                assert 'footer' in structure_str
+
+    @pytest.mark.asyncio
+    async def test_css_styles_extraction_with_simplification(self, advanced_scraper, sample_html):
+        """Test CSS extraction works with structure simplification."""
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=sample_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with advanced_scraper:
+                manifest = await advanced_scraper.scrape_url('https://example.com')
+                
+                # Should have styles even with simplification
+                assert 'styles' in manifest
+                styles = manifest['styles']
+                
+                # Should extract inline styles from <style> tag
+                assert len(styles) > 0
+                assert any('container' in style_name or 'background' in str(styles) for style_name in styles)
+
+    def test_wrapper_div_detection(self, advanced_scraper):
+        """Test wrapper div detection logic."""
+        # Test wrapper class detection
+        wrapper_div = {
+            'class': 'wrapper container inner',
+            'children': [{'p': {'text': 'content'}}]
+        }
+        assert advanced_scraper._is_wrapper_div(wrapper_div) == True
+        
+        # Test non-wrapper div
+        content_div = {
+            'class': 'content',
+            'text': 'Some content',
+            'data-id': '123'
+        }
+        assert advanced_scraper._is_wrapper_div(content_div) == False
+        
+        # Test structural-only div
+        structural_div = {
+            'class': 'layout-grid',
+            'children': [{'div': {'text': 'content'}}]
+        }
+        assert advanced_scraper._is_wrapper_div(structural_div) == True
+
+    def test_depth_limiting_algorithm(self, advanced_scraper):
+        """Test depth limiting algorithm."""
+        deep_structure = {
+            'div': {
+                'children': {
+                    'div': {
+                        'children': {
+                            'div': {
+                                'children': {
+                                    'div': {
+                                        'text': 'deep content'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        limited = advanced_scraper._limit_depth(deep_structure, max_depth=2)
+        
+        # Should be limited to specified depth
+        assert 'div' in limited
+        # Content should be preserved at the depth limit
+        def get_text_at_depth(obj, depth=0):
+            if isinstance(obj, dict):
+                for key, value in obj.items():
+                    if key == 'text':
+                        return value, depth
+                    elif isinstance(value, dict):
+                        return get_text_at_depth(value, depth + 1)
+            return None, depth
+        
+        text, final_depth = get_text_at_depth(limited)
+        assert final_depth <= 3  # Should respect max_depth
+
+    @pytest.mark.asyncio
+    async def test_no_styles_option(self):
+        """Test --no-styles equivalent functionality."""
+        no_styles_scraper = URLScraper(extract_styles=False)
+        
+        sample_html = """
+        <html>
+        <head>
+            <style>.test { color: red; }</style>
+            <title>No Styles Test</title>
+        </head>
+        <body><h1>Content</h1></body>
+        </html>
+        """
+        
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=sample_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with no_styles_scraper:
+                manifest = await no_styles_scraper.scrape_url('https://example.com')
+                
+                # Should not have styles section when extract_styles=False
+                assert 'styles' not in manifest or len(manifest.get('styles', {})) == 0
+
+    # INTEGRATION TESTS FOR COMPLETE WORKFLOW
+
+    @pytest.mark.asyncio
+    async def test_scrape_to_html_conversion_workflow(self, scraper, sample_html):
+        """Test complete scrape → YAML → HTML conversion workflow."""
+        from whyml.processor import WhyMLProcessor
+        from whyml.converters.html_converter import HTMLConverter
+        import tempfile
+        import os
+        
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=sample_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with scraper:
+                # Step 1: Scrape to manifest
+                manifest = await scraper.scrape_url('https://example.com')
+                
+                # Step 2: Convert back to HTML
+                converter = HTMLConverter()
+                html_result = await converter.convert(manifest)
+                
+                # Step 3: Validate conversion
+                assert html_result.success == True
+                assert len(html_result.content) > 0
+                assert '<html' in html_result.content
+                assert 'Welcome to Our Site' in html_result.content  # Original content preserved
+                
+                # Step 4: Write and read test files
+                with tempfile.TemporaryDirectory() as tmpdir:
+                    manifest_path = os.path.join(tmpdir, 'test_manifest.yaml')
+                    html_path = os.path.join(tmpdir, 'regenerated.html')
+                    
+                    # Save manifest
+                    import yaml
+                    with open(manifest_path, 'w') as f:
+                        yaml.dump(manifest, f, default_flow_style=False)
+                    
+                    # Save regenerated HTML
+                    with open(html_path, 'w') as f:
+                        f.write(html_result.content)
+                    
+                    # Verify files exist and have content
+                    assert os.path.exists(manifest_path)
+                    assert os.path.exists(html_path)
+                    assert os.path.getsize(manifest_path) > 0
+                    assert os.path.getsize(html_path) > 0
+
+    @pytest.mark.asyncio 
+    async def test_testing_workflow_similarity_calculation(self, scraper):
+        """Test the testing workflow similarity calculation functionality."""
+        original_html = """
+        <html><head><title>Test</title></head>
+        <body><h1>Hello World</h1><p>Content here</p></body></html>
+        """
+        
+        regenerated_html = """
+        <html><head><title>Test</title></head>
+        <body><h1>Hello World</h1><p>Content here</p></body></html>
+        """
+        
+        # Test similarity calculation method (this would be part of CLI testing functionality)
+        similarity = scraper._calculate_similarity(original_html, regenerated_html)
+        assert similarity >= 0.9  # Should be very similar
+        
+        # Test with different content
+        different_html = """
+        <html><head><title>Different</title></head>
+        <body><h2>Different Content</h2></body></html>
+        """
+        
+        similarity_different = scraper._calculate_similarity(original_html, different_html)
+        assert similarity_different < similarity  # Should be less similar
+
+    @pytest.mark.asyncio
+    async def test_structure_comparison_metrics(self, advanced_scraper, complex_nested_html):
+        """Test structure comparison and complexity metrics."""
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=complex_nested_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with advanced_scraper:
+                manifest = await advanced_scraper.scrape_url('https://example.com')
+                
+                # Verify analysis contains complexity metrics
+                assert 'analysis' in manifest
+                analysis = manifest['analysis']
+                
+                assert 'structure_complexity' in analysis
+                complexity = analysis['structure_complexity']
+                
+                # Should have complexity reduction due to simplification
+                assert 'max_nesting_depth' in complexity
+                assert 'total_elements' in complexity
+                assert 'simplification_applied' in complexity
+                assert complexity['simplification_applied'] == True
+
+    def test_manifest_validation_with_selective_sections(self):
+        """Test manifest validation works with selective sections."""
+        from whyml.manifest_processor import ManifestProcessor
+        
+        # Test manifest with only metadata and analysis
+        selective_manifest = {
+            'metadata': {
+                'title': 'Test Page',
+                'description': 'Test description',
+                'version': '1.0.0'
+            },
+            'analysis': {
+                'page_type': 'website',
+                'content_stats': {'word_count': 10}
+            }
+        }
+        
+        processor = ManifestProcessor()
+        errors, warnings = processor.validate_manifest(selective_manifest)
+        
+        # Should validate successfully without structure section
+        assert len(errors) == 0
+        
+        # Test with only structure section  
+        structure_only_manifest = {
+            'metadata': {
+                'title': 'Test Page',
+                'description': 'Test description',
+                'version': '1.0.0'
+            },
+            'structure': {
+                'div': {'text': 'content'}
+            }
+        }
+        
+        errors, warnings = processor.validate_manifest(structure_only_manifest)
+        assert len(errors) == 0
+
+    @pytest.mark.asyncio
+    async def test_error_handling_network_issues(self, scraper):
+        """Test error handling for network and parsing issues."""
+        # Test network timeout
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_get.side_effect = asyncio.TimeoutError()
+            
+            async with scraper:
+                with pytest.raises(NetworkError):
+                    await scraper.scrape_url('https://timeout.example.com')
+        
+        # Test invalid HTML
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value='<html><invalid</html>')
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with scraper:
+                # Should handle invalid HTML gracefully
+                manifest = await scraper.scrape_url('https://invalid.example.com')
+                assert 'metadata' in manifest  # Should still extract what it can
+
+    @pytest.mark.asyncio
+    async def test_performance_with_large_pages(self, advanced_scraper):
+        """Test performance and memory usage with large complex pages."""
+        # Create a large HTML structure
+        large_html = """
+        <html>
+        <head><title>Large Page</title></head>
+        <body>
+        """ + "\n".join([
+            f'<div class="section-{i}"><h2>Section {i}</h2>' + 
+            ''.join([f'<p>Paragraph {j} content here</p>' for j in range(10)]) + 
+            '</div>' 
+            for i in range(50)
+        ]) + """
+        </body>
+        </html>
+        """
+        
+        with patch('aiohttp.ClientSession.get') as mock_get:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.text = AsyncMock(return_value=large_html)
+            mock_response.headers = {'content-type': 'text/html'}
+            mock_get.return_value.__aenter__.return_value = mock_response
+            
+            async with advanced_scraper:
+                import time
+                start_time = time.time()
+                
+                manifest = await advanced_scraper.scrape_url('https://large.example.com')
+                
+                end_time = time.time()
+                processing_time = end_time - start_time
+                
+                # Should complete in reasonable time (adjust based on performance requirements)
+                assert processing_time < 30  # 30 seconds max
+                
+                # Should have simplified structure 
+                assert 'structure' in manifest
+                assert 'analysis' in manifest
+                
+                # Complexity analysis should show simplification benefits
+                complexity = manifest['analysis']['structure_complexity']
+                assert complexity['simplification_applied'] == True
+
+
+class TestWebpageAnalyzer:
+    """Test cases for webpage analyzer functionality."""
+    
+    @pytest.fixture
+    def analyzer(self):
+        """Create WebpageAnalyzer instance for testing."""
+        return WebpageAnalyzer()
+    
+    @pytest.mark.asyncio
+    async def test_analyze_blog_page(self, analyzer):
+        """Test analysis of blog page structure."""
+        blog_html = """
+        <html>
+        <head>
+            <title>My Blog Post</title>
+            <meta name="description" content="A great blog post">
+        </head>
+        <body>
+            <article>
+                <h1>Blog Post Title</h1>
+                <div class="meta">
+                    <time datetime="2024-01-01">January 1, 2024</time>
+                    <span class="author">John Doe</span>
+                </div>
+                <div class="content">
+                    <p>This is the blog post content.</p>
+                    <p>More blog content here.</p>
+                </div>
+            </article>
+        </body>
+        </html>
+        """
+        
+        soup = BeautifulSoup(blog_html, 'html.parser')
+        analysis = await analyzer.analyze_page(soup, 'https://blog.example.com')
+        
+        assert analysis['page_type'] == 'blog'
+        assert analysis['content_stats']['paragraph_count'] >= 2
+        assert analysis['seo_analysis']['has_meta_description'] == True
+        assert 'article' in analysis['structure_complexity']['semantic_elements']
+
+    @pytest.mark.asyncio  
+    async def test_analyze_ecommerce_page(self, analyzer):
+        """Test analysis of e-commerce page structure."""
+        ecommerce_html = """
+        <html>
+        <head><title>Product - Amazing Item</title></head>
+        <body>
+            <div class="product">
+                <h1>Amazing Product</h1>
+                <span class="price">$99.99</span>
+                <button class="add-to-cart">Add to Cart</button>
+                <button class="buy-now">Buy Now</button>
+            </div>
+        </body>
+        </html>
+        """
+        
+        soup = BeautifulSoup(ecommerce_html, 'html.parser')
+        analysis = await analyzer.analyze_page(soup, 'https://shop.example.com')
+        
+        assert analysis['page_type'] == 'e-commerce'
+        assert 'price' in str(analysis).lower()
+        assert 'cart' in str(analysis).lower() or 'buy' in str(analysis).lower()
+
+    def test_seo_analysis_metrics(self, analyzer):
+        """Test SEO analysis functionality."""
+        html_with_seo = """
+        <html lang="en">
+        <head>
+            <title>Great SEO Page</title>
+            <meta name="description" content="This page has good SEO">
+            <meta name="keywords" content="seo, test, page">
+        </head>
+        <body>
+            <h1>Main Heading</h1>
+            <h2>Subheading 1</h2>
+            <h2>Subheading 2</h2>
+            <p>Content with proper heading structure.</p>
+            <img src="image.jpg" alt="Descriptive alt text">
+        </body>
+        </html>
+        """
+        
+        soup = BeautifulSoup(html_with_seo, 'html.parser')
+        seo = analyzer._analyze_seo(soup)
+        
+        assert seo['has_meta_description'] == True
+        assert seo['meta_description_length'] > 0
+        assert seo['h1_count'] == 1
+        assert seo['h2_count'] == 2
+        assert seo['title_length'] > 0
+
+    def test_accessibility_analysis(self, analyzer):
+        """Test accessibility analysis functionality."""
+        accessible_html = """
+        <html lang="en">
+        <head><title>Accessible Page</title></head>
+        <body>
+            <img src="image1.jpg" alt="Image with alt text">
+            <img src="image2.jpg" alt="Another image">
+            <img src="image3.jpg">  <!-- Missing alt -->
+            <h1>Proper Heading Structure</h1>
+            <h2>Subheading</h2>
+        </body>
+        </html>
+        """
+        
+        soup = BeautifulSoup(accessible_html, 'html.parser')
+        accessibility = analyzer._analyze_accessibility(soup)
+        
+        assert accessibility['has_lang_attribute'] == True
+        assert accessibility['images_with_alt_ratio'] == 2/3  # 2 out of 3 images have alt
+        assert accessibility['heading_structure_valid'] == True
+
+    def test_content_statistics(self, analyzer):
+        """Test content statistics calculation."""
+        content_html = """
+        <html>
+        <body>
+            <h1>Title</h1>
+            <h2>Subtitle</h2>
+            <p>First paragraph with several words here.</p>
+            <p>Second paragraph with more content.</p>
+            <a href="link1.html">Link 1</a>
+            <a href="link2.html">Link 2</a>
+            <img src="image.jpg" alt="Image">
+        </body>
+        </html>
+        """
+        
+        soup = BeautifulSoup(content_html, 'html.parser')
+        stats = analyzer._calculate_content_stats(soup)
+        
+        assert stats['paragraph_count'] == 2
+        assert stats['heading_count'] == 2
+        assert stats['link_count'] == 2
+        assert stats['image_count'] == 1
+        assert stats['word_count'] > 10
+
+    def test_structure_complexity_analysis(self, analyzer):
+        """Test structure complexity analysis."""
+        complex_html = """
+        <html>
+        <body>
+            <div>
+                <div>
+                    <div>
+                        <div>
+                            <p>Deeply nested content</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <header>Semantic element</header>
+            <main>Another semantic element</main>
+        </body>
+        </html>
+        """
+        
+        soup = BeautifulSoup(complex_html, 'html.parser')
+        complexity = analyzer._analyze_structure_complexity(soup)
+        
+        assert complexity['max_nesting_depth'] >= 4
+        assert complexity['total_elements'] > 5
+        assert complexity['div_count'] >= 4
+        assert 'header' in complexity['semantic_elements']
+        assert 'main' in complexity['semantic_elements']
         
         # Session should be closed after context exit
         assert scraper.session is None or scraper.session.closed

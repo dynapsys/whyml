@@ -286,8 +286,17 @@ class WhyMLProcessor:
             # Clean and optimize
             cleaned_manifest = scraper.clean_manifest(manifest)
             
-            # Process the manifest
-            processed_manifest = self.processor.process_manifest(cleaned_manifest)
+            # Process the manifest with selective validation if sections specified
+            if sections:
+                # Create a new processor with selective validation for the requested sections
+                selective_processor = ManifestProcessor(
+                    strict_validation=self.enable_validation,
+                    requested_sections=sections
+                )
+                processed_manifest = selective_processor.process_manifest(cleaned_manifest)
+            else:
+                # Use default processor for full manifest processing
+                processed_manifest = self.processor.process_manifest(cleaned_manifest)
             
             # Add analysis if requested
             if analyze:

@@ -24,7 +24,7 @@ whyml generate pwa -f manifest.yaml -o ./pwa-app
 | [`convert`](convert.md) | Convert manifest to different formats | `whyml convert --from manifest.yaml --to app.html -as spa` |
 | [`generate`](generate.md) | Generate application artifacts | `whyml generate docker -f manifest.yaml` |
 | [`validate`](validate.md) | Validate manifest files | `whyml validate manifest.yaml` |
-| [`scrape`](scrape.md) | Convert websites to manifests | `whyml scrape https://example.com -o manifest.yaml` |
+| [`scrape`](scrape.md) | Advanced website scraping to manifests | `whyml scrape https://example.com -o manifest.yaml --simplify-structure` |
 
 ## 🎯 Natural Language Syntax
 
