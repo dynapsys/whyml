@@ -999,8 +999,8 @@ services:
 <!-- Build Instructions -->
 <g transform="translate(20, 400)">
     <text x="0" y="0" class="pasvg-title" font-size="16">Build Instructions</text>
-    <text x="0" y="25" class="pasvg-code">1. Extract: python pasvg_extractor.py tutorial-2:-svg-file-generation-with-menu,-metadata,-and-media-as-datauri-with-php-and-docker.pasvg.svg</text>
-    <text x="0" y="40" class="pasvg-code">2. Build: cd extracted && ./build.sh</text>
+    <text x="0" y="25" class="pasvg-code">1. Extract: python pasvg_extractor.py tutorial-2--svg-file-generation-with-menu--metadata--and-media-as-datauri-with-php-and-docker.pasvg.svg</text>
+    <text x="0" y="40" class="pasvg-code">2. Build: cd extracted &amp;&amp; ./build.sh</text>
     <text x="0" y="60" class="pasvg-section">Targets: Container, Desktop, Web Application</text>
 </g>
 

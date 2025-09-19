@@ -297,6 +297,9 @@ class PASVGGenerator:
             'files': [{'filename': f.filename, 'type': f.file_type} for f in source_files]
         }
         
+        # Create safe filename for instructions
+        safe_filename = re.sub(r'[^a-zA-Z0-9\-_]', '-', metadata.name.lower())
+        
         return f'''
 <!-- Build Configuration -->
 <script type="application/json" data-filename="pasvg-build.json">
@@ -306,9 +309,9 @@ class PASVGGenerator:
 <!-- Build Instructions -->
 <g transform="translate(20, 400)">
     <text x="0" y="0" class="pasvg-title" font-size="16">Build Instructions</text>
-    <text x="0" y="25" class="pasvg-code">1. Extract: python pasvg_extractor.py {metadata.name.lower().replace(" ", "-")}.pasvg.svg</text>
-    <text x="0" y="40" class="pasvg-code">2. Build: cd extracted && ./build.sh</text>
-    <text x="0" y="60" class="pasvg-section">Targets: {', '.join(metadata.build_targets)}</text>
+    <text x="0" y="25" class="pasvg-code">1. Extract: python pasvg_extractor.py {escape(safe_filename)}.pasvg.svg</text>
+    <text x="0" y="40" class="pasvg-code">2. Build: cd extracted &amp;&amp; ./build.sh</text>
+    <text x="0" y="60" class="pasvg-section">Targets: {escape(', '.join(metadata.build_targets))}</text>
 </g>'''
 
 
