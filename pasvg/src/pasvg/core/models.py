@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 from enum import Enum
+import base64
 
 
 class FileType(Enum):
@@ -48,7 +49,24 @@ class SourceFile:
     def __post_init__(self):
         """Calculate file size after initialization."""
         if self.size == 0:
-            self.size = len(self.content.encode(self.encoding))
+            if self.encoding == "base64":
+                # For base64 content, calculate size of decoded content
+                try:
+                    decoded = base64.b64decode(self.content)
+                    self.size = len(decoded)
+                except Exception:
+                    self.size = len(self.content)
+            else:
+                # For text content, calculate encoded size
+                try:
+                    self.size = len(self.content.encode(self.encoding))
+                except (LookupError, UnicodeEncodeError):
+                    self.size = len(self.content.encode('utf-8'))
+    
+    @property
+    def is_binary(self) -> bool:
+        """Check if file is binary based on encoding."""
+        return self.encoding == "base64"
 
 
 @dataclass
