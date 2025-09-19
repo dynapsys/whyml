@@ -122,9 +122,9 @@ class TestManifestLoader:
         result = await loader.load_manifest(manifest_path)
         
         assert result is not None
-        assert result['metadata']['title'] == 'Base Component'
-        assert 'styles' in result
-        assert 'structure' in result
+        assert result.content['metadata']['title'] == 'Base Component'
+        assert 'styles' in result.content
+        assert 'structure' in result.content
     
     @pytest.mark.asyncio
     async def test_load_manifest_with_inheritance(self, loader, temp_manifest_dir):
@@ -133,10 +133,10 @@ class TestManifestLoader:
         result = await loader.load_manifest(manifest_path)
         
         assert result is not None
-        assert result['metadata']['title'] == 'Child Component'
-        assert result['metadata']['version'] == '1.0.0'  # Inherited from base
-        assert 'content' in result['styles']  # Child styles
-        assert 'container' in result['styles']  # Inherited styles
+        assert result.content['metadata']['title'] == 'Child Component'
+        assert result.content['metadata']['version'] == '1.0.0'  # Inherited from base
+        assert 'content' in result.content['styles']  # Child styles
+        assert 'container' in result.content['styles']  # Inherited styles
     
     @pytest.mark.asyncio
     async def test_dependency_resolution(self, loader, temp_manifest_dir):
@@ -145,8 +145,8 @@ class TestManifestLoader:
         result = await loader.load_manifest(manifest_path)
         
         assert result is not None
-        assert 'dependencies' in result
-        assert len(result['dependencies']) > 0
+        assert 'dependencies' in result.content
+        assert len(result.content['dependencies']) > 0
     
     @pytest.mark.asyncio
     async def test_caching(self, loader, temp_manifest_dir):
@@ -222,7 +222,7 @@ class TestManifestLoader:
         result = await loader.load_manifest('https://example.com/manifest.yaml')
         
         assert result is not None
-        assert result['metadata']['title'] == 'Remote Component'
+        assert result.content['metadata']['title'] == 'Remote Component'
     
     @pytest.mark.asyncio
     @patch('aiohttp.ClientSession.get')
@@ -256,8 +256,8 @@ class TestManifestLoader:
             result = await loader.load_manifest(f.name)
             
             # Check that template variables are preserved for processing
-            assert 'template_vars' in result
-            assert result['template_vars']['primary_color'] == '#007bff'
+            assert 'template_vars' in result.content
+            assert result.content['template_vars']['primary_color'] == '#007bff'
         
         os.unlink(f.name)
     
@@ -377,12 +377,12 @@ class TestManifestLoader:
             
             result = await loader.load_manifest(str(temp_path / 'level3.yaml'))
             
-            assert result['metadata']['title'] == 'Level 3'
-            assert result['metadata']['level'] == 3
-            assert 'base' in result['styles']
-            assert 'level1' in result['styles']
-            assert 'level2' in result['styles']
-            assert 'level3' in result['styles']
+            assert result.content['metadata']['title'] == 'Level 3'
+            assert result.content['metadata']['level'] == 3
+            assert 'base' in result.content['styles']
+            assert 'level1' in result.content['styles']
+            assert 'level2' in result.content['styles']
+            assert 'level3' in result.content['styles']
 
 
 @pytest.mark.asyncio

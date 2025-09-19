@@ -170,6 +170,10 @@ class ManifestCache:
         """Clear the cache."""
         self.cache.clear()
         self.loading_locks.clear()
+    
+    def __contains__(self, cache_key: str) -> bool:
+        """Check if a cache key exists in the cache."""
+        return cache_key in self.cache
 
 
 class ManifestLoader:
@@ -394,6 +398,10 @@ class ManifestLoader:
             # Parse YAML
             manifest_data = self._parse_yaml(raw_content, resolved_url)
             
+            # Process template inheritance if present
+            if 'extends' in manifest_data:
+                manifest_data = await self.expand_manifest(manifest_data, resolved_url)
+            
             # Resolve dependencies
             resolved_modules = await self._resolve_dependencies(
                 manifest_data, resolved_url, depth, loading_chain
@@ -434,7 +442,7 @@ class ManifestLoader:
         
         return chain
     
-    async def expand_manifest(self, manifest: Dict[str, Any]) -> Dict[str, Any]:
+    async def expand_manifest(self, manifest: Dict[str, Any], base_url: str = None) -> Dict[str, Any]:
         """
         Expand a manifest by resolving all imports and template inheritance.
         
@@ -449,13 +457,25 @@ class ManifestLoader:
         expanded = manifest.copy()
         
         # Process template inheritance first (bottom-up)
-        if 'metadata' in expanded and 'extends' in expanded['metadata']:
-            parent_url = expanded['metadata']['extends']
-            parent_loaded = await self.load_manifest(parent_url)
-            parent_expanded = await self.expand_manifest(parent_loaded.content)
+        # Check for extends at root level first, then in metadata
+        extends_url = None
+        if 'extends' in expanded:
+            extends_url = expanded['extends']
+        elif 'metadata' in expanded and 'extends' in expanded['metadata']:
+            extends_url = expanded['metadata']['extends']
+        
+        if extends_url:
+            # Resolve the extends URL relative to the base URL
+            resolved_extends_url = self._resolve_url(extends_url, base_url)
+            parent_loaded = await self.load_manifest(resolved_extends_url)
+            parent_expanded = await self.expand_manifest(parent_loaded.content, resolved_extends_url)
             
             # Merge parent into current (parent provides defaults)
             expanded = self._merge_manifests(parent_expanded, expanded)
+            
+            # Remove the extends field as it's been processed
+            if 'extends' in expanded:
+                del expanded['extends']
         
         # Process imports and modules
         resolved_modules = {}
@@ -513,3 +533,9 @@ class ManifestLoader:
             issues.extend(e.details.get('circular_dependencies', []))
         
         return issues
+    
+    def _generate_cache_key(self, url: str, options: Dict[str, Any] = None) -> str:
+        """Generate a cache key for the given URL and options."""
+        options = options or {}
+        # Use the cache's key generation method for consistency
+        return self.cache._generate_cache_key(url, options)

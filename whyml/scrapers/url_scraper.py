@@ -297,8 +297,12 @@ class URLScraper:
     
     def _find_main_content(self, soup: BeautifulSoup) -> Optional[Tag]:
         """Find the main content area of the page."""
-        # Try common main content selectors
+        # Try common main content selectors, prioritizing containers first
         main_selectors = [
+            '.container',
+            '.wrapper',
+            '#container',
+            '#wrapper',
             'main',
             '[role="main"]',
             '.main-content',

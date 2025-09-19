@@ -110,7 +110,16 @@ class WebpageAnalyzer:
         # Return the type with highest score, or 'general' if no clear match
         if scores:
             best_type = max(scores.items(), key=lambda x: x[1])
-            return best_type[0] if best_type[1] > 0 else 'general'
+            if best_type[1] > 0:
+                result_type = best_type[0]
+                
+                # Map specific types to broader categories where appropriate
+                if result_type == 'product' and scores.get('ecommerce', 0) > 0:
+                    return 'ecommerce'
+                
+                return result_type
+            else:
+                return 'general'
         
         return 'general'
     
