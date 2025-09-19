@@ -491,6 +491,195 @@ async def scrape_command(args) -> int:
         return 1
 
 
+async def _test_conversion_workflow(url: str, manifest_file: str, output_html: Optional[str], manifest: Dict[str, Any]) -> int:
+    """
+    Test conversion workflow: scrape → YAML → HTML and compare with original.
+    
+    This tests the round-trip accuracy of the scraping and conversion process.
+    """
+    try:
+        import requests
+        from difflib import unified_diff
+        import tempfile
+        
+        print("\n🧪 Testing Conversion Workflow:")
+        print("=" * 50)
+        
+        # Step 1: Fetch original HTML
+        print("📥 1. Fetching original HTML...")
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
+        original_html = response.text
+        
+        # Step 2: Convert manifest back to HTML
+        print("🔄 2. Converting manifest back to HTML...")
+        processor = WhyMLProcessor()
+        
+        # Load the saved manifest
+        with open(manifest_file, 'r') as f:
+            loaded_manifest = yaml.safe_load(f)
+        
+        # Convert to HTML
+        conversion_result = await processor.convert_manifest(loaded_manifest, 'html')
+        regenerated_html = conversion_result.content
+        
+        # Step 3: Save regenerated HTML if output file specified
+        if output_html:
+            with open(output_html, 'w', encoding='utf-8') as f:
+                f.write(regenerated_html)
+            print(f"💾 3. Saved regenerated HTML to: {output_html}")
+        else:
+            # Create temporary file for comparison
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8') as f:
+                f.write(regenerated_html)
+                output_html = f.name
+                print(f"💾 3. Created temporary HTML file: {output_html}")
+        
+        # Step 4: Analyze differences
+        print("📊 4. Analyzing conversion accuracy...")
+        
+        # Basic content comparison
+        original_text = _extract_text_content(original_html)
+        regenerated_text = _extract_text_content(regenerated_html)
+        
+        text_similarity = _calculate_text_similarity(original_text, regenerated_text)
+        
+        # Structure comparison
+        original_structure = _analyze_html_structure(original_html)
+        regenerated_structure = _analyze_html_structure(regenerated_html)
+        
+        # Report results
+        print("\n📈 CONVERSION TEST RESULTS:")
+        print("=" * 40)
+        print(f"Text Content Similarity: {text_similarity:.1%}")
+        print(f"Original HTML Size: {len(original_html):,} chars")
+        print(f"Regenerated HTML Size: {len(regenerated_html):,} chars")
+        print(f"Size Difference: {((len(regenerated_html) - len(original_html)) / len(original_html) * 100):+.1f}%")
+        
+        print(f"\nStructure Comparison:")
+        print(f"  Original Elements: {original_structure['total_elements']}")
+        print(f"  Regenerated Elements: {regenerated_structure['total_elements']}")
+        print(f"  Original Max Depth: {original_structure['max_depth']}")
+        print(f"  Regenerated Max Depth: {regenerated_structure['max_depth']}")
+        
+        # Show content preservation
+        print(f"\nContent Preservation:")
+        print(f"  Original Word Count: {len(original_text.split())}")
+        print(f"  Regenerated Word Count: {len(regenerated_text.split())}")
+        print(f"  Word Count Difference: {((len(regenerated_text.split()) - len(original_text.split())) / len(original_text.split()) * 100):+.1f}%")
+        
+        # Generate diff sample if significant differences
+        if text_similarity < 0.8:
+            print(f"\n⚠️  Text similarity is low ({text_similarity:.1%}). Showing content diff sample:")
+            _show_text_diff_sample(original_text, regenerated_text)
+        
+        # Success criteria
+        if text_similarity > 0.7 and abs(len(regenerated_text.split()) - len(original_text.split())) / len(original_text.split()) < 0.5:
+            print(f"\n✅ CONVERSION TEST PASSED: Good content preservation achieved!")
+            success_code = 0
+        elif text_similarity > 0.5:
+            print(f"\n⚠️  CONVERSION TEST PARTIAL: Reasonable content preservation, but room for improvement.")
+            success_code = 0
+        else:
+            print(f"\n❌ CONVERSION TEST FAILED: Significant content loss detected.")
+            success_code = 1
+        
+        print(f"\n🎯 RECOMMENDATIONS:")
+        if regenerated_structure['max_depth'] < original_structure['max_depth'] / 2:
+            print("  • Consider reducing --max-depth for better structure preservation")
+        if text_similarity < 0.8:
+            print("  • Some content may be lost in wrapper div flattening")
+            print("  • Try --no-preserve-semantic to preserve more structural elements")
+        if regenerated_structure['total_elements'] < original_structure['total_elements'] / 3:
+            print("  • Aggressive simplification detected - consider reducing simplification settings")
+        
+        return success_code
+        
+    except Exception as e:
+        print(f"❌ Error in conversion testing workflow: {e}")
+        return 1
+
+
+def _extract_text_content(html: str) -> str:
+    """Extract clean text content from HTML."""
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, 'html.parser')
+    
+    # Remove script and style elements
+    for script in soup(["script", "style"]):
+        script.decompose()
+    
+    text = soup.get_text()
+    
+    # Clean up text
+    lines = (line.strip() for line in text.splitlines())
+    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+    text = ' '.join(chunk for chunk in chunks if chunk)
+    
+    return text
+
+
+def _calculate_text_similarity(text1: str, text2: str) -> float:
+    """Calculate similarity between two text strings."""
+    words1 = set(text1.lower().split())
+    words2 = set(text2.lower().split())
+    
+    intersection = words1.intersection(words2)
+    union = words1.union(words2)
+    
+    if not union:
+        return 1.0
+    
+    return len(intersection) / len(union)
+
+
+def _analyze_html_structure(html: str) -> Dict[str, int]:
+    """Analyze HTML structure complexity."""
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, 'html.parser')
+    
+    def get_max_depth(element, current_depth=0):
+        if not hasattr(element, 'children'):
+            return current_depth
+        
+        max_child_depth = current_depth
+        for child in element.children:
+            if hasattr(child, 'name') and child.name:
+                child_depth = get_max_depth(child, current_depth + 1)
+                max_child_depth = max(max_child_depth, child_depth)
+        
+        return max_child_depth
+    
+    body = soup.find('body')
+    max_depth = get_max_depth(body) if body else 0
+    
+    return {
+        'total_elements': len(soup.find_all()),
+        'max_depth': max_depth,
+        'div_count': len(soup.find_all('div')),
+        'semantic_elements': len(soup.find_all(['article', 'section', 'header', 'footer', 'main', 'nav', 'aside']))
+    }
+
+
+def _show_text_diff_sample(original: str, regenerated: str, max_lines: int = 10):
+    """Show a sample of text differences."""
+    original_lines = original.split('\n')[:max_lines]
+    regenerated_lines = regenerated.split('\n')[:max_lines]
+    
+    diff = list(unified_diff(
+        original_lines,
+        regenerated_lines,
+        fromfile='original',
+        tofile='regenerated',
+        lineterm=''
+    ))
+    
+    if diff:
+        print("   Sample differences (first 10 lines):")
+        for line in diff[:20]:  # Show first 20 diff lines
+            print(f"   {line}")
+
+
 async def main_async() -> int:
     """Main async entry point."""
     parser = create_parser()
