@@ -458,7 +458,18 @@ class ManifestProcessor:
         """
         # Load manifest if needed
         if isinstance(manifest, str):
-            loaded_manifest = await self.loader.load_manifest(manifest)
+            # For synchronous operation, we'll need to run the async load in an event loop
+            import asyncio
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    # If already in an async context, raise an error suggesting async usage
+                    raise RuntimeError("Cannot load manifest from URL in sync context when event loop is running. Use WhyMLProcessor.process_manifest_async() instead.")
+                else:
+                    loaded_manifest = loop.run_until_complete(self.loader.load_manifest(manifest))
+            except RuntimeError:
+                # No event loop, create one
+                loaded_manifest = asyncio.run(self.loader.load_manifest(manifest))
             manifest_data = loaded_manifest.content
         elif isinstance(manifest, LoadedManifest):
             manifest_data = manifest.content
@@ -470,7 +481,7 @@ class ManifestProcessor:
             self._validate_manifest(manifest_data)
         
         # Process template inheritance
-        processed_manifest = await self._process_inheritance(manifest_data)
+        processed_manifest = self._process_inheritance(manifest_data)
         
         # Process template variables
         if context:
@@ -487,6 +498,132 @@ class ManifestProcessor:
         
         return processed_manifest
     
+    def merge_manifests(self, base: Dict[str, Any], child: Dict[str, Any]) -> Dict[str, Any]:
+        """Merge child manifest with base manifest."""
+        merged = copy.deepcopy(base)
+        
+        # Merge metadata (child overrides base)
+        if 'metadata' in child:
+            if 'metadata' not in merged:
+                merged['metadata'] = {}
+            merged['metadata'].update(child['metadata'])
+        
+        # Merge template_vars (child overrides base)
+        if 'template_vars' in child:
+            if 'template_vars' not in merged:
+                merged['template_vars'] = {}
+            merged['template_vars'].update(child['template_vars'])
+        
+        # Merge styles (child overrides base)
+        if 'styles' in child:
+            if 'styles' not in merged:
+                merged['styles'] = {}
+            merged['styles'].update(child['styles'])
+        
+        # Child structure overrides base structure
+        if 'structure' in child:
+            merged['structure'] = child['structure']
+        
+        # Merge other sections
+        for key, value in child.items():
+            if key not in ['metadata', 'template_vars', 'styles', 'structure']:
+                merged[key] = value
+        
+        return merged
+    
+    def optimize_styles(self, styles: Dict[str, str]) -> Dict[str, str]:
+        """Optimize CSS styles by removing duplicates and normalizing."""
+        optimized = {}
+        
+        for name, css in styles.items():
+            # Normalize CSS
+            normalized = self._normalize_css(css)
+            optimized[name] = normalized
+        
+        return optimized
+    
+    def _normalize_css(self, css: str) -> str:
+        """Normalize CSS by removing extra whitespace and organizing properties."""
+        # Remove extra whitespace
+        css = ' '.join(css.split())
+        
+        # Split into properties
+        properties = []
+        for prop in css.split(';'):
+            prop = prop.strip()
+            if prop:
+                # Remove duplicate properties (keep last one)
+                prop_name = prop.split(':')[0].strip()
+                # Remove existing property with same name
+                properties = [p for p in properties if not p.strip().startswith(prop_name + ':')]
+                properties.append(prop)
+        
+        return '; '.join(properties)
+    
+    def validate_structure(self, structure: Dict[str, Any]) -> List[str]:
+        """Validate HTML structure."""
+        errors = []
+        
+        def validate_element(element, path="root"):
+            if isinstance(element, dict):
+                for tag_name, tag_content in element.items():
+                    if not self._is_valid_html_tag(tag_name):
+                        errors.append(f"Invalid HTML tag '{tag_name}' at {path}")
+                    
+                    if isinstance(tag_content, dict):
+                        if 'children' in tag_content:
+                            validate_element(tag_content['children'], f"{path}.{tag_name}")
+                    elif isinstance(tag_content, list):
+                        for i, child in enumerate(tag_content):
+                            validate_element(child, f"{path}.{tag_name}[{i}]")
+            elif isinstance(element, list):
+                for i, item in enumerate(element):
+                    validate_element(item, f"{path}[{i}]")
+        
+        validate_element(structure)
+        return errors
+    
+    def validate_metadata(self, metadata: Dict[str, Any]) -> List[str]:
+        """Validate metadata section."""
+        errors = []
+        
+        required_fields = ['title']
+        for field in required_fields:
+            if field not in metadata:
+                errors.append(f"Missing required metadata field: {field}")
+        
+        return errors
+    
+    def merge_styles(self, base_styles: Dict[str, str], child_styles: Dict[str, str], 
+                    strategy: str = 'override') -> Dict[str, str]:
+        """Merge styles with specified strategy."""
+        if strategy == 'override':
+            merged = base_styles.copy()
+            merged.update(child_styles)
+            return merged
+        elif strategy == 'extend':
+            merged = base_styles.copy()
+            for name, style in child_styles.items():
+                if name in merged:
+                    # Extend existing style
+                    merged[name] = f"{merged[name]}; {style}"
+                else:
+                    merged[name] = style
+            return merged
+        else:
+            raise ValueError(f"Unknown merge strategy: {strategy}")
+    
+    def _is_valid_html_tag(self, tag_name: str) -> bool:
+        """Check if tag name is a valid HTML element."""
+        valid_tags = {
+            'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'ul', 'ol', 'li', 'table', 'tr', 'td', 'th', 'thead', 'tbody',
+            'form', 'input', 'textarea', 'select', 'option', 'button', 'label',
+            'a', 'img', 'video', 'audio', 'br', 'hr',
+            'header', 'nav', 'main', 'section', 'article', 'aside', 'footer'
+        }
+        return tag_name.lower() in valid_tags
+    
     def _validate_manifest(self, manifest: Dict[str, Any]):
         """Validate manifest and raise appropriate errors."""
         errors, warnings = self.validator.validate(manifest)
@@ -502,7 +639,7 @@ class ManifestProcessor:
             for warning in warnings:
                 logger.warning(f"Manifest validation warning: {warning}")
     
-    async def _process_inheritance(self, manifest: Dict[str, Any]) -> Dict[str, Any]:
+    def _process_inheritance(self, manifest: Dict[str, Any]) -> Dict[str, Any]:
         """Process template inheritance chain."""
         metadata = manifest.get('metadata', {})
         extends = metadata.get('extends')
@@ -512,11 +649,21 @@ class ManifestProcessor:
         
         # Load parent template
         try:
-            parent_loaded = await self.loader.load_manifest(extends)
+            # Handle async loading in sync context
+            import asyncio
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    raise RuntimeError("Cannot process inheritance from URL in sync context when event loop is running.")
+                else:
+                    parent_loaded = loop.run_until_complete(self.loader.load_manifest(extends))
+            except RuntimeError:
+                parent_loaded = asyncio.run(self.loader.load_manifest(extends))
+            
             parent_manifest = parent_loaded.content
             
             # Recursively process parent inheritance
-            parent_processed = await self._process_inheritance(parent_manifest)
+            parent_processed = self._process_inheritance(parent_manifest)
             
             # Apply inheritance
             return self.template_processor.process_template_inheritance(
@@ -537,7 +684,7 @@ class ManifestProcessor:
             **kwargs
         }
     
-    async def validate_only(self, manifest: Union[str, Dict[str, Any]]) -> Tuple[List[str], List[str]]:
+    def validate_only(self, manifest: Union[str, Dict[str, Any]]) -> Tuple[List[str], List[str]]:
         """
         Validate a manifest without processing.
         
@@ -545,14 +692,23 @@ class ManifestProcessor:
             Tuple of (errors, warnings)
         """
         if isinstance(manifest, str):
-            loaded_manifest = await self.loader.load_manifest(manifest)
+            # Handle async loading in sync context
+            import asyncio
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    raise RuntimeError("Cannot validate manifest from URL in sync context when event loop is running.")
+                else:
+                    loaded_manifest = loop.run_until_complete(self.loader.load_manifest(manifest))
+            except RuntimeError:
+                loaded_manifest = asyncio.run(self.loader.load_manifest(manifest))
             manifest_data = loaded_manifest.content
         else:
             manifest_data = manifest
         
         return self.validator.validate(manifest_data)
     
-    async def expand_manifest(self, manifest: Union[str, Dict[str, Any]]) -> Dict[str, Any]:
+    def expand_manifest(self, manifest: Union[str, Dict[str, Any]]) -> Dict[str, Any]:
         """
         Expand manifest with all dependencies resolved.
         
@@ -560,8 +716,16 @@ class ManifestProcessor:
         rather than template processing.
         """
         if isinstance(manifest, str):
-            return await self.loader.expand_manifest(manifest)
+            # Handle async loading in sync context
+            import asyncio
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    raise RuntimeError("Cannot expand manifest from URL in sync context when event loop is running.")
+                else:
+                    return loop.run_until_complete(self.loader.expand_manifest(manifest))
+            except RuntimeError:
+                return asyncio.run(self.loader.expand_manifest(manifest))
         else:
-            # For dict input, we need to process it through the loader
-            # This is a simplified version - in practice, you'd save to temp file
-            return await self.loader.expand_manifest(manifest)
+            # For dict input, return as-is since it's already loaded
+            return manifest

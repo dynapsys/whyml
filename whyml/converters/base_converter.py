@@ -70,7 +70,8 @@ class BaseConverter(ABC):
     def __init__(self, 
                  optimize_output: bool = True,
                  minify: bool = False,
-                 include_comments: bool = True):
+                 include_comments: bool = True,
+                 **kwargs):
         """
         Initialize base converter.
         
@@ -78,6 +79,7 @@ class BaseConverter(ABC):
             optimize_output: Whether to optimize generated code
             minify: Whether to minify the output
             include_comments: Whether to include generated comments
+            **kwargs: Additional converter-specific options
         """
         self.optimize_output = optimize_output
         self.minify = minify

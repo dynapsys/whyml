@@ -130,6 +130,16 @@ class ManifestCache:
         self.cache = TTLCache(maxsize=max_size, ttl=ttl_seconds)
         self.loading_locks: Dict[str, asyncio.Lock] = {}
     
+    @property
+    def maxsize(self) -> int:
+        """Get the maximum cache size."""
+        return self.cache.maxsize
+    
+    @property
+    def ttl(self) -> int:
+        """Get the cache TTL."""
+        return self.cache.ttl
+    
     def _generate_cache_key(self, url: str, options: Dict[str, Any]) -> str:
         """Generate a unique cache key for the request."""
         key_data = {
@@ -178,8 +188,9 @@ class ManifestLoader:
                  base_url: str = "",
                  base_dir: Union[str, Path] = None,
                  cache_ttl: int = 300,
-                 max_cache_size: int = 1000,
-                 max_depth: int = 10):
+                 cache_size: int = 1000,
+                 max_depth: int = 10,
+                 timeout: int = 30):
         """
         Initialize the manifest loader.
         
@@ -187,14 +198,16 @@ class ManifestLoader:
             base_url: Base URL for resolving relative URLs
             base_dir: Base directory for resolving relative file paths
             cache_ttl: Cache time-to-live in seconds
-            max_cache_size: Maximum number of items in cache
+            cache_size: Maximum number of items in cache
             max_depth: Maximum dependency resolution depth
+            timeout: Timeout for network requests in seconds
         """
         self.base_url = base_url.rstrip('/')
         self.base_dir = Path(base_dir) if base_dir else Path.cwd()
         self.max_depth = max_depth
+        self.timeout = timeout
         
-        self.cache = ManifestCache(max_cache_size, cache_ttl)
+        self.cache = ManifestCache(cache_size, cache_ttl)
         self.resolver = DependencyResolver()
         self.session: Optional[aiohttp.ClientSession] = None
     
