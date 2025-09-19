@@ -1,0 +1,65 @@
+metadata:
+  name: "My Multi-Page Website"
+  description: "A complete multi-page site built with WhyML"
+  version: "1.0.0"
+  author: "Your Name"
+  language: "en"
+
+config:
+  output_format: "php"
+  base_url: "http://localhost:8080"
+  theme_color: "#2563eb"
+  
+variables:
+  site_name: "My Awesome Site"
+  copyright_year: "2024"
+  contact_email: "hello@example.com"
+
+dependencies:
+  - "components/header.yaml"
+  - "components/footer.yaml" 
+  - "components/menu.yaml"
+  - "pages/home.yaml"
+  - "pages/about.yaml"
+  - "pages/contact.yaml"
+
+structure:
+  - tag: "html"
+    attributes:
+      lang: "<?= $language ?>"
+    children:
+      - tag: "head"
+        children:
+          - tag: "meta"
+            attributes:
+              charset: "utf-8"
+          - tag: "meta"
+            attributes:
+              name: "viewport"
+              content: "width=device-width, initial-scale=1"
+          - tag: "title"
+            content: "<?= $site_name ?> - <?= $page_title ?>"
+          - tag: "link"
+            attributes:
+              rel: "stylesheet"
+              href: "styles/main.css"
+      - tag: "body"
+        children:
+          - "{{EXTERNAL:components/header.yaml}}"
+          - tag: "main"
+            attributes:
+              id: "content"
+            children:
+              - "<?php include $current_page; ?>"
+          - "{{EXTERNAL:components/footer.yaml}}"
+
+routes:
+  - path: "/"
+    page: "home"
+    title: "Welcome"
+  - path: "/about"
+    page: "about" 
+    title: "About Us"
+  - path: "/contact"
+    page: "contact"
+    title: "Contact"

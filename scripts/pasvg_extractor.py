@@ -77,7 +77,34 @@ class PASVGExtractor:
         return metadata
     
     def _extract_files(self, root: ET.Element, project_dir: Path) -> List[str]:
-        """Extract all embedded source files."""
+        """Extract all embedded source files using raw SVG parsing."""
+        extracted_files = []
+        
+        # Read the raw SVG content to extract CDATA sections
+        svg_content = ""
+        if hasattr(self, '_raw_svg_content'):
+            svg_content = self._raw_svg_content
+        else:
+            # If we don't have raw content, try to extract from elements
+            return self._fallback_extract_files(root, project_dir)
+        
+        # Extract CDATA sections using regex from raw SVG content
+        # Pattern to match: <element data-filename="..." ...>...<![CDATA[...]]>...</element>
+        cdata_pattern = r'<(foreignObject|pre|script)[^>]*data-filename="([^"]+)"[^>]*>.*?<!\[CDATA\[(.*?)\]\]>.*?</\1>'
+        
+        matches = re.findall(cdata_pattern, svg_content, re.DOTALL)
+        
+        for element_type, filename, content in matches:
+            # Clean up the content by removing leading/trailing whitespace
+            cleaned_content = content.strip()
+            if cleaned_content:
+                self._write_file(project_dir, filename, cleaned_content)
+                extracted_files.append(filename)
+        
+        return extracted_files
+    
+    def _fallback_extract_files(self, root: ET.Element, project_dir: Path) -> List[str]:
+        """Fallback extraction method for when raw content is not available."""
         extracted_files = []
         
         # Find all foreignObject elements (YAML manifests)
@@ -108,9 +135,25 @@ class PASVGExtractor:
     
     def _extract_cdata_content(self, element: ET.Element) -> Optional[str]:
         """Extract CDATA content from XML element."""
-        if element.text:
-            # Remove leading/trailing whitespace but preserve internal structure
+        # Try to get direct text content first
+        if element.text and element.text.strip():
             return element.text.strip()
+        
+        # For CDATA sections, we need to parse the raw content
+        # ElementTree doesn't preserve CDATA sections, so we need to extract differently
+        content_parts = []
+        if element.text:
+            content_parts.append(element.text)
+        
+        for child in element:
+            if child.tail:
+                content_parts.append(child.tail)
+        
+        if content_parts:
+            content = ''.join(content_parts).strip()
+            if content:
+                return content
+        
         return None
     
     def _write_file(self, project_dir: Path, filename: str, content: str):

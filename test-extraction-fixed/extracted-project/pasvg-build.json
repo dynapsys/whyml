@@ -1,0 +1,45 @@
+{
+  "project": "Tutorial 1: Multi-Page HTML Site with Menu Using YAML Dependencies, PHP Integration, and Docker",
+  "targets": [
+    "Container",
+    "Web Application"
+  ],
+  "files": [
+    {
+      "filename": "manifests/site.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "manifests/components/menu.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "manifests/components/header.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "manifests/components/footer.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "manifests/pages/home.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "manifests/pages/about.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "manifests/pages/contact.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "src/styles/main.css",
+      "type": "web"
+    },
+    {
+      "filename": "docker-compose.yml",
+      "type": "container"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+metadata:
+  name: "About Page"
+  description: "Information about the company"
+
+variables:
+  page_title: "About Us"
+  current_page: "about"
+
+structure:
+  - tag: "section"
+    attributes:
+      class: "page-header"
+    children:
+      - tag: "div"
+        attributes:
+          class: "container"
+        children:
+          - tag: "h2"
+            content: "About {{site_name}}"
+          - tag: "p"
+            attributes:
+              class: "page-subtitle"
+            content: "Learn more about our mission and values"
+  
+  - tag: "section"
+    attributes:
+      class: "content"
+    children:
+      - tag: "div"
+        attributes:
+          class: "container"
+        children:
+          - tag: "div"
+            attributes:
+              class: "content-grid"
+            children:
+              - tag: "div"
+                attributes:
+                  class: "content-main"
+                children:
+                  - tag: "h3"
+                    content: "Our Story"
+                  - tag: "p"
+                    content: "Founded in {{copyright_year}}, we've been dedicated to providing exceptional services to our customers. Our team combines expertise with innovation to deliver results that exceed expectations."
+                  - tag: "p"
+                    content: "We believe in the power of technology to transform businesses and improve lives. That's why we're committed to staying at the forefront of industry developments and best practices."
+                  - tag: "h3"
+                    content: "Our Mission"
+                  - tag: "p"
+                    content: "To empower businesses and individuals through innovative web solutions that are both beautiful and functional."
+              - tag: "aside"
+                attributes:
+                  class: "content-sidebar"
+                children:
+                  - tag: "h4"
+                    content: "Quick Facts"
+                  - tag: "ul"
+                    children:
+                      - tag: "li"
+                        content: "Founded: {{copyright_year}}"
+                      - tag: "li"
+                        content: "Team Size: 50+ professionals"
+                      - tag: "li"
+                        content: "Projects: 500+ completed"
+                      - tag: "li"
+                        content: "Satisfaction: 99% client satisfaction"

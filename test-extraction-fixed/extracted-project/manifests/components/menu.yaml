@@ -1,0 +1,41 @@
+metadata:
+  name: "Navigation Menu"
+  description: "Site navigation with active page highlighting"
+
+structure:
+  - tag: "nav"
+    attributes:
+      class: "main-nav"
+      role: "navigation"
+    children:
+      - tag: "ul"
+        attributes:
+          class: "nav-list"
+        children:
+          - tag: "li"
+            attributes:
+              class: "nav-item"
+            children:
+              - tag: "a"
+                attributes:
+                  href: "/"
+                  class: "nav-link <?= $current_page == 'home' ? 'active' : '' ?>"
+                content: "Home"
+          - tag: "li"
+            attributes:
+              class: "nav-item"
+            children:
+              - tag: "a"
+                attributes:
+                  href: "/about"
+                  class: "nav-link <?= $current_page == 'about' ? 'active' : '' ?>"
+                content: "About"
+          - tag: "li"
+            attributes:
+              class: "nav-item"
+            children:
+              - tag: "a"
+                attributes:
+                  href: "/contact"
+                  class: "nav-link <?= $current_page == 'contact' ? 'active' : '' ?>"
+                content: "Contact"

@@ -1,0 +1,30 @@
+metadata:
+  name: "Site Footer"
+  description: "Site footer with copyright and links"
+
+structure:
+  - tag: "footer"
+    attributes:
+      class: "site-footer"
+      role: "contentinfo"
+    children:
+      - tag: "div"
+        attributes:
+          class: "container"
+        children:
+          - tag: "div"
+            attributes:
+              class: "footer-content"
+            children:
+              - tag: "p"
+                attributes:
+                  class: "copyright"
+                content: "© {{copyright_year}} {{site_name}}. All rights reserved."
+              - tag: "p"
+                attributes:
+                  class: "contact"
+                children:
+                  - tag: "a"
+                    attributes:
+                      href: "mailto:{{contact_email}}"
+                    content: "{{contact_email}}"

@@ -1,0 +1,126 @@
+metadata:
+  name: "Contact Page"
+  description: "Contact form and information"
+
+variables:
+  page_title: "Contact Us"
+  current_page: "contact"
+
+structure:
+  - tag: "section"
+    attributes:
+      class: "page-header"
+    children:
+      - tag: "div"
+        attributes:
+          class: "container"
+        children:
+          - tag: "h2"
+            content: "Contact Us"
+          - tag: "p"
+            attributes:
+              class: "page-subtitle"
+            content: "Get in touch with our team"
+  
+  - tag: "section"
+    attributes:
+      class: "contact-section"
+    children:
+      - tag: "div"
+        attributes:
+          class: "container"
+        children:
+          - tag: "div"
+            attributes:
+              class: "contact-grid"
+            children:
+              - tag: "div"
+                attributes:
+                  class: "contact-form"
+                children:
+                  - tag: "h3"
+                    content: "Send us a Message"
+                  - tag: "form"
+                    attributes:
+                      action: "/contact.php"
+                      method: "post"
+                    children:
+                      - tag: "div"
+                        attributes:
+                          class: "form-group"
+                        children:
+                          - tag: "label"
+                            attributes:
+                              for: "name"
+                            content: "Name"
+                          - tag: "input"
+                            attributes:
+                              type: "text"
+                              id: "name"
+                              name: "name"
+                              required: "required"
+                      - tag: "div"
+                        attributes:
+                          class: "form-group"
+                        children:
+                          - tag: "label"
+                            attributes:
+                              for: "email"
+                            content: "Email"
+                          - tag: "input"
+                            attributes:
+                              type: "email"
+                              id: "email"
+                              name: "email"
+                              required: "required"
+                      - tag: "div"
+                        attributes:
+                          class: "form-group"
+                        children:
+                          - tag: "label"
+                            attributes:
+                              for: "message"
+                            content: "Message"
+                          - tag: "textarea"
+                            attributes:
+                              id: "message"
+                              name: "message"
+                              rows: "5"
+                              required: "required"
+                      - tag: "button"
+                        attributes:
+                          type: "submit"
+                          class: "btn btn-primary"
+                        content: "Send Message"
+              - tag: "div"
+                attributes:
+                  class: "contact-info"
+                children:
+                  - tag: "h3"
+                    content: "Get in Touch"
+                  - tag: "div"
+                    attributes:
+                      class: "contact-item"
+                    children:
+                      - tag: "h4"
+                        content: "Email"
+                      - tag: "a"
+                        attributes:
+                          href: "mailto:{{contact_email}}"
+                        content: "{{contact_email}}"
+                  - tag: "div"
+                    attributes:
+                      class: "contact-item"
+                    children:
+                      - tag: "h4"
+                        content: "Phone"
+                      - tag: "p"
+                        content: "+1 (555) 123-4567"
+                  - tag: "div"
+                    attributes:
+                      class: "contact-item"
+                    children:
+                      - tag: "h4"
+                        content: "Address"
+                      - tag: "p"
+                        content: "123 Main Street<br>City, State 12345"

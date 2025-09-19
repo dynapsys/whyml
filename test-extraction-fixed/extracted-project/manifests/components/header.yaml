@@ -1,0 +1,27 @@
+metadata:
+  name: "Site Header"
+  description: "Main site header with logo and navigation"
+
+structure:
+  - tag: "header"
+    attributes:
+      class: "site-header"
+      role: "banner"
+    children:
+      - tag: "div"
+        attributes:
+          class: "container"
+        children:
+          - tag: "div"
+            attributes:
+              class: "header-content"
+            children:
+              - tag: "h1"
+                attributes:
+                  class: "site-title"
+                children:
+                  - tag: "a"
+                    attributes:
+                      href: "/"
+                    content: "{{site_name}}"
+              - "{{EXTERNAL:components/menu.yaml}}"
