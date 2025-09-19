@@ -1,3 +1,18 @@
+.idea
+.pid
+.*.pid
+.frontend.pid
+.websocket.pid
+.vscode
+.pem
+.rdb
+package-lock.json
+venv
+.env
+npm
+.pid
+node_modules
+Cargo.lock
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
