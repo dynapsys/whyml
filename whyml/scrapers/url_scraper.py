@@ -39,9 +39,14 @@ class URLScraper:
                  timeout: int = 30,
                  max_redirects: int = 10,
                  extract_styles: bool = True,
-                 extract_scripts: bool = False):
+                 extract_scripts: bool = False,
+                 max_depth: Optional[int] = None,
+                 flatten_containers: bool = False,
+                 simplify_structure: bool = False,
+                 preserve_semantic_tags: bool = True,
+                 sections: Optional[List[str]] = None):
         """
-        Initialize URL scraper.
+        Initialize URL scraper with advanced simplification options.
         
         Args:
             user_agent: User agent for requests
@@ -49,12 +54,22 @@ class URLScraper:
             max_redirects: Maximum redirects to follow
             extract_styles: Whether to extract CSS styles
             extract_scripts: Whether to extract JavaScript
+            max_depth: Maximum nesting depth for structure (None = unlimited)
+            flatten_containers: Merge wrapper/container divs with minimal content
+            simplify_structure: Apply general structure simplification rules
+            preserve_semantic_tags: Keep semantic HTML5 tags (article, section, etc.)
+            sections: Only extract specific sections (None = all sections)
         """
         self.user_agent = user_agent
         self.timeout = timeout
         self.max_redirects = max_redirects
         self.extract_styles = extract_styles
         self.extract_scripts = extract_scripts
+        self.max_depth = max_depth
+        self.flatten_containers = flatten_containers
+        self.simplify_structure = simplify_structure
+        self.preserve_semantic_tags = preserve_semantic_tags
+        self.sections = sections or ['metadata', 'styles', 'structure', 'imports', 'analysis']
         self.session: Optional[aiohttp.ClientSession] = None
     
     async def __aenter__(self):
@@ -100,13 +115,24 @@ class URLScraper:
             imports = self._extract_imports(soup, url)
             structure = self._extract_structure(soup)
             
-            # Build manifest
-            manifest = {
+            # Add page analysis
+            analysis = self._analyze_page(soup, url)
+            
+            # Build full manifest
+            full_manifest = {
                 'metadata': metadata,
                 'styles': styles,
                 'structure': structure,
-                'imports': imports
+                'imports': imports,
+                'analysis': analysis
             }
+            
+            # Filter sections based on user request
+            manifest = self._filter_sections(full_manifest)
+            
+            # Apply structure simplification if requested
+            if self.simplify_structure or self.flatten_containers or self.max_depth:
+                manifest = self._apply_simplification(manifest)
             
             return manifest
             

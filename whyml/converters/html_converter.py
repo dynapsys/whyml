@@ -423,17 +423,27 @@ class HTMLConverter(BaseConverter):
         Returns:
             HTML string
         """
-        if isinstance(structure, dict):
-            return self._convert_element_to_html(structure, styles, indent)
-        elif isinstance(structure, list):
-            return '\n'.join(
-                self._convert_structure_to_html(item, styles, indent) 
-                for item in structure
-            )
-        elif isinstance(structure, str):
-            return escape(structure)
-        else:
-            return str(structure)
+        try:
+            if isinstance(structure, dict):
+                return self._convert_element_to_html(structure, styles, indent)
+            elif isinstance(structure, list):
+                return '\n'.join(
+                    self._convert_structure_to_html(item, styles, indent) 
+                    for item in structure
+                )
+            elif isinstance(structure, str):
+                return escape(structure)
+            else:
+                return str(structure)
+        except TypeError as e:
+            if "unhashable type" in str(e):
+                logger.error(f"Unhashable type error in structure conversion: {e}")
+                logger.error(f"Structure type: {type(structure)}")
+                logger.error(f"Structure content: {str(structure)[:200]}...")
+                # Return safe fallback
+                return f'<!-- Error processing structure: {e} -->'
+            else:
+                raise
     
     def _process_external_syntax(self, content: str, external_content_map: Dict[str, str]) -> str:
         """
