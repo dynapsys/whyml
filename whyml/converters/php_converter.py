@@ -130,17 +130,25 @@ class PHPConverter(BaseConverter):
         """Generate valid PHP class name."""
         title = metadata.get('title', 'Component')
         
-        # Convert to PascalCase
-        name = re.sub(r'[^\w\s]', '', title)  # Remove special chars
-        name = ''.join(word.capitalize() for word in name.split())
+        # Remove special chars but preserve word boundaries
+        name = re.sub(r'[^\w\s]', '', title)
+        
+        # If already PascalCase (no spaces), preserve it if valid
+        if ' ' not in name and name and name[0].isupper():
+            # Always add Component suffix for PHP classes
+            name += 'Component'
+            return name
+        
+        # Convert to PascalCase from space-separated words
+        words = name.split()
+        name = ''.join(word.capitalize() for word in words)
         
         # Ensure it starts with uppercase letter
         if not name or not name[0].isupper():
             name = f"Generated{name}"
         
-        # Add Component suffix if not present
-        if not name.endswith('Component'):
-            name += 'Component'
+        # Always add Component suffix for PHP classes
+        name += 'Component'
         
         return name
     
