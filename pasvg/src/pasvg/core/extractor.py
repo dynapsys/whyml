@@ -11,7 +11,7 @@ from typing import Dict, List, Optional
 from pasvg.core.models import (
     PASVGMetadata, SourceFile, ExtractionResult, FileType
 )
-from pasvg.utils.file_utils import FileProcessor
+from pasvg.utils.file_utils import FileUtils
 from pasvg.generators.build_script_generator import BuildScriptGenerator
 
 
@@ -22,7 +22,7 @@ class Extractor:
         self.namespaces = {
             'pasvg': 'http://whyml.org/pasvg/1.0'
         }
-        self.file_processor = FileProcessor()
+        self.file_utils = FileUtils()
         self.build_generator = BuildScriptGenerator()
     
     def extract(self, pasvg_file: str, output_dir: str) -> ExtractionResult:
@@ -121,7 +121,7 @@ class Extractor:
             # Clean and process the content
             cleaned_content = content.strip()
             if cleaned_content:
-                self.file_processor.write_file(project_dir, filename, cleaned_content)
+                self.file_utils.write_file_content(project_dir / filename, cleaned_content)
                 extracted_files.append(filename)
         
         return extracted_files

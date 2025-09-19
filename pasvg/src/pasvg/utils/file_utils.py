@@ -12,7 +12,7 @@ import base64
 from pasvg.core.models import SourceFile, FileType
 
 
-class FileProcessor:
+class FileUtils:
     """Handles file operations and processing for PASVG system."""
     
     def __init__(self):
