@@ -1,0 +1,794 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" 
+     viewBox="0 0 1400 1000"
+     data-pasvg-version="1.0"
+     data-project-name="Tutorial 4: React/Vue/PWA/SPA Creation from HTTP to YAML to Final Application">
+
+<!-- PASVG: Project Artifact SVG -->
+<defs>
+    <style><![CDATA[
+        .pasvg-title { font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #2563eb; }
+        .pasvg-subtitle { font-family: Arial, sans-serif; font-size: 14px; fill: #6b7280; }
+        .pasvg-section { font-family: Arial, sans-serif; font-size: 12px; fill: #374151; }
+        .pasvg-code { font-family: monospace; font-size: 10px; fill: #1f2937; }
+    ]]></style>
+</defs>
+
+<!-- Project metadata -->
+<metadata>
+    <project xmlns="http://whyml.org/pasvg/1.0">
+        <name>Tutorial 4: React/Vue/PWA/SPA Creation from HTTP to YAML to Final Application</name>
+        <description>This tutorial demonstrates the complete workflow from scraping a website with WhyML to creating modern React, Vue, PWA, and SPA applications with full deployment.</description>
+        <version>1.0.0</version>
+        <platforms>Web</platforms>
+        <technologies>Docker, React, Vue.js, PWA</technologies>
+        <build-targets>Container, SPA, SPA, Progressive Web App</build-targets>
+    </project>
+</metadata>
+
+<!-- Visual Layout -->
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="0" y="0" width="1400" height="80" fill="#dbeafe" stroke="#3b82f6"/>
+
+<text x="20" y="35" class="pasvg-title">Tutorial 4: React/Vue/PWA/SPA Creation from HTTP to YAML to Final Application</text>
+<text x="20" y="55" class="pasvg-subtitle">This tutorial demonstrates the complete workflow from scraping a website with WhyML to creating modern React, Vue, PWA, and SPA applications with full deployment.</text>
+
+<!-- Technology badges -->
+<g transform="translate(20, 90)">
+
+    <g transform="translate(0, 0)">
+        <rect width="68" height="20" rx="10" fill="#3b82f6" opacity="0.1"/>
+        <text x="34" y="14" text-anchor="middle" class="pasvg-section" fill="#3b82f6">Docker</text>
+    </g>
+
+    <g transform="translate(78, 0)">
+        <rect width="60" height="20" rx="10" fill="#3b82f6" opacity="0.1"/>
+        <text x="30" y="14" text-anchor="middle" class="pasvg-section" fill="#3b82f6">React</text>
+    </g>
+
+    <g transform="translate(148, 0)">
+        <rect width="68" height="20" rx="10" fill="#3b82f6" opacity="0.1"/>
+        <text x="34" y="14" text-anchor="middle" class="pasvg-section" fill="#3b82f6">Vue.js</text>
+    </g>
+
+    <g transform="translate(226, 0)">
+        <rect width="44" height="20" rx="10" fill="#3b82f6" opacity="0.1"/>
+        <text x="22" y="14" text-anchor="middle" class="pasvg-section" fill="#3b82f6">PWA</text>
+    </g>
+</g>
+
+<!-- File overview -->
+<g transform="translate(20, 150)">
+    <text x="0" y="0" class="pasvg-title" font-size="18">Project Files (8)</text>
+
+    <text x="0" y="20" class="pasvg-section">📄 manifests/app-base.yaml (manifest)</text>
+
+    <text x="0" y="38" class="pasvg-section">📄 manifests/react-app.yaml (manifest)</text>
+
+    <text x="0" y="56" class="pasvg-section">📄 manifests/vue-app.yaml (manifest)</text>
+
+    <text x="0" y="74" class="pasvg-section">📄 manifests/pwa-config.yaml (manifest)</text>
+
+    <text x="0" y="92" class="pasvg-section">📄 scripts/generate-react.js (source)</text>
+
+    <text x="0" y="110" class="pasvg-section">📄 docker/react.dockerfile (container)</text>
+
+    <text x="0" y="128" class="pasvg-section">📄 docker-compose.yml (container)</text>
+
+    <text x="0" y="146" class="pasvg-section">📄 scripts/build-all.sh (script)</text>
+</g>
+
+<!-- Embedded Source Files -->
+
+<foreignObject id="file_0" data-filename="manifests/app-base.yaml" 
+              data-type="manifest" data-language="yaml" 
+              data-section="Step 2: Create Base Application Manifest" style="display: none;">
+    <![CDATA[metadata:
+  name: "Modern Web Application"
+  description: "Multi-framework app generated from scraped content"
+  version: "1.0.0"
+  author: "WhyML Generator"
+
+config:
+  base_url: "/"
+  api_endpoint: "/api"
+  build_target: "modern"
+  
+variables:
+  app_name: "ModernApp"
+  primary_color: "#3b82f6"
+  secondary_color: "#1e40af"
+  background_color: "#ffffff"
+  text_color: "#1f2937"
+
+components:
+  header:
+    type: "navigation"
+    props:
+      brand: "{{app_name}}"
+      links:
+        - { path: "/", label: "Home", icon: "home" }
+        - { path: "/about", label: "About", icon: "info" }
+        - { path: "/contact", label: "Contact", icon: "mail" }
+  
+  footer:
+    type: "content"
+    props:
+      copyright: "© 2024 {{app_name}}"
+      links:
+        - { href: "/privacy", label: "Privacy" }
+        - { href: "/terms", label: "Terms" }
+
+pages:
+  home:
+    title: "Welcome to {{app_name}}"
+    components: ["header", "hero", "features", "footer"]
+  about:
+    title: "About {{app_name}}"
+    components: ["header", "content", "footer"]
+  contact:
+    title: "Contact Us"
+    components: ["header", "form", "footer"]
+
+styles:
+  theme:
+    colors:
+      primary: "{{primary_color}}"
+      secondary: "{{secondary_color}}"
+      background: "{{background_color}}"
+      text: "{{text_color}}"
+    fonts:
+      primary: "'Inter', system-ui, sans-serif"
+      mono: "'JetBrains Mono', monospace"
+    spacing:
+      xs: "0.25rem"
+      sm: "0.5rem"
+      md: "1rem"
+      lg: "1.5rem"
+      xl: "2rem"]]>
+</foreignObject>
+
+<foreignObject id="file_1" data-filename="manifests/react-app.yaml" 
+              data-type="manifest" data-language="yaml" 
+              data-section="Step 3: React Application Generation" style="display: none;">
+    <![CDATA[metadata:
+  name: "React Application"
+  framework: "react"
+  version: "18.0.0"
+
+config:
+  build_tool: "vite"
+  typescript: true
+  routing: "react-router"
+  state_management: "context"
+
+structure:
+  app_component: |
+    import React from 'react';
+    import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+    import { ThemeProvider } from './contexts/ThemeContext';
+    import Header from './components/Header';
+    import Footer from './components/Footer';
+    import Home from './pages/Home';
+    import About from './pages/About';
+    import Contact from './pages/Contact';
+    import './App.css';
+
+    function App() {
+      return (
+        <ThemeProvider>
+          <Router>
+            <div className="app">
+              <Header />
+              <main className="main-content">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          </Router>
+        </ThemeProvider>
+      );
+    }
+
+    export default App;
+
+  header_component: |
+    import React from 'react';
+    import { Link, useLocation } from 'react-router-dom';
+    import './Header.css';
+
+    const Header = () => {
+      const location = useLocation();
+      
+      const navItems = [
+        { path: '/', label: 'Home', icon: '🏠' },
+        { path: '/about', label: 'About', icon: 'ℹ️' },
+        { path: '/contact', label: 'Contact', icon: '📧' }
+      ];
+
+      return (
+        <header className="header">
+          <div className="container">
+            <Link to="/" className="brand">
+              {{app_name}}
+            </Link>
+            <nav className="nav">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
+                >
+                  <span className="nav-icon">{item.icon}</span>
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </header>
+      );
+    };
+
+    export default Header;
+
+  home_page: |
+    import React, { useState, useEffect } from 'react';
+    import './Home.css';
+
+    const Home = () => {
+      const [features, setFeatures] = useState([]);
+
+      useEffect(() => {
+        // Simulate loading scraped content
+        setFeatures([
+          {
+            id: 1,
+            title: 'Modern Framework',
+            description: 'Built with React 18 and modern hooks',
+            icon: '⚛️'
+          },
+          {
+            id: 2,
+            title: 'Responsive Design',
+            description: 'Works perfectly on all devices',
+            icon: '📱'
+          },
+          {
+            id: 3,
+            title: 'Fast Performance',
+            description: 'Optimized for speed and efficiency',
+            icon: '⚡'
+          }
+        ]);
+      }, []);
+
+      return (
+        <div className="home">
+          <section className="hero">
+            <div className="container">
+              <h1>Welcome to {{app_name}}</h1>
+              <p>A modern web application generated from scraped content using WhyML</p>
+              <button className="cta-button">Get Started</button>
+            </div>
+          </section>
+          
+          <section className="features">
+            <div className="container">
+              <h2>Features</h2>
+              <div className="features-grid">
+                {features.map((feature) => (
+                  <div key={feature.id} className="feature-card">
+                    <div className="feature-icon">{feature.icon}</div>
+                    <h3>{feature.title}</h3>
+                    <p>{feature.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+      );
+    };
+
+    export default Home;
+
+dependencies:
+  - "react@^18.0.0"
+  - "react-dom@^18.0.0"
+  - "react-router-dom@^6.0.0"
+  - "vite@^4.0.0"
+  - "@vitejs/plugin-react@^4.0.0"]]>
+</foreignObject>
+
+<foreignObject id="file_2" data-filename="manifests/vue-app.yaml" 
+              data-type="manifest" data-language="yaml" 
+              data-section="Step 4: Vue Application Generation" style="display: none;">
+    <![CDATA[metadata:
+  name: "Vue Application"
+  framework: "vue"
+  version: "3.0.0"
+
+config:
+  build_tool: "vite"
+  typescript: true
+  routing: "vue-router"
+  state_management: "pinia"
+
+structure:
+  app_component: |
+    <template>
+      <div id="app">
+        <AppHeader />
+        <main class="main-content">
+          <router-view />
+        </main>
+        <AppFooter />
+      </div>
+    </template>
+
+    <script setup lang="ts">
+    import { onMounted } from 'vue'
+    import AppHeader from './components/AppHeader.vue'
+    import AppFooter from './components/AppFooter.vue'
+    import { useThemeStore } from './stores/theme'
+
+    const themeStore = useThemeStore()
+
+    onMounted(() => {
+      themeStore.initializeTheme()
+    })
+    </script>
+
+    <style>
+    #app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-content {
+      flex: 1;
+    }
+    </style>
+
+  header_component: |
+    <template>
+      <header class="header">
+        <div class="container">
+          <router-link to="/" class="brand">
+            {{app_name}}
+          </router-link>
+          <nav class="nav">
+            <router-link
+              v-for="item in navItems"
+              :key="item.path"
+              :to="item.path"
+              class="nav-link"
+              :class="{ active: $route.path === item.path }"
+            >
+              <span class="nav-icon">{{ item.icon }}</span>
+              {{ item.label }}
+            </router-link>
+          </nav>
+        </div>
+      </header>
+    </template>
+
+    <script setup lang="ts">
+    import { ref } from 'vue'
+
+    const navItems = ref([
+      { path: '/', label: 'Home', icon: '🏠' },
+      { path: '/about', label: 'About', icon: 'ℹ️' },
+      { path: '/contact', label: 'Contact', icon: '📧' }
+    ])
+    </script>
+
+  home_page: |
+    <template>
+      <div class="home">
+        <section class="hero">
+          <div class="container">
+            <h1>Welcome to {{app_name}}</h1>
+            <p>A modern Vue.js application generated from scraped content</p>
+            <button class="cta-button" @click="handleGetStarted">
+              Get Started
+            </button>
+          </div>
+        </section>
+        
+        <section class="features">
+          <div class="container">
+            <h2>Features</h2>
+            <div class="features-grid">
+              <div
+                v-for="feature in features"
+                :key="feature.id"
+                class="feature-card"
+              >
+                <div class="feature-icon">{{ feature.icon }}</div>
+                <h3>{{ feature.title }}</h3>
+                <p>{{ feature.description }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </template>
+
+    <script setup lang="ts">
+    import { ref, onMounted } from 'vue'
+
+    const features = ref([])
+
+    const handleGetStarted = () => {
+      console.log('Getting started...')
+    }
+
+    onMounted(() => {
+      features.value = [
+        {
+          id: 1,
+          title: 'Vue 3 Composition API',
+          description: 'Built with the latest Vue.js features',
+          icon: '💚'
+        },
+        {
+          id: 2,
+          title: 'TypeScript Support',
+          description: 'Full type safety and better development experience',
+          icon: '🔷'
+        },
+        {
+          id: 3,
+          title: 'Reactive Data',
+          description: 'Efficient reactivity system for optimal performance',
+          icon: '⚡'
+        }
+      ]
+    })
+    </script>
+
+dependencies:
+  - "vue@^3.3.0"
+  - "vue-router@^4.2.0"
+  - "pinia@^2.1.0"
+  - "vite@^4.0.0"
+  - "@vitejs/plugin-vue@^4.0.0"]]>
+</foreignObject>
+
+<foreignObject id="file_3" data-filename="manifests/pwa-config.yaml" 
+              data-type="manifest" data-language="yaml" 
+              data-section="Step 5: PWA Configuration" style="display: none;">
+    <![CDATA[metadata:
+  name: "Progressive Web App"
+  type: "pwa"
+
+config:
+  manifest:
+    name: "{{app_name}} PWA"
+    short_name: "{{app_name}}"
+    description: "Progressive Web App generated from scraped content"
+    start_url: "/"
+    display: "standalone"
+    theme_color: "{{primary_color}}"
+    background_color: "{{background_color}}"
+    icons:
+      - src: "/icons/icon-192.png"
+        sizes: "192x192"
+        type: "image/png"
+      - src: "/icons/icon-512.png"
+        sizes: "512x512"
+        type: "image/png"
+
+  service_worker: |
+    const CACHE_NAME = 'whyml-pwa-v1';
+    const urlsToCache = [
+      '/',
+      '/static/css/main.css',
+      '/static/js/main.js',
+      '/manifest.json'
+    ];
+
+    self.addEventListener('install', (event) => {
+      event.waitUntil(
+        caches.open(CACHE_NAME)
+          .then((cache) => cache.addAll(urlsToCache))
+      );
+    });
+
+    self.addEventListener('fetch', (event) => {
+      event.respondWith(
+        caches.match(event.request)
+          .then((response) => {
+            if (response) {
+              return response;
+            }
+            return fetch(event.request);
+          }
+        );
+      );
+    });
+
+  features:
+    - offline_support: true
+    - push_notifications: true
+    - background_sync: true
+    - install_prompt: true]]>
+</foreignObject>
+
+<foreignObject id="file_4" data-filename="scripts/generate-react.js" 
+              data-type="source" data-language="javascript" 
+              data-section="Step 6: Generation Scripts" style="display: none;">
+    <![CDATA[const fs = require('fs');
+const path = require('path');
+const yaml = require('js-yaml');
+
+class ReactGenerator {
+  constructor(manifestPath) {
+    this.manifest = yaml.load(fs.readFileSync(manifestPath, 'utf8'));
+    this.outputDir = 'apps/react-app';
+  }
+
+  generate() {
+    this.createDirectoryStructure();
+    this.generatePackageJson();
+    this.generateViteConfig();
+    this.generateComponents();
+    this.generatePages();
+    this.generateStyles();
+    console.log('React app generated successfully!');
+  }
+
+  createDirectoryStructure() {
+    const dirs = [
+      'src/components',
+      'src/pages',
+      'src/contexts',
+      'src/hooks',
+      'src/utils',
+      'public'
+    ];
+
+    dirs.forEach(dir => {
+      fs.mkdirSync(path.join(this.outputDir, dir), { recursive: true });
+    });
+  }
+
+  generatePackageJson() {
+    const packageJson = {
+      name: this.manifest.metadata.name.toLowerCase().replace(/\s+/g, '-'),
+      version: this.manifest.metadata.version,
+      type: 'module',
+      scripts: {
+        dev: 'vite',
+        build: 'vite build',
+        preview: 'vite preview'
+      },
+      dependencies: Object.fromEntries(
+        this.manifest.dependencies.map(dep => {
+          const [name, version] = dep.split('@');
+          return [name, version || 'latest'];
+        })
+      ),
+      devDependencies: {
+        '@types/react': '^18.0.0',
+        '@types/react-dom': '^18.0.0',
+        'typescript': '^5.0.0'
+      }
+    };
+
+    fs.writeFileSync(
+      path.join(this.outputDir, 'package.json'),
+      JSON.stringify(packageJson, null, 2)
+    );
+  }
+
+  generateComponents() {
+    const components = this.manifest.structure;
+    
+    Object.entries(components).forEach(([key, content]) => {
+      if (key.includes('component')) {
+        const componentName = this.toPascalCase(key.replace('_component', ''));
+        const filePath = path.join(this.outputDir, 'src/components', `${componentName}.jsx`);
+        
+        // Process template variables
+        const processedContent = this.processTemplate(content);
+        fs.writeFileSync(filePath, processedContent);
+      }
+    });
+  }
+
+  generatePages() {
+    const pages = this.manifest.structure;
+    
+    Object.entries(pages).forEach(([key, content]) => {
+      if (key.includes('page')) {
+        const pageName = this.toPascalCase(key.replace('_page', ''));
+        const filePath = path.join(this.outputDir, 'src/pages', `${pageName}.jsx`);
+        
+        const processedContent = this.processTemplate(content);
+        fs.writeFileSync(filePath, processedContent);
+      }
+    });
+  }
+
+  processTemplate(content) {
+    const variables = this.manifest.variables || {};
+    let processed = content;
+    
+    Object.entries(variables).forEach(([key, value]) => {
+      const regex = new RegExp(`{{${key}}}`, 'g');
+      processed = processed.replace(regex, value);
+    });
+    
+    return processed;
+  }
+
+  toPascalCase(str) {
+    return str.replace(/(^\w|_\w)/g, match => 
+      match.replace('_', '').toUpperCase()
+    );
+  }
+}
+
+// Usage
+const generator = new ReactGenerator('manifests/react-app.yaml');
+generator.generate();]]>
+</foreignObject>
+
+<foreignObject id="file_5" data-filename="docker/react.dockerfile" 
+              data-type="container" data-language="dockerfile" 
+              data-section="Step 7: Docker Configuration" style="display: none;">
+    <![CDATA[FROM node:18-alpine as build
+
+WORKDIR /app
+COPY apps/react-app/package*.json ./
+RUN npm ci --only=production
+
+COPY apps/react-app/ ./
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]]]>
+</foreignObject>
+
+<foreignObject id="file_6" data-filename="docker-compose.yml" 
+              data-type="container" data-language="yaml" 
+              data-section="Step 7: Docker Configuration" style="display: none;">
+    <![CDATA[version: '3.8'
+
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: docker/react.dockerfile
+    ports:
+      - "3001:80"
+    environment:
+      - NODE_ENV=production
+
+  vue-app:
+    build:
+      context: .
+      dockerfile: docker/vue.dockerfile
+    ports:
+      - "3002:80"
+    environment:
+      - NODE_ENV=production
+
+  pwa-app:
+    build:
+      context: .
+      dockerfile: docker/pwa.dockerfile
+    ports:
+      - "3003:80"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./pwa-assets:/usr/share/nginx/html/assets
+
+networks:
+  default:
+    name: whyml-apps]]>
+</foreignObject>
+
+<foreignObject id="file_7" data-filename="scripts/build-all.sh" 
+              data-type="script" data-language="bash" 
+              data-section="Step 8: Build and Deploy" style="display: none;">
+    <![CDATA[#!/bin/bash
+
+echo "🌐 Scraping source website..."
+whyml scrape https://example-modern-site.com \
+  --section metadata \
+  --section analysis \
+  --section structure \
+  --section styles \
+  --output scraped/source-site.yaml
+
+echo "⚛️ Generating React application..."
+node scripts/generate-react.js
+
+echo "💚 Generating Vue application..."
+node scripts/generate-vue.js
+
+echo "📱 Generating PWA..."
+node scripts/generate-pwa.js
+
+echo "🐳 Building Docker containers..."
+docker-compose build
+
+echo "🚀 Starting all applications..."
+docker-compose up -d
+
+echo "✅ All applications deployed successfully!"
+echo "React App: http://localhost:3001"
+echo "Vue App: http://localhost:3002"
+echo "PWA: http://localhost:3003"]]>
+</foreignObject>
+
+
+<!-- Build Configuration -->
+<script type="application/json" data-filename="pasvg-build.json">
+    <![CDATA[{
+  "project": "Tutorial 4: React/Vue/PWA/SPA Creation from HTTP to YAML to Final Application",
+  "targets": [
+    "Container",
+    "SPA",
+    "SPA",
+    "Progressive Web App"
+  ],
+  "files": [
+    {
+      "filename": "manifests/app-base.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "manifests/react-app.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "manifests/vue-app.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "manifests/pwa-config.yaml",
+      "type": "manifest"
+    },
+    {
+      "filename": "scripts/generate-react.js",
+      "type": "source"
+    },
+    {
+      "filename": "docker/react.dockerfile",
+      "type": "container"
+    },
+    {
+      "filename": "docker-compose.yml",
+      "type": "container"
+    },
+    {
+      "filename": "scripts/build-all.sh",
+      "type": "script"
+    }
+  ]
+}]]>
+</script>
+
+<!-- Build Instructions -->
+<g transform="translate(20, 400)">
+    <text x="0" y="0" class="pasvg-title" font-size="16">Build Instructions</text>
+    <text x="0" y="25" class="pasvg-code">1. Extract: python pasvg_extractor.py tutorial-4--react-vue-pwa-spa-creation-from-http-to-yaml-to-final-application.pasvg.svg</text>
+    <text x="0" y="40" class="pasvg-code">2. Build: cd extracted &amp;&amp; ./build.sh</text>
+    <text x="0" y="60" class="pasvg-section">Targets: Container, SPA, SPA, Progressive Web App</text>
+</g>
+
+</svg>
