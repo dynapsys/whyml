@@ -144,8 +144,10 @@ class WebpageAnalyzer:
                 result_type = best_type[0]
                 
                 # Map specific types to broader categories where appropriate
-                if result_type == 'product' and scores.get('ecommerce', 0) > 0:
-                    return 'ecommerce'
+                if result_type == 'product':
+                    return 'e-commerce'
+                elif result_type == 'ecommerce':
+                    return 'e-commerce'
                 
                 return result_type
             else:
@@ -410,17 +412,17 @@ class WebpageAnalyzer:
         for button in buttons:
             button_info = {
                 'type': button.get('type', 'button'),
-                'classes': button.get('class', []),
+                'classes': list(button.get('class', [])),
                 'has_onclick': bool(button.get('onclick'))
             }
             interactive['buttons'].append(button_info)
         
         # Look for common interactive patterns
         modal_indicators = soup.select('.modal, [data-toggle="modal"], [data-bs-toggle="modal"]')
-        interactive['modals'] = [{'classes': el.get('class', [])} for el in modal_indicators]
+        interactive['modals'] = [{'classes': list(el.get('class', []))} for el in modal_indicators]
         
         tab_indicators = soup.select('.tabs, .nav-tabs, [role="tablist"]')
-        interactive['tabs'] = [{'classes': el.get('class', [])} for el in tab_indicators]
+        interactive['tabs'] = [{'classes': list(el.get('class', []))} for el in tab_indicators]
         
         return interactive
     
