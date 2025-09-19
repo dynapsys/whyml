@@ -1,60 +1,3205 @@
 metadata:
-  title: Example Domain
-  description: Content from Example Domain - scraped from example.com
-  source_url: https://example.com
-  extracted_at: '2025-09-19T18:39:23.919580'
+  title: Tom Sapletta 'Blog | Platform & DevOps Engineer & Hardware Developer, Expat
+    in Germany
+  description: Platform & DevOps Engineer & Hardware Developer, Expat in Germany |
+    Tom Sapletta 'Blog
+  keywords: IoT,iot for fun wunder bar relayr,relayr,Wunderbar
+  source_url: https://tom.sapletta.com
+  extracted_at: '2025-09-19T20:29:59.937725'
+  open_graph:
+    url: https://tom.sapletta.com/
+    title: Tom Sapletta 'Blog | Platform & DevOps Engineer &
+    description: Platform & DevOps Engineer & Hardware Developer, Expat in Germany
+      | Tom Sapletta 'Blog
+    type: website
+    site_name: Tom Sapletta 'Blog
+    locale: en_GB
+  schema_org:
+  - '@context': https://schema.org
+    '@graph':
+    - '@type': Person
+      '@id': https://tom.sapletta.com#Person
+      url: https://tom.sapletta.com
+      name: Tomasz Sapletta
+      image:
+        '@type': ImageObject
+        url: https://tom.sapletta.com/wp-content/uploads/2016/10/ts_2013_300x270.jpg
+        '@id': https://tom.sapletta.com#image
+      jobTitle: engineer
+      description: "Since many year\u2019s I develop hardware and software. I share\
+        \ here my ideas, tests, solutions and opinions. I am programming in PHP7,\
+        \ Python, NodeJS, JavaScript, Java on Windows, Linux, Android"
+      sameAs:
+      - https://www.linkedin.com/in/tomasz-sapletta-68045726
+    - '@type': WebSite
+      '@id': https://tom.sapletta.com#website
+      url: https://tom.sapletta.com
+      name: Tomasz Sapletta
+      headline: Platform &#038; DevOps Engineer &#038; Hardware Developer, Expat in
+        Germany | Tom Sapletta &#039;Blog
+      mainEntityOfPage:
+        '@type': WebPage
+        url: https://tom.sapletta.com
+      potentialAction:
+        '@type': SearchAction
+        target: https://tom.sapletta.com/?s={search_term_string}
+        query-input: required name=search_term_string
+      publisher:
+        '@type': Person
+        '@id': https://tom.sapletta.com#Person
+        url: https://tom.sapletta.com
+        name: Tomasz Sapletta
+        image:
+          '@type': ImageObject
+          url: https://tom.sapletta.com/wp-content/uploads/2016/10/ts_2013_300x270.jpg
+          '@id': https://tom.sapletta.com#image
+        jobTitle: engineer
+        description: "Since many year\u2019s I develop hardware and software. I share\
+          \ here my ideas, tests, solutions and opinions. I am programming in PHP7,\
+          \ Python, NodeJS, JavaScript, Java on Windows, Linux, Android"
+        sameAs:
+        - https://www.linkedin.com/in/tomasz-sapletta-68045726
+  language: en-GB
+styles:
+  img_element_0: 'width: 16px; height: 11px;'
+  span_element_1: margin-left:0.3em;
+  aside_moove_gdpr_cookie_info_bar: 'display: none;'
+  div_strict_necessary_cookies: display:none;
+  div_element_10: 'margin-top: 10px;'
+  wp_block_file__button: background:#32373c; color:#fff; text-decoration:none;
+  is_layout_flex: 'flex-wrap: wrap; align-items: center;'
+  has_black_color: 'color: var(--wp--preset--color--black) !important;'
+  has_cyan_bluish_gray_color: 'color: var(--wp--preset--color--cyan-bluish-gray) !important;'
+  has_white_color: 'color: var(--wp--preset--color--white) !important;'
+  has_pale_pink_color: 'color: var(--wp--preset--color--pale-pink) !important;'
+  has_vivid_red_color: 'color: var(--wp--preset--color--vivid-red) !important;'
+  has_luminous_vivid_orange_color: 'color: var(--wp--preset--color--luminous-vivid-orange)
+    !important;'
+  has_luminous_vivid_amber_color: 'color: var(--wp--preset--color--luminous-vivid-amber)
+    !important;'
+  has_light_green_cyan_color: 'color: var(--wp--preset--color--light-green-cyan) !important;'
+  has_vivid_green_cyan_color: 'color: var(--wp--preset--color--vivid-green-cyan) !important;'
+  has_pale_cyan_blue_color: 'color: var(--wp--preset--color--pale-cyan-blue) !important;'
+  has_vivid_cyan_blue_color: 'color: var(--wp--preset--color--vivid-cyan-blue) !important;'
+  has_vivid_purple_color: 'color: var(--wp--preset--color--vivid-purple) !important;'
+  has_black_background_color: 'background-color: var(--wp--preset--color--black) !important;'
+  has_cyan_bluish_gray_background_color: 'background-color: var(--wp--preset--color--cyan-bluish-gray)
+    !important;'
+  has_white_background_color: 'background-color: var(--wp--preset--color--white) !important;'
+  has_pale_pink_background_color: 'background-color: var(--wp--preset--color--pale-pink)
+    !important;'
+  has_vivid_red_background_color: 'background-color: var(--wp--preset--color--vivid-red)
+    !important;'
+  has_luminous_vivid_orange_background_color: 'background-color: var(--wp--preset--color--luminous-vivid-orange)
+    !important;'
+  has_luminous_vivid_amber_background_color: 'background-color: var(--wp--preset--color--luminous-vivid-amber)
+    !important;'
+  has_light_green_cyan_background_color: 'background-color: var(--wp--preset--color--light-green-cyan)
+    !important;'
+  has_vivid_green_cyan_background_color: 'background-color: var(--wp--preset--color--vivid-green-cyan)
+    !important;'
+  has_pale_cyan_blue_background_color: 'background-color: var(--wp--preset--color--pale-cyan-blue)
+    !important;'
+  has_vivid_cyan_blue_background_color: 'background-color: var(--wp--preset--color--vivid-cyan-blue)
+    !important;'
+  has_vivid_purple_background_color: 'background-color: var(--wp--preset--color--vivid-purple)
+    !important;'
+  has_black_border_color: 'border-color: var(--wp--preset--color--black) !important;'
+  has_cyan_bluish_gray_border_color: 'border-color: var(--wp--preset--color--cyan-bluish-gray)
+    !important;'
+  has_white_border_color: 'border-color: var(--wp--preset--color--white) !important;'
+  has_pale_pink_border_color: 'border-color: var(--wp--preset--color--pale-pink) !important;'
+  has_vivid_red_border_color: 'border-color: var(--wp--preset--color--vivid-red) !important;'
+  has_luminous_vivid_orange_border_color: 'border-color: var(--wp--preset--color--luminous-vivid-orange)
+    !important;'
+  has_luminous_vivid_amber_border_color: 'border-color: var(--wp--preset--color--luminous-vivid-amber)
+    !important;'
+  has_light_green_cyan_border_color: 'border-color: var(--wp--preset--color--light-green-cyan)
+    !important;'
+  has_vivid_green_cyan_border_color: 'border-color: var(--wp--preset--color--vivid-green-cyan)
+    !important;'
+  has_pale_cyan_blue_border_color: 'border-color: var(--wp--preset--color--pale-cyan-blue)
+    !important;'
+  has_vivid_cyan_blue_border_color: 'border-color: var(--wp--preset--color--vivid-cyan-blue)
+    !important;'
+  has_vivid_purple_border_color: 'border-color: var(--wp--preset--color--vivid-purple)
+    !important;'
+  has_vivid_cyan_blue_to_vivid_purple_gradient_background: 'background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple)
+    !important;'
+  has_light_green_cyan_to_vivid_green_cyan_gradient_background: 'background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan)
+    !important;'
+  has_luminous_vivid_amber_to_luminous_vivid_orange_gradient_background: 'background:
+    var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;'
+  has_luminous_vivid_orange_to_vivid_red_gradient_background: 'background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red)
+    !important;'
+  has_very_light_gray_to_cyan_bluish_gray_gradient_background: 'background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray)
+    !important;'
+  has_cool_to_warm_spectrum_gradient_background: 'background: var(--wp--preset--gradient--cool-to-warm-spectrum)
+    !important;'
+  has_blush_light_purple_gradient_background: 'background: var(--wp--preset--gradient--blush-light-purple)
+    !important;'
+  has_blush_bordeaux_gradient_background: 'background: var(--wp--preset--gradient--blush-bordeaux)
+    !important;'
+  has_luminous_dusk_gradient_background: 'background: var(--wp--preset--gradient--luminous-dusk)
+    !important;'
+  has_pale_ocean_gradient_background: 'background: var(--wp--preset--gradient--pale-ocean)
+    !important;'
+  has_electric_grass_gradient_background: 'background: var(--wp--preset--gradient--electric-grass)
+    !important;'
+  has_midnight_gradient_background: 'background: var(--wp--preset--gradient--midnight)
+    !important;'
+  has_small_font_size: 'font-size: var(--wp--preset--font-size--small) !important;'
+  has_medium_font_size: 'font-size: var(--wp--preset--font-size--medium) !important;'
+  has_large_font_size: 'font-size: var(--wp--preset--font-size--large) !important;'
+  has_x_large_font_size: 'font-size: var(--wp--preset--font-size--x-large) !important;'
+  credits_designer: 'clip: rect(1px, 1px, 1px, 1px); position: absolute;'
+  recentcomments_a: display:inline !important; padding:0 !important; margin:0 !important;
+  site_description: 'font-size: 22pt;'
+  synved_social_resolution_single: 'display: inline-block;'
+  site_title: 'font-size: 51pt; line-height: 0.9;'
+  site_branding_wrapper: 'min-height: 30px; margin: auto 120px;'
+  site_logo_wrapper: 'float: left; width: 130px;'
+  site_header: 'padding: 8px 0; min-height: 80px;'
+  more_link: 'width: 100%; text-align: center;'
+  yarpp_related_div_a_img: 'width: 350px;'
+  yarpp_related_div_a_span: display:table;
+  site_logo_wrapper_img: 'max-height: 100%;'
 structure:
-  body:
+  main:
+    id: main
+    class: site-main
     children:
-      div:
+    - div:
+        id: post-wrapper
+        class: post-wrapper post-wrapper-archive
         children:
-        - h1:
-            text: Example Domain
-        - p:
-            text: "This domain is for use in illustrative examples in documents. You\
-              \ may use this\n    domain in literature without prior coordination\
-              \ or asking for permission."
-        - p:
+        - article:
+            id: post-2604
+            class: post-2604 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-idea-en category-idea category-project-en category-project
+              category-software-en tag-data-format tag-delimiterless tag-json tag-jsonl
+              tag-multiobjects tag-multipart tag-multipart-objects tag-ndjson tag-ndof
+              tag-newline-delimited tag-newline-delimited-xml tag-streaming-data tag-xml
             children:
-              a:
-                href: https://www.iana.org/domains/example
-                text: More information...
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/idea/transforming-data-streaming-an-insight-into-ndofs-expansion-and-use-cases-10-things-i-wish-id-known-earlier/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/10/photo-1484480974693-6ca0a78fb36b3Fixlib3Drb-0.3-1.526q3d8026fm3djpg26crop3dentropy26cs3dtinysrgb26w3d20026fit3dmax26s3d455970be79f030880a003ec7629c2284
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: "Data Streaming: An Insight into NDOF: Newline\
+                                  \ Delimited Objects Format \u2013 10 Things I Wish\
+                                  \ I\u2019d Known Earlier"
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/idea-en/
+                                            title: Idea
+                                            text: Idea
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/idea/transforming-data-streaming-an-insight-into-ndofs-expansion-and-use-cases-10-things-i-wish-id-known-earlier/
+                                    text: "Data Streaming: An Insight into NDOF: Newline\
+                                      \ Delimited Objects Format \u2013 10 Things\
+                                      \ I Wish I\u2019d Known Earlier"
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/idea/transforming-data-streaming-an-insight-into-ndofs-expansion-and-use-cases-10-things-i-wish-id-known-earlier/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 07/10/2023
+                                            - time:
+                                                class: updated
+                                                text: 07/10/2023
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "Newline Delimited Objects Format (NDOF) has revolutionized\
+                              \ the way data streaming is handled, allowing seamless\
+                              \ transition and efficiency in dealing with JSON, XML,\
+                              \ and other newline delimited objects. From JSON\u2026"
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/idea/transforming-data-streaming-an-insight-into-ndofs-expansion-and-use-cases-10-things-i-wish-id-known-earlier/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-2588
+            class: post-2588 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-how-to category-uncategorized-en
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/how-to/lenovo-yoga-7-ryzen-9-and-wifi-problem-on-linux/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2021/08/lenovo-wifi-scaled.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Lenovo Yoga 7 Ryzen 9 and wifi problem on linux
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/how-to/
+                                            title: how-to
+                                            text: how-to
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/how-to/lenovo-yoga-7-ryzen-9-and-wifi-problem-on-linux/
+                                    text: Lenovo Yoga 7 Ryzen 9 and wifi problem on
+                                      linux
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/how-to/lenovo-yoga-7-ryzen-9-and-wifi-problem-on-linux/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 13/08/2021
+                                            - time:
+                                                class: updated
+                                                text: 13/08/2021
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "GitHub \u2013 lwfinger/rtw89: Driver for Realtek\
+                              \ 8852AE, an 802.11ax device You will need to install\
+                              \ \u201Cmake\u201D, \u201Cgcc\u201D, \u201Ckernel headers\u201D\
+                              , \u201Ckernel build essentials\u201D, and \u201Cgit\u201D\
+                              . You can install them with the\u2026"
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/how-to/lenovo-yoga-7-ryzen-9-and-wifi-problem-on-linux/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-2571
+            class: post-2571 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-idea category-idea-en
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/idea/git-synchronisation-on-any-operation-system/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2021/08/github-754x566.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Git Synchronisation on any Operation System
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/idea/
+                                            title: Idea
+                                            text: Idea
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/idea/git-synchronisation-on-any-operation-system/
+                                    text: Git Synchronisation on any Operation System
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/idea/git-synchronisation-on-any-operation-system/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 08/08/2021
+                                            - time:
+                                                class: updated
+                                                text: 09/08/2021
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "How to use a remote git repository for sharing\
+                              \ between devices? create a repo in github, gitlab or\
+                              \ anywhere else checkout on desktop via git checkout\
+                              \ on android via mgit\u2026"
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/idea/git-synchronisation-on-any-operation-system/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-2541
+            class: post-2541 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-idea tag-podcast-market tag-podcasting-and-marketing-library-services
+              tag-podcasts tag-radio
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/idea/podcasting-and-marketing-library-services/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2018/04/fig-27-04-2018_17-45-55-754x400.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Podcasting and marketing library services
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/idea/
+                                            title: Idea
+                                            text: Idea
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/idea/podcasting-and-marketing-library-services/
+                                    text: Podcasting and marketing library services
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/idea/podcasting-and-marketing-library-services/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 27/04/2018
+                                            - time:
+                                                class: updated
+                                                text: 27/04/2018
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: I will present some ideas, how to go in area, new
+                              element of our life.
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/idea/podcasting-and-marketing-library-services/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-2531
+            class: post-2531 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-domains
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/domains/tools-for-a-domainers/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2018/04/dreamstime_xxl_95899032-1-754x566.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Tools for a Domainers
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/domains/
+                                            title: domains
+                                            text: domains
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/domains/tools-for-a-domainers/
+                                    text: Tools for a Domainers
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/domains/tools-for-a-domainers/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 21/04/2018
+                                            - time:
+                                                class: updated
+                                                text: 21/04/2018
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "I was looking for domain generator and i finded\
+                              \ some free domain address for crypto bussiness, the\
+                              \ domain name is \u2026"
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/domains/tools-for-a-domainers/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-2497
+            class: post-2497 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-how-to-en tag-music-dev
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/how-to-en/the-wave-of-efficient-be-more-focused-as-developer/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2018/04/photo-1505218795627-2b9746a5343f3Fixlib3Drb-0.3-754x566.526q3d8026fm3djpg26crop3dentropy26cs3dtinysrgb26w3d108026fit3dmax26ixid3deyjhchbfawqiojmwodh926s3d1361bc4cc54b9105eb78ce7e05e3dfa6
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: The Wave of Efficient, be more focused as Developer
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/how-to-en/
+                                            title: How-to
+                                            text: How-to
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/how-to-en/the-wave-of-efficient-be-more-focused-as-developer/
+                                    text: The Wave of Efficient, be more focused as
+                                      Developer
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/how-to-en/the-wave-of-efficient-be-more-focused-as-developer/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 19/04/2018
+                                            - time:
+                                                class: updated
+                                                text: 20/04/2018
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: How to be every day on the top?
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/how-to-en/the-wave-of-efficient-be-more-focused-as-developer/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-2310
+            class: post-2310 post type-post status-publish format-standard hentry
+              category-domains category-how-to
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                  div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/domains/
+                                            title: domains
+                                            text: domains
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/how-to/domains-trends-the-best-name/
+                                    text: domains, trends, the best NAME!
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/how-to/domains-trends-the-best-name/
+                                            children:
+                                              time:
+                                                class: entry-date published updated
+                                                text: 31/08/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: I want to show You how i am looking for potencial
+                              of domain name on examples
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/how-to/domains-trends-the-best-name/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-2297
+            class: post-2297 post type-post status-publish format-standard hentry
+              category-software-en
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                  div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/software-en/
+                                            title: Software
+                                            text: Software
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/software-en/wordpress-blog-optimisation-with-nginx-and-cacheing/
+                                    text: WordPress blog optimisation with NGINX and
+                                      Cacheing
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/software-en/wordpress-blog-optimisation-with-nginx-and-cacheing/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 30/08/2017
+                                            - time:
+                                                class: updated
+                                                text: 30/08/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "What is now? Page without Caching support on NGINX\
+                              \ server I use some web toll for check how fast the\
+                              \ website is loaded: https://www.webpagetest.org second\
+                              \ toll for checking is in\u2026"
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/software-en/wordpress-blog-optimisation-with-nginx-and-cacheing/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-1842
+            class: post-1842 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-offer category-project-en tag-domain-for-sale tag-internet-of-things
+              tag-iot-trade tag-iot-city tag-iotcity
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/project-en/iot-city-com-the-right-domain-name-for-industry-internet-of-things-iot/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/07/fig-29-07-2017_15-16-08-754x566.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: 'iot-city.com the right domain name for Industry:
+                                  Internet of Things (IOT)'
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/offer/
+                                            title: Offer
+                                            text: Offer
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/project-en/iot-city-com-the-right-domain-name-for-industry-internet-of-things-iot/
+                                    text: 'iot-city.com the right domain name for
+                                      Industry: Internet of Things (IOT)'
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/project-en/iot-city-com-the-right-domain-name-for-industry-internet-of-things-iot/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 29/07/2017
+                                            - time:
+                                                class: updated
+                                                text: 03/08/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "Did you heard a story about IOT.com and it having\
+                              \ a price tag of $2.8 million? The Internet of Things\
+                              \ has become a very hot topic over the last couple\u2026"
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/project-en/iot-city-com-the-right-domain-name-for-industry-internet-of-things-iot/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-1630
+            class: post-1630 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-software-en category-tools-en tag-debian-jessie tag-install-docker
+              tag-setup-docker
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/set-up-and-install-docker-ce-for-debian-jessie/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/07/docker_1501186240.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Set up and install Docker CE for Debian Jessie
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/software-en/
+                                            title: Software
+                                            text: Software
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/tools-en/set-up-and-install-docker-ce-for-debian-jessie/
+                                    text: Set up and install Docker CE for Debian
+                                      Jessie
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/tools-en/set-up-and-install-docker-ce-for-debian-jessie/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 24/07/2017
+                                            - time:
+                                                class: updated
+                                                text: 27/07/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: how to setup docker on dev machine with debian
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/set-up-and-install-docker-ce-for-debian-jessie/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-1580
+            class: post-1580 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-hardware category-software-en category-test tag-acronis
+              tag-backup tag-cloning tag-sdd
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/test/backup-cloning-resizing-for-partitions-on-disc-review-test/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/07/wp-1500842539157-754x566.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Backup, Cloning, Resizing for Partitions on Disc,
+                                  Review & Test
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/hardware/
+                                            title: Hardware
+                                            text: Hardware
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/test/backup-cloning-resizing-for-partitions-on-disc-review-test/
+                                    text: Backup, Cloning, Resizing for Partitions
+                                      on Disc, Review & Test
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/test/backup-cloning-resizing-for-partitions-on-disc-review-test/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 23/07/2017
+                                            - time:
+                                                class: updated
+                                                text: 23/07/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: I made export from old PC to the new one, here are
+                              details, how to do it
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/test/backup-cloning-resizing-for-partitions-on-disc-review-test/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-1553
+            class: post-1553 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-hardware tag-armbian-cubieboard-on-marsboard
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/hardware/armbian-cubieboard-on-marsboard/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/07/armbian-cubieboard-on-marsboard5-754x566.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Armbian Cubieboard on Marsboard
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/hardware/
+                                            title: Hardware
+                                            text: Hardware
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/hardware/armbian-cubieboard-on-marsboard/
+                                    text: Armbian Cubieboard on Marsboard
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/hardware/armbian-cubieboard-on-marsboard/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 22/07/2017
+                                            - time:
+                                                class: updated
+                                                text: 29/07/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "MarsBoard A10 is not supported by HAOYU Electronics,\
+                              \ but is existing another distribution The Armbian\_\
+                              Cubieboard which works good with Marsboard."
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/hardware/armbian-cubieboard-on-marsboard/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-1526
+            class: post-1526 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-hardware category-how-to-en
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/how-to-en/printer-server-on-marsboard/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/07/wp-1500751461249-e1500754843810-754x566.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Printer Server on Marsboard
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/hardware/
+                                            title: Hardware
+                                            text: Hardware
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/how-to-en/printer-server-on-marsboard/
+                                    text: Printer Server on Marsboard
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/how-to-en/printer-server-on-marsboard/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 22/07/2017
+                                            - time:
+                                                class: updated
+                                                text: 27/07/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: I want to show how to fast build Print Server with
+                              old Marsboard computer.
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/how-to-en/printer-server-on-marsboard/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-1496
+            class: post-1496 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-hardware category-how-to tag-disc-cloning tag-m-2-converter
+              tag-m-2-to-pci-express tag-mainboard-asrock tag-performance-test tag-ssd-performance
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/how-to/fastest-memory-with-nvm-technology-in-turbo-mode/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/07/wp-1500658298112-754x566.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Fastest Memory with NVM Technology in Turbo Mode
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/hardware/
+                                            title: Hardware
+                                            text: Hardware
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/how-to/fastest-memory-with-nvm-technology-in-turbo-mode/
+                                    text: Fastest Memory with NVM Technology in Turbo
+                                      Mode
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/how-to/fastest-memory-with-nvm-technology-in-turbo-mode/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 21/07/2017
+                                            - time:
+                                                class: updated
+                                                text: 23/07/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: Belowe i want to show, how to install M.2 Socket
+                              on Mainboard without M.2 Socket.
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/how-to/fastest-memory-with-nvm-technology-in-turbo-mode/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-1221
+            class: post-1221 post type-post status-publish format-chat has-post-thumbnail
+              hentry category-project-en category-software-en tag-git tag-learn-git-by-examples
+              post_format-post-format-chat
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/project-en/how-to-fast-learn-git-by-examples/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/07/ExternalLink_chrome_2017-07-18_18-46-11.png
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: how to fast learn GIT version control system
+                                  (VCS)?
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/project-en/
+                                            title: Project
+                                            text: Project
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/project-en/how-to-fast-learn-git-by-examples/
+                                    text: how to fast learn GIT version control system
+                                      (VCS)?
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/project-en/how-to-fast-learn-git-by-examples/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 18/07/2017
+                                            - time:
+                                                class: updated
+                                                text: 18/07/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "it\u2019s really easy by simple examples on website:\
+                              \ https://try.github.io/levels/1/challenges/1"
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/project-en/how-to-fast-learn-git-by-examples/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-876
+            class: post-876 post type-post status-publish format-chat has-post-thumbnail
+              hentry category-project-en category-tools-en tag-image-processing tag-image-processing-opencv-python
+              tag-python-library post_format-post-format-chat
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/how-to-start-image-processing-with-python-libraries/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/05/e837b50c28fd003ed95c4518b7454191eb73ebc818b5184494f1c77ea6e4_640.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: how to start Image Processing with Python libraries
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/project-en/
+                                            title: Project
+                                            text: Project
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/tools-en/how-to-start-image-processing-with-python-libraries/
+                                    text: how to start Image Processing with Python
+                                      libraries
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/tools-en/how-to-start-image-processing-with-python-libraries/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 21/05/2017
+                                            - time:
+                                                class: updated
+                                                text: 23/05/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "Python it\u2019s not just next programming language,\
+                              \ he offer more strict and easy way to create very understandable\
+                              \ solutions for diffcult Problems. With solutions come\
+                              \ libraries, today i will presennts\u2026"
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/how-to-start-image-processing-with-python-libraries/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-725
+            class: post-725 post type-post status-publish format-chat has-post-thumbnail
+              hentry category-how-to-en category-project-en category-tools-en tag-cv2-__version__
+              tag-debian tag-how-to-install tag-image-processing-opencv-python tag-linux
+              tag-pygame tag-python tag-python-rpi tag-raspberry-pi tag-raspbian tag-rpi-camera
+              tag-virtual-environment post_format-post-format-chat
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/how-to-start-python-on-raspbian-raspberry-pi/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/05/ec31b20d2cf71c2ad65a5854ef4b419ee77effd41db8154693f5c271a6_640.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Image Processing based on OpenCv with Python
+                                  on Raspbian, Raspberry Pi
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/how-to-en/
+                                            title: How-to
+                                            text: How-to
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/tools-en/how-to-start-python-on-raspbian-raspberry-pi/
+                                    text: Image Processing based on OpenCv with Python
+                                      on Raspbian, Raspberry Pi
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/tools-en/how-to-start-python-on-raspbian-raspberry-pi/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 14/05/2017
+                                            - time:
+                                                class: updated
+                                                text: 18/07/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "First Steps with Image processing based on Rasberry\
+                              \ Pi,\_OpenCV &\_Python 3.6.1 on Debian Jessie"
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/how-to-start-python-on-raspbian-raspberry-pi/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-714
+            class: post-714 post type-post status-publish format-chat has-post-thumbnail
+              hentry category-idea-en category-project-en category-test-en category-tools-en
+              tag-docker-en tag-virtualbox-en tag-virtualisation tag-without-virtualisation
+              post_format-post-format-chat
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/dev-environment-for-fast-development-with-cubieboard-mini-pc-and-switch-without-virtualization/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/05/wp-1493786544612.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: dev environment for fast development with odroid
+                                  xu4, mini PC and switch, without virtualization
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/idea-en/
+                                            title: Idea
+                                            text: Idea
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/tools-en/dev-environment-for-fast-development-with-cubieboard-mini-pc-and-switch-without-virtualization/
+                                    text: dev environment for fast development with
+                                      odroid xu4, mini PC and switch, without virtualization
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/tools-en/dev-environment-for-fast-development-with-cubieboard-mini-pc-and-switch-without-virtualization/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 03/05/2017
+                                            - time:
+                                                class: updated
+                                                text: 29/05/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "I am starting new\_development way with hardware\
+                              \ support for my linux environment to deployment."
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/dev-environment-for-fast-development-with-cubieboard-mini-pc-and-switch-without-virtualization/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-654
+            class: post-654 post type-post status-publish format-standard has-post-thumbnail
+              hentry category-how-to-en category-opinion-en category-test-en category-tools-en
+              tag-cloud-tools tag-eclipse tag-eclipse-che tag-online-ide
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/eclipse-che-tests-on-docker/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/04/chrome_2017-04-21_21-30-19.png
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Eclipse Che, tests on docker
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/how-to-en/
+                                            title: How-to
+                                            text: How-to
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/tools-en/eclipse-che-tests-on-docker/
+                                    text: Eclipse Che, tests on docker
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/tools-en/eclipse-che-tests-on-docker/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 21/04/2017
+                                            - time:
+                                                class: updated
+                                                text: 24/04/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: How to start with cloud IDE on own small server.
+                              You can get a hosted version of Eclipse Che with Codenvy
+                              at codenvy.io.
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/eclipse-che-tests-on-docker/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-622
+            class: post-622 post type-post status-publish format-chat has-post-thumbnail
+              hentry category-how-to-en category-project-en category-test-en category-tools-en
+              tag-anaconda tag-console tag-debian tag-jessie tag-jupiter tag-linux
+              tag-mathematical-functions tag-python tag-video post_format-post-format-chat
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/how-to-start-with-jupyter-notepad/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/04/ea33b40f2bf31c2ad65a5854ef4b419ee77effd41db8104390f0c170a5_640.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: how to start with jupyter notepad
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/how-to-en/
+                                            title: How-to
+                                            text: How-to
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/tools-en/how-to-start-with-jupyter-notepad/
+                                    text: how to start with jupyter notepad
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/tools-en/how-to-start-with-jupyter-notepad/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 03/04/2017
+                                            - time:
+                                                class: updated
+                                                text: 30/10/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: "It\u2019s an interesting topic\u2026 I was started\
+                              \ my interests to jupyter notepad, after Meetup about\
+                              \ python."
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/how-to-start-with-jupyter-notepad/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-618
+            class: post-618 post type-post status-publish format-chat has-post-thumbnail
+              hentry category-how-to-en category-idea-en category-test-en category-tools-en
+              tag-automatisation tag-debian tag-froxlor tag-hosting tag-manager-for-linux
+              tag-webmanager post_format-post-format-chat
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/new-froxlor-with-new-server-old-data/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/05/froxlor_hero.png
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: new Froxlor with new server & old data
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/how-to-en/
+                                            title: How-to
+                                            text: How-to
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/tools-en/new-froxlor-with-new-server-old-data/
+                                    text: new Froxlor with new server & old data
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/tools-en/new-froxlor-with-new-server-old-data/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 20/03/2017
+                                            - time:
+                                                class: updated
+                                                text: 15/05/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: How to Install Froxlor Management for Hosting Services
+                              with apt packages on Debian
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/new-froxlor-with-new-server-old-data/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-517
+            class: post-517 post type-post status-publish format-chat has-post-thumbnail
+              hentry category-project-en category-software-en tag-backend tag-frontend
+              tag-landing-page tag-one-page-application post_format-post-format-chat
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/project-en/one-page-application/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2017/08/fig-21-08-2017_19-22-17-754x400.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: How to create the One Page Application
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/project-en/
+                                            title: Project
+                                            text: Project
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/project-en/one-page-application/
+                                    text: How to create the One Page Application
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/project-en/one-page-application/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 08/01/2017
+                                            - time:
+                                                class: updated
+                                                text: 21/08/2017
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: Are You looking for information about technology
+                              to make One Page Application?
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/project-en/one-page-application/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-466
+            class: post-466 post type-post status-publish format-image has-post-thumbnail
+              hentry category-opinion-en tag-belarus post_format-post-format-image
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                - div:
+                    class: entry-image-wrapper entry-image-wrapper-archive
+                    children:
+                      figure:
+                        class: post-thumbnail post-thumbnail-archive
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/opinion-en/belarus-2/
+                            children:
+                              img:
+                                src: https://tom.sapletta.com/wp-content/uploads/2016/09/12590004-e1475275366174.jpg
+                                class: img-featured img-featured-retina img-responsive
+                                  wp-post-image
+                                alt: Belarus
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/opinion-en/
+                                            title: Opinion
+                                            text: Opinion
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/opinion-en/belarus-2/
+                                    text: Belarus
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/opinion-en/belarus-2/
+                                            children:
+                                              time:
+                                                class: entry-date published updated
+                                                text: 30/12/2016
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: order, space, peace
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/opinion-en/belarus-2/
+                            class: more-link
+                            text: Read More
+        - article:
+            id: post-374
+            class: post-374 post type-post status-publish format-chat hentry category-project-en
+              category-tools-en tag-iot tag-iot-for-fun-wunder-bar-relayr tag-relayr
+              tag-wunderbar post_format-chat
+            children:
+              div:
+                class: post-content-wrapper post-content-wrapper-archive
+                children:
+                  div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/project-en/
+                                            title: Project
+                                            text: Project
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/tools-en/iot-for-fun-wunder-bar/
+                                    text: IOT for FUN, wunder bar, relayr
+                        - div:
+                            class: entry-meta entry-meta-header-after
+                            children:
+                              ul:
+                                children:
+                                - li:
+                                    children:
+                                      span:
+                                        class: posted-on
+                                        children:
+                                        - span:
+                                            class: screen-reader-text
+                                            text: Posted on
+                                        - a:
+                                            href: https://tom.sapletta.com/tools-en/iot-for-fun-wunder-bar/
+                                            children:
+                                            - time:
+                                                class: entry-date published
+                                                text: 25/11/2016
+                                            - time:
+                                                class: updated
+                                                text: 30/12/2016
+                                - li:
+                                    children:
+                                      span:
+                                        class: byline
+                                        children:
+                                          span:
+                                            class: author vcard
+                                            children:
+                                              a:
+                                                class: url fn n
+                                                href: https://tom.sapletta.com/author/admin/
+                                                text: Tom Sapletta
+                    - div:
+                        class: entry-summary
+                        children:
+                          p:
+                            text: http://www.dragoninnovation.com/projects/35-wunderbar-by-relayr?src=sbl
+                              IOT for FUN, wunder bar, relayr
+                    - div:
+                        class: more-link-wrapper
+                        children:
+                          a:
+                            href: https://tom.sapletta.com/tools-en/iot-for-fun-wunder-bar/
+                            class: more-link
+                            text: Read More
+    - nav:
+        class: navigation pagination
+        children:
+        - h2:
+            class: screen-reader-text
+            text: Posts pagination
+        - div:
+            class: nav-links
+            children:
+            - span:
+                class: page-numbers current
+                children:
+                  span:
+                    class: meta-nav screen-reader-text
+                    text: Page
+            - a:
+                class: page-numbers
+                href: https://tom.sapletta.com/page/2/
+                children:
+                  span:
+                    class: meta-nav screen-reader-text
+                    text: Page
+            - a:
+                class: next page-numbers
+                href: https://tom.sapletta.com/page/2/
+                children:
+                  span:
+                    class: screen-reader-text
+                    text: Next Page
+imports:
+  styles:
+  - https://tom.sapletta.com/wp-content/plugins/squirrly-seo/view/assets/css/frontend.min.css?ver=12.4.11
+  - https://tom.sapletta.com/wp-includes/css/dist/block-library/style.min.css?ver=6.8.2
+  - https://tom.sapletta.com/wp-content/plugins/github-embed/css/github-embed.css?ver=6.8.2
+  - https://tom.sapletta.com/wp-content/plugins/table-of-contents-plus/screen.min.css?ver=2411.1
+  - https://tom.sapletta.com/wp-content/themes/bezel/css/bootstrap-grid.css?ver=6.8.2
+  - https://tom.sapletta.com/wp-content/themes/bezel/css/font-awesome.css?ver=6.8.2
+  - https://fonts.googleapis.com/css?family=Montserrat%3A400%2C700%7COpen+Sans%3A400%2C400i%2C700%2C700i&subset=latin%2Clatin-ext
+  - https://tom.sapletta.com/wp-content/themes/bezel/style.css?ver=6.8.2
+  - https://tom.sapletta.com/wp-content/plugins/heateor-social-comments/css/front.css?ver=1.6.3
+  - https://tom.sapletta.com/wp-content/plugins/gdpr-cookie-compliance/dist/styles/gdpr-main.css?ver=4.16.1
+  fonts:
+  - https://fonts.googleapis.com
+  - https://fonts.googleapis.com/css?family=Montserrat%3A400%2C700%7COpen+Sans%3A400%2C400i%2C700%2C700i&subset=latin%2Clatin-ext
 analysis:
-  page_type: general
+  page_type: blog
   layout_structure:
-    has_header: false
-    has_footer: false
-    has_sidebar: false
-    has_navigation: false
-    main_content_area: null
+    has_header: true
+    has_footer: true
+    has_sidebar: true
+    has_navigation: true
+    main_content_area: main
     layout_type: custom
     grid_structure:
-      has_grid: false
-      grid_containers: []
-      column_patterns: []
-      max_columns: 0
-    responsive_breakpoints: []
-  content_sections: []
+      has_grid: true
+      grid_containers:
+      - tag: div
+        classes:
+        - row
+        children_count: 1
+      - tag: div
+        classes:
+        - row
+        children_count: 1
+      - tag: div
+        classes:
+        - row
+        children_count: 2
+      - tag: div
+        classes:
+        - row
+        children_count: 1
+      - tag: div
+        classes:
+        - row
+        children_count: 1
+      - tag: div
+        classes:
+        - row
+        children_count: 1
+      - tag: div
+        classes:
+        - row
+        children_count: 2
+      - tag: div
+        classes:
+        - row
+        children_count: 1
+      - tag: span
+        classes:
+        - gdpr-icon
+        - moovegdpr-arrow-close
+        children_count: 0
+      - tag: div
+        classes:
+        - col-xxl-12
+        children_count: 1
+      - tag: div
+        classes:
+        - col-xxl-12
+        children_count: 1
+      - tag: div
+        classes:
+        - content-area
+        - col-12
+        - col-sm-12
+        - col-md-12
+        - col-lg-8
+        - col-xl-8
+        - col-xxl-8
+        children_count: 1
+      - tag: div
+        classes:
+        - sidebar-area
+        - col-12
+        - col-sm-12
+        - col-md-12
+        - col-lg-4
+        - col-xl-4
+        - col-xxl-4
+        children_count: 1
+      - tag: div
+        classes:
+        - col-xxl-12
+        children_count: 1
+      column_patterns:
+      - !!python/tuple
+        - col-xxl-12
+        - 3
+      - !!python/tuple
+        - col-12
+        - 2
+      - !!python/tuple
+        - col-sm-12
+        - 2
+      - !!python/tuple
+        - col-md-12
+        - 2
+      - !!python/tuple
+        - col-lg-8
+        - 1
+      - !!python/tuple
+        - col-xl-8
+        - 1
+      - !!python/tuple
+        - col-xxl-8
+        - 1
+      - !!python/tuple
+        - col-lg-4
+        - 1
+      - !!python/tuple
+        - col-xl-4
+        - 1
+      - !!python/tuple
+        - col-xxl-4
+        - 1
+      max_columns: 12
+    responsive_breakpoints:
+    - lg
+    - md
+    - sm
+    - xl
+  content_sections:
+  - tag: article
+    classes:
+    - post-2604
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-idea-en
+    - category-idea
+    - category-project-en
+    - category-project
+    - category-software-en
+    - tag-data-format
+    - tag-delimiterless
+    - tag-json
+    - tag-jsonl
+    - tag-multiobjects
+    - tag-multipart
+    - tag-multipart-objects
+    - tag-ndjson
+    - tag-ndof
+    - tag-newline-delimited
+    - tag-newline-delimited-xml
+    - tag-streaming-data
+    - tag-xml
+    id: post-2604
+    content_type: content_card
+    word_count: 57
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-2588
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-how-to
+    - category-uncategorized-en
+    id: post-2588
+    content_type: content_card
+    word_count: 49
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-2571
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-idea
+    - category-idea-en
+    id: post-2571
+    content_type: content_card
+    word_count: 45
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-2541
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-idea
+    - tag-podcast-market
+    - tag-podcasting-and-marketing-library-services
+    - tag-podcasts
+    - tag-radio
+    id: post-2541
+    content_type: content_card
+    word_count: 29
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-2531
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-domains
+    id: post-2531
+    content_type: content_card
+    word_count: 34
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-2497
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-how-to-en
+    - tag-music-dev
+    id: post-2497
+    content_type: content_card
+    word_count: 26
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-2310
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - hentry
+    - category-domains
+    - category-how-to
+    id: post-2310
+    content_type: content_card
+    word_count: 30
+    has_images: false
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-2297
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - hentry
+    - category-software-en
+    id: post-2297
+    content_type: content_card
+    word_count: 46
+    has_images: false
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-1842
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-offer
+    - category-project-en
+    - tag-domain-for-sale
+    - tag-internet-of-things
+    - tag-iot-trade
+    - tag-iot-city
+    - tag-iotcity
+    id: post-1842
+    content_type: content_card
+    word_count: 50
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-1630
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-software-en
+    - category-tools-en
+    - tag-debian-jessie
+    - tag-install-docker
+    - tag-setup-docker
+    id: post-1630
+    content_type: content_card
+    word_count: 27
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-1580
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-hardware
+    - category-software-en
+    - category-test
+    - tag-acronis
+    - tag-backup
+    - tag-cloning
+    - tag-sdd
+    id: post-1580
+    content_type: content_card
+    word_count: 36
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-1553
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-hardware
+    - tag-armbian-cubieboard-on-marsboard
+    id: post-1553
+    content_type: content_card
+    word_count: 34
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-1526
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-hardware
+    - category-how-to-en
+    id: post-1526
+    content_type: content_card
+    word_count: 27
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-1496
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-hardware
+    - category-how-to
+    - tag-disc-cloning
+    - tag-m-2-converter
+    - tag-m-2-to-pci-express
+    - tag-mainboard-asrock
+    - tag-performance-test
+    - tag-ssd-performance
+    id: post-1496
+    content_type: content_card
+    word_count: 32
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-1221
+    - post
+    - type-post
+    - status-publish
+    - format-chat
+    - has-post-thumbnail
+    - hentry
+    - category-project-en
+    - category-software-en
+    - tag-git
+    - tag-learn-git-by-examples
+    - post_format-post-format-chat
+    id: post-1221
+    content_type: content_card
+    word_count: 27
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-876
+    - post
+    - type-post
+    - status-publish
+    - format-chat
+    - has-post-thumbnail
+    - hentry
+    - category-project-en
+    - category-tools-en
+    - tag-image-processing
+    - tag-image-processing-opencv-python
+    - tag-python-library
+    - post_format-post-format-chat
+    id: post-876
+    content_type: content_card
+    word_count: 47
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-725
+    - post
+    - type-post
+    - status-publish
+    - format-chat
+    - has-post-thumbnail
+    - hentry
+    - category-how-to-en
+    - category-project-en
+    - category-tools-en
+    - tag-cv2-__version__
+    - tag-debian
+    - tag-how-to-install
+    - tag-image-processing-opencv-python
+    - tag-linux
+    - tag-pygame
+    - tag-python
+    - tag-python-rpi
+    - tag-raspberry-pi
+    - tag-raspbian
+    - tag-rpi-camera
+    - tag-virtual-environment
+    - post_format-post-format-chat
+    id: post-725
+    content_type: content_card
+    word_count: 36
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-714
+    - post
+    - type-post
+    - status-publish
+    - format-chat
+    - has-post-thumbnail
+    - hentry
+    - category-idea-en
+    - category-project-en
+    - category-test-en
+    - category-tools-en
+    - tag-docker-en
+    - tag-virtualbox-en
+    - tag-virtualisation
+    - tag-without-virtualisation
+    - post_format-post-format-chat
+    id: post-714
+    content_type: content_card
+    word_count: 38
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-654
+    - post
+    - type-post
+    - status-publish
+    - format-standard
+    - has-post-thumbnail
+    - hentry
+    - category-how-to-en
+    - category-opinion-en
+    - category-test-en
+    - category-tools-en
+    - tag-cloud-tools
+    - tag-eclipse
+    - tag-eclipse-che
+    - tag-online-ide
+    id: post-654
+    content_type: content_card
+    word_count: 37
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
+  - tag: article
+    classes:
+    - post-622
+    - post
+    - type-post
+    - status-publish
+    - format-chat
+    - has-post-thumbnail
+    - hentry
+    - category-how-to-en
+    - category-project-en
+    - category-test-en
+    - category-tools-en
+    - tag-anaconda
+    - tag-console
+    - tag-debian
+    - tag-jessie
+    - tag-jupiter
+    - tag-linux
+    - tag-mathematical-functions
+    - tag-python
+    - tag-video
+    - post_format-post-format-chat
+    id: post-622
+    content_type: content_card
+    word_count: 31
+    has_images: true
+    has_links: true
+    has_forms: false
+    nesting_level: 10
   navigation_elements:
-    main_nav: null
+    main_nav:
+      tag: nav
+      classes:
+      - main-navigation
+      links_count: 5
+      has_dropdown: false
     breadcrumbs: null
-    pagination: null
+    pagination:
+      selector: .pagination
+      pages_count: 2
     secondary_nav: []
     mobile_nav: null
   interactive_elements:
     forms: []
-    buttons: []
+    buttons:
+    - type: button
+      classes:
+      - change-settings-button
+      has_onclick: false
+    - type: button
+      classes:
+      - mgbutton
+      - moove-gdpr-infobar-allow-all
+      - gdpr-fbo-0
+      has_onclick: false
+    - type: button
+      classes:
+      - moove-gdpr-modal-close
+      has_onclick: false
+    - type: button
+      classes:
+      - moove-gdpr-tab-nav
+      has_onclick: false
+    - type: button
+      classes:
+      - moove-gdpr-tab-nav
+      has_onclick: false
+    - type: button
+      classes:
+      - mgbutton
+      - moove-gdpr-modal-allow-all
+      - button-visible
+      has_onclick: false
+    - type: button
+      classes:
+      - mgbutton
+      - moove-gdpr-modal-save-settings
+      - button-visible
+      has_onclick: false
     modals: []
     tabs: []
     accordions: []
     sliders: []
   media_elements:
     images:
-      count: 0
-      has_alt_text: 0
-      has_lazy_loading: 0
-      responsive_images: 0
-      formats: []
+      count: 27
+      has_alt_text: 23
+      has_lazy_loading: 18
+      responsive_images: 13
+      formats:
+      - 526q3d8026fm3djpg26crop3dentropy26cs3dtinysrgb26w3d108026fit3dmax26ixid3deyjhchbfawqiojmwodh926s3d1361bc4cc54b9105eb78ce7e05e3dfa6
+      - jpg
+      - 526q3d8026fm3djpg26crop3dentropy26cs3dtinysrgb26w3d20026fit3dmax26s3d455970be79f030880a003ec7629c2284
+      - png
     videos:
       count: 0
       embedded: 0
@@ -64,17 +3209,105 @@ analysis:
   semantic_structure:
     heading_structure:
       count_by_level:
-        h1: 1
-        h2: 0
-        h3: 0
+        h1: 24
+        h2: 4
+        h3: 1
         h4: 0
         h5: 0
         h6: 0
-      total_count: 1
-      has_proper_hierarchy: true
+      total_count: 29
+      has_proper_hierarchy: false
       outline:
+      - level: 2
+        text: Tom Sapletta 'Blog
+        id: null
+      - level: 3
+        text: Platform & DevOps Engineer & Hardware Developer, Expat in Germany
+        id: null
       - level: 1
-        text: Example Domain
+        text: "Data Streaming: An Insight into NDOF: Newline Delimited Objects Format\
+          \ \u2013 10 Things I Wish I\u2019d Known "
+        id: null
+      - level: 1
+        text: Lenovo Yoga 7 Ryzen 9 and wifi problem on linux
+        id: null
+      - level: 1
+        text: Git Synchronisation on any Operation System
+        id: null
+      - level: 1
+        text: Podcasting and marketing library services
+        id: null
+      - level: 1
+        text: Tools for a Domainers
+        id: null
+      - level: 1
+        text: The Wave of Efficient, be more focused as Developer
+        id: null
+      - level: 1
+        text: domains, trends, the best NAME!
+        id: null
+      - level: 1
+        text: WordPress blog optimisation with NGINX and Cacheing
+        id: null
+      - level: 1
+        text: 'iot-city.com the right domain name for Industry: Internet of Things
+          (IOT)'
+        id: null
+      - level: 1
+        text: Set up and install Docker CE for Debian Jessie
+        id: null
+      - level: 1
+        text: Backup, Cloning, Resizing for Partitions on Disc, Review & Test
+        id: null
+      - level: 1
+        text: Armbian Cubieboard on Marsboard
+        id: null
+      - level: 1
+        text: Printer Server on Marsboard
+        id: null
+      - level: 1
+        text: Fastest Memory with NVM Technology in Turbo Mode
+        id: null
+      - level: 1
+        text: how to fast learn GIT version control system (VCS)?
+        id: null
+      - level: 1
+        text: how to start Image Processing with Python libraries
+        id: null
+      - level: 1
+        text: Image Processing based on OpenCv with Python on Raspbian, Raspberry
+          Pi
+        id: null
+      - level: 1
+        text: dev environment for fast development with odroid xu4, mini PC and switch,
+          without virtualization
+        id: null
+      - level: 1
+        text: Eclipse Che, tests on docker
+        id: null
+      - level: 1
+        text: how to start with jupyter notepad
+        id: null
+      - level: 1
+        text: new Froxlor with new server & old data
+        id: null
+      - level: 1
+        text: How to create the One Page Application
+        id: null
+      - level: 1
+        text: Belarus
+        id: null
+      - level: 1
+        text: IOT for FUN, wunder bar, relayr
+        id: null
+      - level: 2
+        text: Posts pagination
+        id: null
+      - level: 2
+        text: Recent Posts
+        id: null
+      - level: 2
+        text: Categories
         id: null
     landmark_roles:
       banner: 0
@@ -86,39 +3319,448 @@ analysis:
       form: 0
       region: 0
     semantic_elements:
-      header: 0
-      nav: 0
-      main: 0
+      header: 25
+      nav: 2
+      main: 1
       section: 0
-      article: 0
-      aside: 0
-      footer: 0
-      figure: 0
+      article: 24
+      aside: 3
+      footer: 1
+      figure: 21
       figcaption: 0
-      time: 0
+      time: 46
       mark: 0
-    structured_data: []
-  component_patterns: []
+    structured_data:
+    - JSON-LD
+    - RDFa
+  component_patterns:
+  - type: repeated_class
+    pattern: entry-meta
+    count: 48
+    elements:
+    - tag: div
+      text_preview: '
+
+
+        Idea
+
+
+        '
+    - tag: div
+      text_preview: "\n\nPosted on 07/10/202307/10/2023\n by Tom Sapletta\n"
+    - tag: div
+      text_preview: '
+
+
+        how-to
+
+
+        '
+  - type: repeated_class
+    pattern: screen-reader-text
+    count: 30
+    elements:
+    - tag: span
+      text_preview: Menu
+    - tag: a
+      text_preview: Skip to content
+    - tag: span
+      text_preview: Posted on
+  - type: repeated_class
+    pattern: post
+    count: 24
+    elements:
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Data Streaming: An Insight into NDO'
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        how-to
+
+
+
+
+        Lenovo Yoga 7 Ryzen 9 and wifi pr'
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Git Synchronisation on any Operatio'
+  - type: repeated_class
+    pattern: type-post
+    count: 24
+    elements:
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Data Streaming: An Insight into NDO'
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        how-to
+
+
+
+
+        Lenovo Yoga 7 Ryzen 9 and wifi pr'
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Git Synchronisation on any Operatio'
+  - type: repeated_class
+    pattern: status-publish
+    count: 24
+    elements:
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Data Streaming: An Insight into NDO'
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        how-to
+
+
+
+
+        Lenovo Yoga 7 Ryzen 9 and wifi pr'
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Git Synchronisation on any Operatio'
+  - type: repeated_class
+    pattern: hentry
+    count: 24
+    elements:
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Data Streaming: An Insight into NDO'
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        how-to
+
+
+
+
+        Lenovo Yoga 7 Ryzen 9 and wifi pr'
+    - tag: article
+      text_preview: '
+
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Git Synchronisation on any Operatio'
+  - type: repeated_class
+    pattern: post-content-wrapper
+    count: 24
+    elements:
+    - tag: div
+      text_preview: '
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Data Streaming: An Insight into NDOF'
+    - tag: div
+      text_preview: '
+
+
+
+
+
+
+        how-to
+
+
+
+
+        Lenovo Yoga 7 Ryzen 9 and wifi pro'
+    - tag: div
+      text_preview: '
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Git Synchronisation on any Operation'
+  - type: repeated_class
+    pattern: post-content-wrapper-archive
+    count: 24
+    elements:
+    - tag: div
+      text_preview: '
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Data Streaming: An Insight into NDOF'
+    - tag: div
+      text_preview: '
+
+
+
+
+
+
+        how-to
+
+
+
+
+        Lenovo Yoga 7 Ryzen 9 and wifi pro'
+    - tag: div
+      text_preview: '
+
+
+
+
+
+
+        Idea
+
+
+
+
+        Git Synchronisation on any Operation'
+  - type: repeated_class
+    pattern: entry-data-wrapper
+    count: 24
+    elements:
+    - tag: div
+      text_preview: '
+
+
+
+
+        Idea
+
+
+
+
+        Data Streaming: An Insight into NDOF: '
+    - tag: div
+      text_preview: '
+
+
+
+
+        how-to
+
+
+
+
+        Lenovo Yoga 7 Ryzen 9 and wifi probl'
+    - tag: div
+      text_preview: '
+
+
+
+
+        Idea
+
+
+
+
+        Git Synchronisation on any Operation S'
+  - type: repeated_class
+    pattern: entry-data-wrapper-archive
+    count: 24
+    elements:
+    - tag: div
+      text_preview: '
+
+
+
+
+        Idea
+
+
+
+
+        Data Streaming: An Insight into NDOF: '
+    - tag: div
+      text_preview: '
+
+
+
+
+        how-to
+
+
+
+
+        Lenovo Yoga 7 Ryzen 9 and wifi probl'
+    - tag: div
+      text_preview: '
+
+
+
+
+        Idea
+
+
+
+
+        Git Synchronisation on any Operation S'
   optimization_suggestions:
-  - Add a meta description for better SEO
+  - Consider using only one h1 tag per page for better SEO
+  - Consider moving inline styles to CSS files
   structure_complexity:
-    max_nesting_depth: 3
-    total_elements: 13
-    div_count: 1
-    semantic_elements: 0
+    max_nesting_depth: 17
+    total_elements: 1020
+    div_count: 242
+    semantic_elements: 56
+    simplification_applied: true
+    simplification_details:
+      max_depth_limit: null
+      flatten_containers: false
+      simplify_structure: true
+      preserve_semantic_tags: true
   accessibility:
-    images_with_alt: 0
+    images_with_alt: 27
     images_without_alt: 0
-    form_labels: 0
+    form_labels: 1
     form_inputs_without_labels: 0
     skip_links: false
-    aria_labels: 0
+    aria_labels: 10
     aria_described_by: 0
-    focus_indicators: false
+    focus_indicators: true
     color_contrast_issues: []
   url_analysis:
-    domain: example.com
+    domain: tom.sapletta.com
     path_segments: []
     has_query_params: false
     is_secure: true
-    subdomain: example
+    subdomain: tom

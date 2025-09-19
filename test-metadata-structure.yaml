@@ -1,0 +1,126 @@
+metadata:
+  title: Example Domain
+  description: Content from Example Domain - scraped from example.com
+  source_url: https://example.com
+  extracted_at: '2025-09-19T20:33:37.276479'
+structure:
+  body:
+    children:
+      div:
+        children:
+        - h1:
+            text: Example Domain
+        - p:
+            text: "This domain is for use in illustrative examples in documents. You\
+              \ may use this\n    domain in literature without prior coordination\
+              \ or asking for permission."
+        - p:
+            children:
+              a:
+                href: https://www.iana.org/domains/example
+                text: More information...
+analysis:
+  page_type: general
+  layout_structure:
+    has_header: false
+    has_footer: false
+    has_sidebar: false
+    has_navigation: false
+    main_content_area: null
+    layout_type: custom
+    grid_structure:
+      has_grid: false
+      grid_containers: []
+      column_patterns: []
+      max_columns: 0
+    responsive_breakpoints: []
+  content_sections: []
+  navigation_elements:
+    main_nav: null
+    breadcrumbs: null
+    pagination: null
+    secondary_nav: []
+    mobile_nav: null
+  interactive_elements:
+    forms: []
+    buttons: []
+    modals: []
+    tabs: []
+    accordions: []
+    sliders: []
+  media_elements:
+    images:
+      count: 0
+      has_alt_text: 0
+      has_lazy_loading: 0
+      responsive_images: 0
+      formats: []
+    videos:
+      count: 0
+      embedded: 0
+      local: 0
+    audio:
+      count: 0
+  semantic_structure:
+    heading_structure:
+      count_by_level:
+        h1: 1
+        h2: 0
+        h3: 0
+        h4: 0
+        h5: 0
+        h6: 0
+      total_count: 1
+      has_proper_hierarchy: true
+      outline:
+      - level: 1
+        text: Example Domain
+        id: null
+    landmark_roles:
+      banner: 0
+      navigation: 0
+      main: 0
+      complementary: 0
+      contentinfo: 0
+      search: 0
+      form: 0
+      region: 0
+    semantic_elements:
+      header: 0
+      nav: 0
+      main: 0
+      section: 0
+      article: 0
+      aside: 0
+      footer: 0
+      figure: 0
+      figcaption: 0
+      time: 0
+      mark: 0
+    structured_data: []
+  component_patterns: []
+  optimization_suggestions:
+  - Add a meta description for better SEO
+  structure_complexity:
+    total_elements: 13
+    max_nesting_depth: 3
+    div_count: 1
+    semantic_elements: 0
+    element_types: 10
+    complexity_score: 7.8
+  accessibility:
+    images_with_alt: 0
+    images_without_alt: 0
+    form_labels: 0
+    form_inputs_without_labels: 0
+    skip_links: false
+    aria_labels: 0
+    aria_described_by: 0
+    focus_indicators: false
+    color_contrast_issues: []
+  url_analysis:
+    domain: example.com
+    path_segments: []
+    has_query_params: false
+    is_secure: true
+    subdomain: example
