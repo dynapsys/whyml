@@ -223,3 +223,17 @@ class GenerationResult:
         """Add a generation error."""
         self.errors.append(message)
         self.success = False
+
+
+@dataclass
+class BuildResult:
+    """Result of project build operation."""
+    success: bool
+    built_targets: List[str] = field(default_factory=list)
+    build_dir: Optional[Path] = None
+    errors: List[str] = field(default_factory=list)
+    
+    def add_error(self, message: str) -> None:
+        """Add a build error."""
+        self.errors.append(message)
+        self.success = False
