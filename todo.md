@@ -25,11 +25,42 @@ tutaj jest stara wersja: /home/tom/github/tom-sapletta-com/webpage.yaml
 jesli to pomoże to sprawdz co może juz zostało poporawnie zaimplementowano albo zainsiipruj sie rozwizaniami
 ktore tutaj trzeba bedzieie zaimplementować
 
+potrzebne sa przyklady do testowania z roznymi jezykami, aby np łączyć różne frameworki w ramach jednej strony www
+do tego potrzebne są predefiniowane środowiska docker, które powinny być uruchamiane do wygenerowania pełnego html
+dozwol na inne metody, jeśli są prostsze, aby generować pliki wynikowe html z różnycmi opcjami, np kompresja, optymalizacja css, js, itd
 
 
+daj drugi wariant [test-manifest.yaml](test-manifest.yaml) gdzie kod html z yaml 
+znajduje sie w sosobnym pliku .html, ktyory jest ładowany i renderowany, 
+zamiast byc dodawany sam kod, dodajemy plik jako moduł
+taki moduł w osobnym pliku powinien być ładowany dynamicznie,
+z możliwoscia zamiany etykiet jeśli są tam używane jakieś formy zmiennych 
+np w podwójnych klamrach {{VAR}} lub w php <?=VAR ?>
+
+w rozwiązniu serwera:
+whyml run -f test-manifest.yaml --watch --api-debug
+dodaj warstwe API, ktora w momencie startu http://localhost:8080/
+czyli http://localhost:8080/api/health
+http://localhost:8080/api/debug/logs
+http://localhost:8080/api/debug/logs/error/
+chodzi o to by możliwe było używanie usług w róznych ekosystemach i analiza zachowań usługi
+wyczytywanie błędów
+
+Jak ładować wiele manifestow z jednego folderu, ktore maja meidzy soba zaleznosci sa ladowane jako komponenty a główny je włącza do całej mapy strony
+jak łączyć ze sobą różne formaty, jak wygenerować cłą sitemap.xml?
+
+whyml run -f test-manifest.yaml --watch --rss
+dodaj do server opcję RSS, ktora ma za zadanie informowanie o zmianach na stronie
+wynikajace z --watch obejmujace nie tylko strukture ale i tresc
+
+podaj przyklad uruchomienia na produkcji z domena i tls na porcie 80 
 
 
-
+Install dependencies: pip install -r requirements.txt
+Test examples: Run the example scripts in examples/
+Create your first app: Use whyml run with your manifest
+Explore generators: Try whyml generate pwa for complete apps
+Deploy production: Use Caddy integration for HTTPS deployment
 
 
 

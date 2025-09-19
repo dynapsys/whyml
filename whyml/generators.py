@@ -337,7 +337,274 @@ def generate_offline_page(manifest: Dict[str, Any]) -> str:
 """
 
 
-def generate_spa_router(manifest: Dict[str, Any], config: Dict[str, Any]) -> str:
+def generate_spa_enhancements(manifest: Dict[str, Any]) -> str:
+    """Generate SPA-specific enhancements and utilities."""
+    
+    app_name = manifest.get('metadata', {}).get('title', 'WhyML SPA')
+    
+    return f"""
+// SPA Enhancements for {app_name}
+class SPAApp {{
+    constructor() {{
+        this.currentRoute = '/';
+        this.routes = {{}};
+        this.init();
+    }}
+    
+    init() {{
+        window.addEventListener('popstate', () => {{
+            this.handleRouteChange();
+        }});
+        
+        // Handle initial route
+        this.handleRouteChange();
+        
+        // Setup navigation links
+        this.setupNavigationLinks();
+    }}
+    
+    setupNavigationLinks() {{
+        document.addEventListener('click', (e) => {{
+            if (e.target.tagName === 'A' && e.target.getAttribute('href')) {{
+                const href = e.target.getAttribute('href');
+                if (href.startsWith('/') || href.startsWith('#')) {{
+                    e.preventDefault();
+                    this.navigateTo(href);
+                }}
+            }}
+        }});
+    }}
+    
+    navigateTo(path) {{
+        if (path !== this.currentRoute) {{
+            history.pushState(null, '', path);
+            this.currentRoute = path;
+            this.handleRouteChange();
+        }}
+    }}
+    
+    handleRouteChange() {{
+        const path = window.location.pathname || '/';
+        this.currentRoute = path;
+        
+        // Trigger route change event
+        const event = new CustomEvent('spa-route-change', {{
+            detail: {{ path, route: this.currentRoute }}
+        }});
+        document.dispatchEvent(event);
+    }}
+    
+    // Add page transition effects
+    transitionTo(newContent) {{
+        const main = document.querySelector('main') || document.body;
+        main.style.opacity = '0';
+        
+        setTimeout(() => {{
+            main.innerHTML = newContent;
+            main.style.opacity = '1';
+        }}, 150);
+    }}
+}}
+
+// Initialize SPA
+if (typeof window !== 'undefined') {{
+    window.spaApp = new SPAApp();
+}}
+"""
+
+def generate_pwa_enhancements(manifest: Dict[str, Any]) -> str:
+    """Generate PWA-specific enhancements and service worker registration."""
+    
+    app_name = manifest.get('metadata', {}).get('title', 'WhyML PWA')
+    
+    return f"""
+// PWA Enhancements for {app_name}
+class PWAApp {{
+    constructor() {{
+        this.isOnline = navigator.onLine;
+        this.init();
+    }}
+    
+    init() {{
+        // Register service worker
+        this.registerServiceWorker();
+        
+        // Setup online/offline detection
+        this.setupConnectivityDetection();
+        
+        // Setup install prompt
+        this.setupInstallPrompt();
+        
+        // Setup update notifications
+        this.setupUpdateNotifications();
+    }}
+    
+    async registerServiceWorker() {{
+        if ('serviceWorker' in navigator) {{
+            try {{
+                const registration = await navigator.serviceWorker.register('/sw.js');
+                console.log('Service Worker registered:', registration);
+                
+                // Listen for updates
+                registration.addEventListener('updatefound', () => {{
+                    this.handleServiceWorkerUpdate(registration);
+                }});
+            }} catch (error) {{
+                console.error('Service Worker registration failed:', error);
+            }}
+        }}
+    }}
+    
+    handleServiceWorkerUpdate(registration) {{
+        const newWorker = registration.installing;
+        if (newWorker) {{
+            newWorker.addEventListener('statechange', () => {{
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {{
+                    this.showUpdateNotification();
+                }}
+            }});
+        }}
+    }}
+    
+    setupConnectivityDetection() {{
+        window.addEventListener('online', () => {{
+            this.isOnline = true;
+            this.showConnectivityStatus('online');
+        }});
+        
+        window.addEventListener('offline', () => {{
+            this.isOnline = false;
+            this.showConnectivityStatus('offline');
+        }});
+    }}
+    
+    setupInstallPrompt() {{
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {{
+            e.preventDefault();
+            deferredPrompt = e;
+            this.showInstallButton();
+        }});
+        
+        // Handle install button click
+        document.addEventListener('click', async (e) => {{
+            if (e.target.id === 'pwa-install-btn') {{
+                if (deferredPrompt) {{
+                    deferredPrompt.prompt();
+                    const {{ outcome }} = await deferredPrompt.userChoice;
+                    console.log('Install prompt outcome:', outcome);
+                    deferredPrompt = null;
+                    this.hideInstallButton();
+                }}
+            }}
+        }});
+    }}
+    
+    showInstallButton() {{
+        if (!document.getElementById('pwa-install-btn')) {{
+            const button = document.createElement('button');
+            button.id = 'pwa-install-btn';
+            button.textContent = 'Install App';
+            button.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #007acc;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                z-index: 1000;
+                font-family: Arial, sans-serif;
+            `;
+            document.body.appendChild(button);
+        }}
+    }}
+    
+    hideInstallButton() {{
+        const button = document.getElementById('pwa-install-btn');
+        if (button) {{
+            button.remove();
+        }}
+    }}
+    
+    showConnectivityStatus(status) {{
+        const existing = document.getElementById('connectivity-status');
+        if (existing) existing.remove();
+        
+        const statusDiv = document.createElement('div');
+        statusDiv.id = 'connectivity-status';
+        statusDiv.textContent = status === 'online' ? 'Back online!' : 'You are offline';
+        statusDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border-radius: 6px;
+            color: white;
+            background: ${{status === 'online' ? '#4CAF50' : '#f44336'}};
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+        `;
+        
+        document.body.appendChild(statusDiv);
+        
+        setTimeout(() => {{
+            if (statusDiv && statusDiv.parentNode) {{
+                statusDiv.parentNode.removeChild(statusDiv);
+            }}
+        }}, 3000);
+    }}
+    
+    showUpdateNotification() {{
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #333;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+        `;
+        notification.innerHTML = `
+            <div>New version available!</div>
+            <button onclick="window.location.reload()" style="
+                background: #007acc;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 10px;
+            ">Refresh</button>
+        `;
+        
+        document.body.appendChild(notification);
+    }}
+    
+    setupUpdateNotifications() {{
+        // Check for updates periodically
+        setInterval(() => {{
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {{
+                navigator.serviceWorker.controller.postMessage({{ type: 'CHECK_FOR_UPDATES' }});
+            }}
+        }}, 60000); // Check every minute
+    }}
+}}
+
+// Initialize PWA
+if (typeof window !== 'undefined') {{
+    window.pwaApp = new PWAApp();
+}}
+"""
+
+def generate_spa_router(manifest: Dict[str, Any], config: Dict[str, Any] = None) -> str:
     """Generate router configuration for SPA."""
     
     routes = manifest.get('routes', {})

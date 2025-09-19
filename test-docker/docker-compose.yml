@@ -1,0 +1,26 @@
+networks:
+  whyml-network:
+    driver: bridge
+services:
+  whyml-app:
+    build: .
+    environment:
+    - NODE_ENV=production
+    - WHYML_HOST=0.0.0.0
+    - WHYML_PORT=8080
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:8080/api/health
+      timeout: 10s
+    ports:
+    - 8080:8080
+    restart: unless-stopped
+    volumes:
+    - ./manifests:/app/manifests:ro
+    - ./assets:/app/assets:ro
+version: '3.8'

@@ -73,7 +73,7 @@ class WhyMLProcessor:
         )
         
         self.processor = ManifestProcessor(
-            enable_validation=enable_validation
+            strict_validation=enable_validation
         )
         
         # Initialize converters
@@ -354,7 +354,7 @@ class WhyMLProcessor:
         return ConversionResult(
             content=spa_content,
             filename=f"{manifest.get('metadata', {}).get('title', 'app').lower().replace(' ', '-')}.html",
-            format='spa',
+            format_type='spa',
             metadata=html_result.metadata
         )
     
@@ -385,7 +385,7 @@ class WhyMLProcessor:
         return ConversionResult(
             content=pwa_content,
             filename=f"pwa-{spa_result.filename}",
-            format='pwa',
+            format_type='pwa',
             metadata={**spa_result.metadata, 'pwa_enabled': True}
         )
     
@@ -419,15 +419,18 @@ class WhyMLProcessor:
         (output_dir / "index.html").write_text(pwa_result.content)
         
         # Generate service worker
-        sw_content = self._generate_service_worker(manifest, config or {})
+        from .generators import generate_service_worker
+        sw_content = generate_service_worker(manifest, config or {})
         (output_dir / "sw.js").write_text(sw_content)
         
         # Generate web manifest
-        web_manifest = self._generate_web_manifest(manifest, config or {})
+        from .generators import generate_web_manifest
+        web_manifest = generate_web_manifest(manifest, config or {})
         (output_dir / "manifest.json").write_text(json.dumps(web_manifest, indent=2))
         
         # Generate offline page
-        offline_content = self._generate_offline_page(manifest)
+        from .generators import generate_offline_page
+        offline_content = generate_offline_page(manifest)
         (output_dir / "offline.html").write_text(offline_content)
         
         return str(output_dir)
@@ -462,7 +465,8 @@ class WhyMLProcessor:
         (output_dir / "index.html").write_text(spa_result.content)
         
         # Generate router configuration
-        router_content = self._generate_spa_router(manifest, config or {})
+        from .generators import generate_spa_router
+        router_content = generate_spa_router(manifest, config or {})
         (output_dir / "router.js").write_text(router_content)
         
         return str(output_dir)
@@ -527,15 +531,18 @@ class WhyMLProcessor:
         output_dir.mkdir(parents=True, exist_ok=True)
         
         # Generate Dockerfile
-        dockerfile_content = self._generate_dockerfile(manifest, config or {})
+        from .generators import generate_dockerfile
+        dockerfile_content = generate_dockerfile(manifest, config or {})
         (output_dir / "Dockerfile").write_text(dockerfile_content)
         
         # Generate docker-compose.yml
-        compose_content = self._generate_docker_compose(manifest, config or {})
+        from .generators import generate_docker_compose
+        compose_content = generate_docker_compose(manifest, config or {})
         (output_dir / "docker-compose.yml").write_text(compose_content)
         
         # Generate .dockerignore
-        dockerignore_content = self._generate_dockerignore()
+        from .generators import generate_dockerignore
+        dockerignore_content = generate_dockerignore()
         (output_dir / ".dockerignore").write_text(dockerignore_content)
         
         return str(output_dir)
@@ -570,15 +577,18 @@ class WhyMLProcessor:
         (output_dir / "src-tauri").mkdir(exist_ok=True)
         
         # Generate Tauri configuration
-        tauri_config = self._generate_tauri_config(manifest, config or {})
+        from .generators import generate_tauri_config
+        tauri_config = generate_tauri_config(manifest, config or {})
         (output_dir / "src-tauri" / "tauri.conf.json").write_text(json.dumps(tauri_config, indent=2))
         
         # Generate Cargo.toml
-        cargo_toml = self._generate_cargo_toml(manifest)
+        from .generators import generate_cargo_toml
+        cargo_toml = generate_cargo_toml(manifest)
         (output_dir / "src-tauri" / "Cargo.toml").write_text(cargo_toml)
         
         # Generate main.rs
-        main_rs = self._generate_tauri_main_rs(manifest)
+        from .generators import generate_tauri_main_rs
+        main_rs = generate_tauri_main_rs(manifest)
         (output_dir / "src-tauri" / "src").mkdir(exist_ok=True)
         (output_dir / "src-tauri" / "src" / "main.rs").write_text(main_rs)
         
@@ -702,6 +712,67 @@ class WhyMLProcessor:
             'max_nesting_depth': max_depth,
             'complexity_score': element_count * (max_depth + 1)
         }
+    
+    def _enhance_for_spa(self, html_content: str, manifest: Dict[str, Any]) -> str:
+        """Enhance HTML content for SPA functionality."""
+        from .generators import generate_spa_router, generate_spa_enhancements
+        
+        # Add SPA router and enhancements with config
+        config = self.config or {}
+        spa_router = generate_spa_router(manifest, config)
+        spa_enhancements = generate_spa_enhancements(manifest)
+        
+        # Insert SPA functionality before closing </body> tag
+        spa_scripts = f"""
+        <script>
+        {spa_router}
+        {spa_enhancements}
+        </script>
+        """
+        
+        if '</body>' in html_content:
+            html_content = html_content.replace('</body>', f'{spa_scripts}\n</body>')
+        else:
+            html_content += spa_scripts
+            
+        return html_content
+    
+    def _enhance_for_pwa(self, html_content: str, manifest: Dict[str, Any]) -> str:
+        """Enhance HTML content for PWA functionality."""
+        from .generators import generate_pwa_enhancements, generate_service_worker, generate_web_manifest
+        
+        # Generate PWA components with empty config if not provided
+        config = self.config or {}
+        pwa_enhancements = generate_pwa_enhancements(manifest)
+        service_worker = generate_service_worker(manifest, config)
+        web_manifest = generate_web_manifest(manifest, config)
+        
+        # Add PWA meta tags and service worker registration
+        pwa_head = f"""
+        <link rel="manifest" href="/manifest.json">
+        <meta name="theme-color" content="{manifest.get('styles', {}).get('primary', '#000000')}">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="{manifest.get('metadata', {}).get('title', 'PWA')}">
+        """
+        
+        pwa_scripts = f"""
+        <script>
+        {pwa_enhancements}
+        </script>
+        """
+        
+        # Insert PWA head content
+        if '</head>' in html_content:
+            html_content = html_content.replace('</head>', f'{pwa_head}\n</head>')
+        
+        # Insert PWA scripts before closing </body> tag
+        if '</body>' in html_content:
+            html_content = html_content.replace('</body>', f'{pwa_scripts}\n</body>')
+        else:
+            html_content += pwa_scripts
+            
+        return html_content
     
     async def __aenter__(self):
         """Async context manager entry."""

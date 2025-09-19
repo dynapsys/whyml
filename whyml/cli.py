@@ -62,7 +62,7 @@ def create_parser() -> argparse.ArgumentParser:
         help='Port to run server on (default: 8080)'
     )
     run_parser.add_argument(
-        '-h', '--host',
+        '--host',
         default='localhost',
         help='Host to bind server to (default: localhost)'
     )

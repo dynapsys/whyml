@@ -90,6 +90,7 @@ Welcome to the comprehensive WhyML documentation. This directory contains detail
 ```bash
 # Development server
 whyml run -f manifest.yaml --watch
+whyml run -f test-manifest.yaml --watch
 
 # Convert formats  
 whyml convert --from manifest.yaml --to output.html -as spa
