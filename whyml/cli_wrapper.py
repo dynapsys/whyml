@@ -56,6 +56,11 @@ def scrape(url, output, section, max_depth, flatten_containers, simplify_structu
     """Scrape a website and convert to YAML manifest."""
     
     try:
+        # Validate flag values
+        if max_depth is not None and max_depth < 1:
+            click.echo("❌ Error: --max-depth must be a positive integer (1 or greater)", err=True)
+            sys.exit(1)
+        
         # Run the async scraping operation
         result = asyncio.run(_scrape_async(
             url=url,

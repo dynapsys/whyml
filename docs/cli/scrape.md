@@ -8,6 +8,10 @@ The `whyml scrape` command provides advanced website scraping capabilities with 
 # Basic website scraping
 whyml scrape https://example.com -o manifest.yaml
 
+whyml scrape https://example.com --section analysis
+
+whyml scrape https://example.com --section metadata --section structure
+
 # Advanced scraping with structure simplification
 whyml scrape https://example.com \
   --max-depth 3 \
