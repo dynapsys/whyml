@@ -183,28 +183,32 @@ class ProjectConfig:
 class ValidationResult:
     """Result of PASVG validation."""
     is_valid: bool
-    errors: List[str] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
+    errors: Optional[List[str]] = None
+    warnings: Optional[List[str]] = None
     metadata: Optional[PASVGMetadata] = None
     file_count: int = 0
     total_size: int = 0
     
     def add_error(self, message: str) -> None:
         """Add a validation error."""
+        if self.errors is None:
+            self.errors = []
         self.errors.append(message)
         self.is_valid = False
     
     def add_warning(self, message: str) -> None:
         """Add a validation warning."""
+        if self.warnings is None:
+            self.warnings = []
         self.warnings.append(message)
     
     def has_errors(self) -> bool:
         """Check if there are validation errors."""
-        return len(self.errors) > 0
+        return self.errors is not None and len(self.errors) > 0
     
     def has_warnings(self) -> bool:
         """Check if there are validation warnings."""
-        return len(self.warnings) > 0
+        return self.warnings is not None and len(self.warnings) > 0
 
 
 @dataclass

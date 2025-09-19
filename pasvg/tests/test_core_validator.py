@@ -90,7 +90,7 @@ class TestValidator:
         
         # Create PASVG with metadata
         svg_content = '''<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" data-pasvg-version="1.0" data-project-name="Test Project">
     <!-- PASVG Metadata -->
     <metadata data-pasvg="true">
         <project-name>Test Project</project-name>
@@ -127,7 +127,7 @@ class TestValidator:
         
         # Create PASVG with multiple embedded files
         svg_content = '''<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" data-pasvg-version="1.0" data-project-name="Multi-File Project">
     <!-- PASVG Metadata -->
     <metadata data-pasvg="true">
         <project-name>Multi-File Project</project-name>
@@ -201,7 +201,7 @@ body {
         
         # Create PASVG that might generate warnings
         svg_content = '''<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" data-pasvg-version="1.0" data-project-name="Incomplete Project">
     <!-- Missing some recommended metadata -->
     <metadata data-pasvg="true">
         <project-name>Incomplete Project</project-name>

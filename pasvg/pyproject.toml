@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pasvg"
-version = "1.0.2"
+version = "1.0.3"
 description = "Project Artifact SVG - Revolutionary single-file project distribution system"
 readme = "docs/README.md"
 license = "Apache-2.0"
@@ -48,10 +48,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/dynapsys/whyml"
-Documentation = "https://github.com/dynapsys/whyml/tree/main/pasvg/docs"
-Repository = "https://github.com/dynapsys/whyml"
-Issues = "https://github.com/dynapsys/whyml/issues"
+Homepage = "https://github.com/dynapsys/pasvg"
+Documentation = "https://github.com/dynapsys/pasvg/tree/main/docs"
+Repository = "https://github.com/dynapsys/pasvg"
+Issues = "https://github.com/dynapsys/pasvg/issues"
 
 [project.scripts]
 pasvg = "pasvg.cli:main"

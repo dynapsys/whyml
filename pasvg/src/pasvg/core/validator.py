@@ -26,6 +26,7 @@ class Validator:
             'manifest', 'source', 'config', 'style', 'template', 
             'docs', 'binary', 'web', 'container', 'build'
         ]
+        self.schema_validator = SchemaValidator()
     
     def validate(self, pasvg_file: str) -> ValidationResult:
         """Validate a PASVG file."""
