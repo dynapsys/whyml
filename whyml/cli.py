@@ -188,7 +188,7 @@ def create_parser() -> argparse.ArgumentParser:
     # Scrape command
     scrape_parser = subparsers.add_parser(
         'scrape',
-        help='Scrape website to generate manifest'
+        help='Scrape website to generate manifest with advanced simplification options'
     )
     scrape_parser.add_argument(
         'url',
@@ -198,6 +198,57 @@ def create_parser() -> argparse.ArgumentParser:
         '-o', '--output',
         default='scraped-manifest.yaml',
         help='Output manifest file'
+    )
+    
+    # Structure simplification options
+    scrape_parser.add_argument(
+        '--max-depth',
+        type=int,
+        help='Maximum nesting depth for structure (reduces deep HTML nesting)'
+    )
+    scrape_parser.add_argument(
+        '--flatten-containers',
+        action='store_true',
+        help='Merge wrapper/container divs with minimal semantic value'
+    )
+    scrape_parser.add_argument(
+        '--simplify-structure',
+        action='store_true',
+        help='Apply general structure simplification rules'
+    )
+    scrape_parser.add_argument(
+        '--no-preserve-semantic',
+        action='store_true',
+        help='Do not preserve semantic HTML5 tags during simplification'
+    )
+    
+    # Selective section generation
+    scrape_parser.add_argument(
+        '--section',
+        action='append',
+        choices=['metadata', 'styles', 'structure', 'imports', 'analysis'],
+        help='Only generate specific sections (can be used multiple times)'
+    )
+    scrape_parser.add_argument(
+        '--no-styles',
+        action='store_true',
+        help='Skip CSS style extraction'
+    )
+    scrape_parser.add_argument(
+        '--extract-scripts',
+        action='store_true',
+        help='Include JavaScript files in imports'
+    )
+    
+    # Testing and comparison options
+    scrape_parser.add_argument(
+        '--test-conversion',
+        action='store_true',
+        help='Test conversion workflow: scrape → YAML → HTML and compare with original'
+    )
+    scrape_parser.add_argument(
+        '--output-html',
+        help='Output file for regenerated HTML (for testing conversion accuracy)'
     )
     
     return parser
@@ -391,16 +442,48 @@ async def validate_command(args) -> int:
 
 
 async def scrape_command(args) -> int:
-    """Handle the scrape command."""
+    """Handle the scrape command with advanced simplification options."""
     try:
         processor = WhyMLProcessor()
-        manifest = await processor.scrape_url_to_manifest(args.url)
+        
+        # Prepare parameters for advanced scraping
+        scrape_params = {
+            'extract_styles': not args.no_styles,
+            'extract_scripts': args.extract_scripts,
+            'max_depth': args.max_depth,
+            'flatten_containers': args.flatten_containers,
+            'simplify_structure': args.simplify_structure,
+            'preserve_semantic_tags': not args.no_preserve_semantic,
+            'sections': args.section  # CLI collects multiple --section flags into a list
+        }
+        
+        # Scrape with advanced parameters
+        manifest = await processor.scrape_url_to_manifest(args.url, **scrape_params)
         
         # Save manifest
         with open(args.output, 'w') as f:
-            yaml.dump(manifest, f, default_flow_style=False, sort_keys=False)
+            yaml.dump(manifest, f, default_flow_style=False, sort_keys=False, indent=2)
         
         print(f"Successfully scraped {args.url} to {args.output}")
+        
+        # Print simplification report
+        if any([args.max_depth, args.flatten_containers, args.simplify_structure]):
+            print("\n📊 Structure Simplification Applied:")
+            if args.max_depth:
+                print(f"   • Maximum depth limited to: {args.max_depth}")
+            if args.flatten_containers:
+                print("   • Container divs flattened")
+            if args.simplify_structure:
+                print("   • General structure simplification applied")
+        
+        # Print section filtering report
+        if args.section:
+            print(f"\n🎯 Sections Generated: {', '.join(args.section)}")
+        
+        # Run conversion testing workflow if requested
+        if args.test_conversion:
+            return await _test_conversion_workflow(args.url, args.output, args.output_html, manifest)
+        
         return 0
         
     except Exception as e:

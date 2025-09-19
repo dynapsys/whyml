@@ -242,24 +242,49 @@ class WhyMLProcessor:
     async def scrape_url_to_manifest(self,
                                     url: str,
                                     analyze: bool = True,
+                                    max_depth: Optional[int] = None,
+                                    flatten_containers: bool = False,
+                                    simplify_structure: bool = False,
+                                    preserve_semantic_tags: bool = True,
+                                    sections: Optional[List[str]] = None,
+                                    extract_styles: bool = True,
+                                    extract_scripts: bool = False,
                                     **kwargs) -> Dict[str, Any]:
         """
-        Scrape a URL and convert to YAML manifest.
+        Scrape a URL and convert to YAML manifest with advanced simplification options.
         
         Args:
-            url: URL to scrape
+            url: URL to scrape  
             analyze: Whether to perform webpage analysis
+            max_depth: Maximum nesting depth for structure (None = unlimited)
+            flatten_containers: Merge wrapper/container divs with minimal content
+            simplify_structure: Apply general structure simplification rules
+            preserve_semantic_tags: Keep semantic HTML5 tags (article, section, etc.)
+            sections: Only extract specific sections (None = all sections)
+            extract_styles: Whether to extract CSS styles
+            extract_scripts: Whether to extract JavaScript
             **kwargs: Additional scraping options
             
         Returns:
             Generated manifest dictionary
         """
-        async with self.url_scraper:
+        # Create URLScraper with advanced parameters
+        scraper = URLScraper(
+            extract_styles=extract_styles,
+            extract_scripts=extract_scripts,
+            max_depth=max_depth,
+            flatten_containers=flatten_containers,
+            simplify_structure=simplify_structure,
+            preserve_semantic_tags=preserve_semantic_tags,
+            sections=sections
+        )
+        
+        async with scraper:
             # Scrape the URL
-            manifest = await self.url_scraper.scrape_url(url)
+            manifest = await scraper.scrape_url(url)
             
             # Clean and optimize
-            cleaned_manifest = self.url_scraper.clean_manifest(manifest)
+            cleaned_manifest = scraper.clean_manifest(manifest)
             
             # Process the manifest
             processed_manifest = self.processor.process_manifest(cleaned_manifest)
