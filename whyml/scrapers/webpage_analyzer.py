@@ -767,3 +767,63 @@ class WebpageAnalyzer:
             }
         
         return result
+    
+    def _analyze_structure_complexity(self, soup: BeautifulSoup) -> Dict[str, Any]:
+        """Analyze structural complexity of the webpage."""
+        all_elements = soup.find_all()
+        
+        # Count different element types
+        element_counts = {}
+        for element in all_elements:
+            if hasattr(element, 'name') and element.name:
+                element_counts[element.name] = element_counts.get(element.name, 0) + 1
+        
+        # Calculate nesting depth
+        def get_max_depth(element, current_depth=0):
+            if not hasattr(element, 'children'):
+                return current_depth
+            
+            max_child_depth = current_depth
+            for child in element.children:
+                if hasattr(child, 'name') and child.name:
+                    child_depth = get_max_depth(child, current_depth + 1)
+                    max_child_depth = max(max_child_depth, child_depth)
+            
+            return max_child_depth
+        
+        max_depth = get_max_depth(soup.body) if soup.body else get_max_depth(soup)
+        
+        # Count semantic elements
+        semantic_elements = ['header', 'main', 'section', 'article', 'aside', 'footer', 'nav']
+        semantic_count = sum(len(soup.find_all(tag)) for tag in semantic_elements)
+        
+        # Basic complexity metrics
+        complexity = {
+            'total_elements': len(all_elements),
+            'max_nesting_depth': max_depth,
+            'div_count': element_counts.get('div', 0),
+            'semantic_elements': semantic_count,
+            'element_types': len(element_counts),
+            'complexity_score': self._calculate_complexity_score(len(all_elements), max_depth, element_counts.get('div', 0))
+        }
+        
+        # Add simplification status if applicable
+        if hasattr(self, 'max_depth') and (self.max_depth or self.flatten_containers or self.simplify_structure):
+            complexity['simplification_applied'] = True
+            complexity['simplification_details'] = {
+                'max_depth_limit': getattr(self, 'max_depth', None),
+                'flatten_containers': getattr(self, 'flatten_containers', False),
+                'simplify_structure': getattr(self, 'simplify_structure', False),
+                'preserve_semantic_tags': getattr(self, 'preserve_semantic_tags', True)
+            }
+        
+        return complexity
+    
+    def _calculate_complexity_score(self, total_elements: int, max_depth: int, div_count: int) -> float:
+        """Calculate a complexity score for the page structure."""
+        # Simple scoring algorithm
+        base_score = total_elements * 0.1
+        depth_penalty = max_depth * 2
+        div_penalty = div_count * 0.5
+        
+        return round(base_score + depth_penalty + div_penalty, 2)
