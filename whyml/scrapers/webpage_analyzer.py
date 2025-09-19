@@ -192,8 +192,8 @@ class WebpageAnalyzer:
     def _detect_layout_type(self, soup: BeautifulSoup) -> str:
         """Detect common layout patterns."""
         # Check for common CSS frameworks and layout patterns
-        body_classes = soup.body.get('class', []) if soup.body else []
-        html_classes = soup.html.get('class', []) if soup.html else []
+        body_classes = list(soup.body.get('class', [])) if soup.body else []
+        html_classes = list(soup.html.get('class', [])) if soup.html else []
         all_classes = ' '.join(body_classes + html_classes).lower()
         
         if any(fw in all_classes for fw in ['bootstrap', 'bs-', 'container']):
@@ -237,7 +237,7 @@ class WebpageAnalyzer:
                 for element in elements[:5]:  # Limit to first 5
                     grid_info['grid_containers'].append({
                         'tag': element.name,
-                        'classes': element.get('class', []),
+                        'classes': list(element.get('class', [])),
                         'children_count': len(element.find_all(recursive=False))
                     })
         
@@ -246,7 +246,7 @@ class WebpageAnalyzer:
         if col_elements:
             column_classes = []
             for elem in col_elements:
-                classes = elem.get('class', [])
+                classes = list(elem.get('class', []))
                 column_classes.extend([cls for cls in classes if 'col' in cls.lower()])
             
             # Count column patterns
@@ -274,7 +274,7 @@ class WebpageAnalyzer:
         
         all_classes = []
         for element in soup.find_all(class_=True):
-            all_classes.extend(element.get('class', []))
+            all_classes.extend(list(element.get('class', [])))
         
         breakpoints = set()
         for class_name in all_classes:
@@ -299,7 +299,7 @@ class WebpageAnalyzer:
             if self._has_substantial_content(element):
                 section_info = {
                     'tag': element.name,
-                    'classes': element.get('class', []),
+                    'classes': list(element.get('class', [])),
                     'id': element.get('id'),
                     'content_type': self._classify_content_type(element),
                     'word_count': len(element.get_text().split()),
@@ -315,7 +315,7 @@ class WebpageAnalyzer:
     def _classify_content_type(self, element: Tag) -> str:
         """Classify the type of content in an element."""
         text = element.get_text().lower()
-        classes = ' '.join(element.get('class', [])).lower()
+        classes = ' '.join(list(element.get('class', []))).lower()
         
         # Classification based on content and classes
         if any(keyword in text for keyword in ['subscribe', 'newsletter', 'email']):
@@ -354,7 +354,7 @@ class WebpageAnalyzer:
         if main_nav:
             nav_info['main_nav'] = {
                 'tag': main_nav.name,
-                'classes': main_nav.get('class', []),
+                'classes': list(main_nav.get('class', [])),
                 'links_count': len(main_nav.find_all('a')),
                 'has_dropdown': bool(main_nav.find('.dropdown, .submenu'))
             }

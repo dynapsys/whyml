@@ -399,10 +399,12 @@ class URLScraper:
         attributes = {}
         for attr, value in element.attrs.items():
             if attr in ['class', 'id', 'style', 'src', 'href', 'alt', 'title']:
-                if attr == 'class' and isinstance(value, list):
-                    attributes[attr] = ' '.join(value)
+                if isinstance(value, list):
+                    # Convert AttributeValueList and other list types to space-separated string
+                    attributes[attr] = ' '.join(str(v) for v in value)
                 else:
-                    attributes[attr] = value
+                    # Ensure all values are basic Python types (strings)
+                    attributes[attr] = str(value) if value is not None else None
         
         # Extract children
         children = []
