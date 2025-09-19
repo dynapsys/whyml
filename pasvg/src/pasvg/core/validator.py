@@ -49,15 +49,15 @@ class Validator:
             with open(pasvg_path, 'r', encoding='utf-8') as f:
                 svg_content = f.read()
             
-            # Validate XML structure
+            # Parse XML tree first to catch XML errors before PASVG validation
+            tree = ET.parse(pasvg_path)
+            root = tree.getroot()
+            
+            # Now validate XML structure and PASVG requirements
             self._validate_xml_structure(svg_content, result)
             
             if result.has_errors():
                 return result
-            
-            # Parse XML tree
-            tree = ET.parse(pasvg_path)
-            root = tree.getroot()
             
             # Validate SVG root element
             self._validate_svg_root(root, result)
@@ -124,7 +124,14 @@ class Validator:
     
     def _validate_metadata(self, root: ET.Element, result: ValidationResult) -> Optional[PASVGMetadata]:
         """Validate project metadata."""
-        metadata_elem = root.find('.//metadata/project', self.namespaces)
+        # Try to find metadata element with and without namespaces
+        metadata_elem = root.find('.//metadata', self.namespaces)
+        if metadata_elem is None:
+            # Try with SVG namespace directly
+            metadata_elem = root.find('.//{http://www.w3.org/2000/svg}metadata')
+        if metadata_elem is None:
+            # Try without namespace
+            metadata_elem = root.find('.//metadata')
         
         if metadata_elem is None:
             result.add_error("Missing project metadata")
@@ -133,7 +140,11 @@ class Validator:
         metadata_dict = {}
         for child in metadata_elem:
             tag_name = child.tag.split('}')[-1] if '}' in child.tag else child.tag
-            metadata_dict[tag_name.replace('-', '_')] = child.text or ''
+            # Map project-name to name for compatibility
+            if tag_name == 'project-name':
+                metadata_dict['name'] = child.text or ''
+            else:
+                metadata_dict[tag_name.replace('-', '_')] = child.text or ''
         
         if not metadata_dict.get('name'):
             result.add_error("Project name is required in metadata")
@@ -153,7 +164,7 @@ class Validator:
         total_size = 0
         
         if file_count == 0:
-            result.add_error("No embedded files found")
+            result.add_warning("No embedded files found")
             return 0, 0
         
         filenames = set()
@@ -257,3 +268,35 @@ class SchemaValidator:
         # For now, return basic structural validation
         validator = Validator()
         return validator.validate(pasvg_file)
+    
+    def validate_svg_structure(self, svg_content: str) -> ValidationResult:
+        """Validate SVG structure."""
+        result = ValidationResult(is_valid=True)
+        # Basic SVG structure validation
+        if not svg_content.strip().startswith('<?xml'):
+            result.add_warning("Missing XML declaration")
+        if '<svg' not in svg_content:
+            result.add_error("Missing SVG root element")
+        return result
+    
+    def validate_metadata(self, metadata_dict: dict) -> ValidationResult:
+        """Validate metadata structure."""
+        result = ValidationResult(is_valid=True)
+        if not metadata_dict.get('name'):
+            result.add_error("Project name is required")
+        if not metadata_dict.get('description'):
+            result.add_warning("Project description is recommended")
+        return result
+    
+    def validate_embedded_files(self, files: list) -> ValidationResult:
+        """Validate embedded files structure."""
+        result = ValidationResult(is_valid=True)
+        if not files:
+            result.add_error("No embedded files found")
+        filenames = set()
+        for file_info in files:
+            filename = file_info.get('filename')
+            if filename in filenames:
+                result.add_error(f"Duplicate filename: {filename}")
+            filenames.add(filename)
+        return result

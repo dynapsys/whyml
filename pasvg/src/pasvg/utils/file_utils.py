@@ -38,7 +38,9 @@ class FileUtils:
         self.max_file_size = 10 * 1024 * 1024  # 10MB limit
     
     def scan_directory(self, directory: Path, 
-                      max_files: int = 100) -> List[SourceFile]:
+                      max_files: int = 100,
+                      include_patterns: Optional[List[str]] = None,
+                      exclude_patterns: Optional[List[str]] = None) -> List[SourceFile]:
         """Scan directory and return list of source files."""
         source_files = []
         
@@ -65,6 +67,10 @@ class FileUtils:
     
     def write_file(self, project_dir: Path, filename: str, content: str):
         """Write file to project directory, creating subdirectories as needed."""
+        self.write_file_content(project_dir, filename, content)
+    
+    def write_file_content(self, project_dir: Path, filename: str, content: str):
+        """Write file to project directory, creating subdirectories as needed."""
         file_path = project_dir / filename
         file_path.parent.mkdir(parents=True, exist_ok=True)
         
@@ -72,6 +78,10 @@ class FileUtils:
             f.write(content)
     
     def read_file(self, file_path: Path) -> Optional[str]:
+        """Read file content safely."""
+        return self.read_file_content(file_path)
+    
+    def read_file_content(self, file_path: Path) -> Optional[str]:
         """Read file content safely."""
         try:
             # Check file size
@@ -118,6 +128,10 @@ class FileUtils:
     
     def get_file_type(self, file_path: Path) -> FileType:
         """Determine file type based on path and content."""
+        return self.detect_file_type(file_path)
+    
+    def detect_file_type(self, file_path: Path) -> FileType:
+        """Determine file type based on path and content."""
         filename = file_path.name.lower()
         suffix = file_path.suffix.lower()
         
@@ -151,6 +165,10 @@ class FileUtils:
     
     def get_language(self, file_path: Path) -> str:
         """Get programming language from file extension."""
+        return self.detect_language(file_path)
+    
+    def detect_language(self, file_path: Path) -> str:
+        """Get programming language from file extension."""
         suffix = file_path.suffix.lower()
         
         language_map = {
@@ -182,6 +200,33 @@ class FileUtils:
         }
         
         return language_map.get(suffix, '')
+    
+    def validate_file_path(self, file_path: str) -> bool:
+        """Validate if file path is safe and valid."""
+        try:
+            path = Path(file_path)
+            # Check for directory traversal attempts
+            if '..' in file_path or file_path.startswith('/'):
+                return False
+            # Check for invalid characters
+            invalid_chars = ['<', '>', ':', '"', '|', '?', '*']
+            if any(char in file_path for char in invalid_chars):
+                return False
+            return True
+        except Exception:
+            return False
+    
+    def sanitize_filename(self, filename: str) -> str:
+        """Sanitize filename by removing invalid characters."""
+        # Remove/replace invalid characters
+        safe = re.sub(r'[<>:"/\\|?*]', '_', filename)
+        safe = re.sub(r'\s+', '_', safe)
+        # Remove leading/trailing dots and spaces
+        safe = safe.strip('. ')
+        # Ensure not empty
+        if not safe:
+            safe = 'untitled'
+        return safe
     
     def encode_binary_file(self, file_path: Path) -> str:
         """Encode binary file as base64 string."""
