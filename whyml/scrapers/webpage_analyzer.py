@@ -48,7 +48,12 @@ class WebpageAnalyzer:
     def __init__(self, 
                  min_content_length: int = 50,
                  max_nesting_depth: int = 10,
-                 analyze_accessibility: bool = True):
+                 analyze_accessibility: bool = True,
+                 # Structure simplification parameters
+                 max_depth: Optional[int] = None,
+                 flatten_containers: bool = False,
+                 simplify_structure: bool = False,
+                 preserve_semantic_tags: bool = True):
         """
         Initialize webpage analyzer.
         
@@ -56,10 +61,20 @@ class WebpageAnalyzer:
             min_content_length: Minimum content length to consider substantial
             max_nesting_depth: Maximum nesting depth to analyze
             analyze_accessibility: Whether to perform accessibility analysis
+            max_depth: Maximum nesting depth for structure simplification
+            flatten_containers: Whether container flattening was applied
+            simplify_structure: Whether structure simplification was applied
+            preserve_semantic_tags: Whether semantic tags are preserved
         """
         self.min_content_length = min_content_length
         self.max_nesting_depth = max_nesting_depth
         self.analyze_accessibility = analyze_accessibility
+        
+        # Simplification parameters
+        self.max_depth = max_depth
+        self.flatten_containers = flatten_containers
+        self.simplify_structure = simplify_structure
+        self.preserve_semantic_tags = preserve_semantic_tags
     
     def analyze_webpage(self, soup: BeautifulSoup, url: str = None) -> Dict[str, Any]:
         """
@@ -81,7 +96,8 @@ class WebpageAnalyzer:
             'media_elements': self._analyze_media_elements(soup),
             'semantic_structure': self._analyze_semantic_structure(soup),
             'component_patterns': self._detect_component_patterns(soup),
-            'optimization_suggestions': self._generate_optimization_suggestions(soup)
+            'optimization_suggestions': self._generate_optimization_suggestions(soup),
+            'structure_complexity': self._analyze_structure_complexity(soup)
         }
         
         if self.analyze_accessibility:
@@ -706,3 +722,46 @@ class WebpageAnalyzer:
             level += 1
             parent = parent.parent
         return level
+    
+    def _analyze_structure_complexity(self, soup: BeautifulSoup) -> Dict[str, Any]:
+        """Analyze HTML structure complexity."""
+        def get_max_depth(element, current_depth=0):
+            if not hasattr(element, 'children'):
+                return current_depth
+            
+            max_child_depth = current_depth
+            for child in element.children:
+                if hasattr(child, 'name') and child.name:
+                    child_depth = get_max_depth(child, current_depth + 1)
+                    max_child_depth = max(max_child_depth, child_depth)
+            
+            return max_child_depth
+        
+        body = soup.find('body')
+        max_depth = get_max_depth(body) if body else 0
+        
+        # Determine if any simplification was applied
+        simplification_applied = bool(
+            self.max_depth or 
+            self.flatten_containers or 
+            self.simplify_structure
+        )
+        
+        result = {
+            'max_nesting_depth': max_depth,
+            'total_elements': len(soup.find_all()),
+            'div_count': len(soup.find_all('div')),
+            'semantic_elements': len(soup.find_all(['article', 'section', 'header', 'footer', 'main', 'nav', 'aside'])),
+            'simplification_applied': simplification_applied
+        }
+        
+        # Add simplification details if applied
+        if simplification_applied:
+            result['simplification_details'] = {
+                'max_depth_limit': self.max_depth,
+                'flatten_containers': self.flatten_containers,
+                'simplify_structure': self.simplify_structure,
+                'preserve_semantic_tags': self.preserve_semantic_tags
+            }
+        
+        return result

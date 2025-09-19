@@ -2,7 +2,7 @@ metadata:
   title: Example Domain
   description: Content from Example Domain - scraped from example.com
   source_url: https://example.com
-  extracted_at: '2025-09-19T18:39:23.919580'
+  extracted_at: '2025-09-19T18:35:11.078932'
 structure:
   body:
     children:
@@ -101,11 +101,6 @@ analysis:
   component_patterns: []
   optimization_suggestions:
   - Add a meta description for better SEO
-  structure_complexity:
-    max_nesting_depth: 3
-    total_elements: 13
-    div_count: 1
-    semantic_elements: 0
   accessibility:
     images_with_alt: 0
     images_without_alt: 0

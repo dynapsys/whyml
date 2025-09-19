@@ -75,15 +75,76 @@ Add sitemap.xml generation capability
 
 
 
+dodaj testowanie pobranej strony
+ whyml scrape https://example.com --output scraped-manifest.yaml
+Successfully scraped https://example.com to scraped-manifest.yaml
+
+pobierz strone html , przekonwertuj na yaml i z yaml do html i porownaj te dwie wersje 
+czy oryginalna rozni sie od tej regenrowanej z manifestu yaml?
+ 
+Dodaj więcej parametrow, ktore pozwolą na uproszczenie struktury yaml manifestu, 
+np pomijając duże zagnieżdzenia, chodzi o to aby moc zrobic prostsza strone na bazie informacji, tekstu jaki zawiera strona zrodlowa, 
+np przy refaktoringu starej wersji przydaje sie zrobienie protszej reprezentacji i mozna ominac zagniezdzenia
+albo przy realizacji projektu na rozne platformy mozna uproscic, albo przy monitorowaniu stron mozna wygenerowac prostsza reprezentacje, ktora nie bedzie wrazaliwa na drobne zmiany zagniezdzen strukutry html, podczas gdy np etykiety, contnet text beda te same
+
+upraszczajac strukture html poprzez mniejszenie zagneizdzen, np:
+
+
+                - div:
+                    class: entry-data-wrapper entry-data-wrapper-archive
+                    children:
+                    - div:
+                        class: entry-header-wrapper entry-header-wrapper-archive
+                        children:
+                        - div:
+                            class: entry-meta entry-meta-header-before
+                            children:
+                              ul:
+                                children:
+                                  li:
+                                    children:
+                                      span:
+                                        class: post-first-category
+                                        children:
+                                          a:
+                                            href: https://tom.sapletta.com/category/idea-en/
+                                            title: Idea
+                                            text: Idea
+                        - header:
+                            class: entry-header
+                            children:
+                              h1:
+                                class: entry-title
+                                children:
+                                  a:
+                                    href: https://tom.sapletta.com/tools-en/dev-environment-for-fast-development-with-cubieboard-mini-pc-and-switch-without-virtualization/
+                                    text: dev environment for fast development with
+                                      odroid xu4, mini PC and switch, without virtualization
+
+
+Stworz tez opcje do generowanie z pliku zrodlowego, np. html tylko sekcji w yaml "analysis" lub tylko sekcji "imports" 
 
 
 
-
-
-
-
+whyml scrape https://example.com --section metadata --section structure
+ta komenda nie powinna generowac analysis
 
 Oto zestaw kolejnych promptów, które mogą poprowadzić rozwój WhyML w kierunku pełnej konkurencyjności względem rozwiązań enterprise, OCI i manifestów w ekosystemie Kubernetes:
+Production Deployment - All features examples, tested and documented
+User Testing - Comprehensive examples and documentation available
+Future Enhncements - Multi-manifest dependencies and sitemap generation remain as optional medium/low priority features
+
+
+
+
+zrob w docs/tutorials/ kolejne przyklady jakie mozna zaimplementowac krok po kroku:
+- stworzenie kilku stron html z menu poprzez polaczenie kilku plikow yaml z zaleznosciami z php i uruchomienie z docker
+- stworzenie pliku SVG z menu, metadanymi, mediami jako datauri odtwrazanymi przyotwarciu w przegladarce poprzez polaczenie z php i uruchomienie z docker
+- tworzenie aplikacji tauri z przykładowej strony skonwerrtowanej za pomoca whyml do tauri
+- stworzenie react, vue, pwa, spa za pomoca przykladowej strony skonwerttowanej z http do yaml do finalnej wersji
+- Stworzenie przykladowej aplikacji na android, windows, linux za pomoca manifestu apk.yaml z przykladami komend i uzycia
+
+
 
 ***
 

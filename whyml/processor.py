@@ -308,7 +308,14 @@ class WhyMLProcessor:
                         html_content = await response.text()
                         soup = BeautifulSoup(html_content, 'html.parser')
                         
-                        analysis = self.webpage_analyzer.analyze_webpage(soup, url)
+                        # Create WebpageAnalyzer with simplification parameters
+                        analyzer = WebpageAnalyzer(
+                            max_depth=max_depth,
+                            flatten_containers=flatten_containers,
+                            simplify_structure=simplify_structure,
+                            preserve_semantic_tags=preserve_semantic_tags
+                        )
+                        analysis = analyzer.analyze_webpage(soup, url)
                         processed_manifest['analysis'] = analysis
             
             return processed_manifest
