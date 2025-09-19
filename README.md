@@ -43,7 +43,7 @@ pip install whyml
 For development:
 
 ```bash
-git clone https://github.com/your-username/whyml.git
+git clone https://github.com/dynapsys/whyml.git
 cd whyml
 pip install -e .
 ```
@@ -424,7 +424,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 ### Development Setup
 
 ```bash
-git clone https://github.com/your-username/whyml.git
+git clone https://github.com/dynapsys/whyml.git
 cd whyml
 python -m venv venv
 source venv/bin/activate  # or venv\Scripts\activate on Windows
@@ -458,8 +458,8 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for detai
 ## Support
 
 - 📖 [Documentation](https://whyml.readthedocs.io/)
-- 🐛 [Issue Tracker](https://github.com/your-username/whyml/issues)
-- 💬 [Discussions](https://github.com/your-username/whyml/discussions)
+- 🐛 [Issue Tracker](https://github.com/dynapsys/whyml/issues)
+- 💬 [Discussions](https://github.com/dynapsys/whyml/discussions)
 - 📧 [Contact](mailto:info@softreck.dev)
 
 ---
