@@ -451,7 +451,11 @@ class ReactConverter(BaseConverter):
         for key, value in interactions.items():
             if key.startswith('state'):
                 state_name = key.replace('state', '').lower()
-                initial_value = value.get('initial', 'null')
+                if isinstance(value, dict):
+                    initial_value = value.get('initial', 'null')
+                else:
+                    # Handle string values directly (e.g., 'true', 'useState(0)')
+                    initial_value = value if isinstance(value, str) else 'null'
                 hooks.append(f"const [{state_name}, set{state_name.capitalize()}] = useState({initial_value});")
         
         # From structure analysis

@@ -18,8 +18,28 @@ import aiohttp
 from aiohttp import web, WSMsgType
 from aiofiles import open as aio_open
 import yaml
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+try:
+    from watchdog.observers import Observer
+    WATCHDOG_AVAILABLE = True
+except ImportError:
+    WATCHDOG_AVAILABLE = False
+    class Observer:
+        def __init__(self):
+            pass
+        def schedule(self, *args, **kwargs):
+            pass
+        def start(self):
+            pass
+        def stop(self):
+            pass
+try:
+    from watchdog.events import FileSystemEventHandler
+except ImportError:
+    class FileSystemEventHandler:
+        def __init__(self):
+            pass
+        def on_modified(self, event):
+            pass
 
 from .processor import WhyMLProcessor
 from .exceptions import WhyMLError

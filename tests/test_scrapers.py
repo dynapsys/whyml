@@ -11,7 +11,14 @@ Licensed under the Apache License, Version 2.0
 import pytest
 import asyncio
 from unittest.mock import Mock, patch, AsyncMock
-from bs4 import BeautifulSoup
+try:
+    from bs4 import BeautifulSoup
+    BS4_AVAILABLE = True
+except ImportError:
+    BS4_AVAILABLE = False
+    class BeautifulSoup:
+        def __init__(self, *args, **kwargs):
+            pass
 
 from whyml.scrapers import URLScraper, WebpageAnalyzer
 from whyml.exceptions import NetworkError, ConversionError

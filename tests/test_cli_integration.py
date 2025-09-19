@@ -16,7 +16,7 @@ import yaml
 from unittest.mock import Mock, patch, AsyncMock
 from click.testing import CliRunner
 
-from whyml.cli import main_async, scrape_command
+from whyml.cli_wrapper import cli
 from whyml.exceptions import NetworkError
 
 

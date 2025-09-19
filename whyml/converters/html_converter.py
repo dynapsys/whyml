@@ -268,9 +268,9 @@ class HTMLConverter(BaseConverter):
         
         # Character encoding
         if self.doctype == 'html5':
-            head_parts.append('  <meta charset="UTF-8">')
+            head_parts.append('  <meta charset="utf-8">')
         else:
-            head_parts.append('  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">')
+            head_parts.append('  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">')
         
         # Responsive viewport
         if self.responsive_design:
