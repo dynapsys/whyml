@@ -1,7 +1,7 @@
 # PASVG - Project Artifact SVG Package
 # Makefile for development, testing, and publishing
 
-.PHONY: help install install-dev test lint format clean build publish example-test
+.PHONY: help install install-dev test lint format format-check bump-major bump-minor bump-patch clean build publish publish-test example-test validate
 
 # Default target
 help:
@@ -14,9 +14,9 @@ help:
 	@echo "  test         - Run tests"
 	@echo "  lint         - Run linting (flake8, mypy)"
 	@echo "  format       - Format code (black, isort)"
-	@echo "  clean        - Clean build artifacts"
-	@echo "  build        - Build wheel and source distribution"
-	@echo "  publish      - Publish package to PyPI"
+	@echo "  bump-major   - Bump major version (x.0.0)"
+	@echo "  bump-minor   - Bump minor version (x.y.0)"
+	@echo "  bump-patch   - Bump patch version (x.y.z)"
 	@echo "  example-test - Test package with example SVG files"
 	@echo "  validate     - Validate PASVG files"
 
@@ -75,11 +75,27 @@ clean:
 	rm -rf dist/
 	rm -rf *.egg-info/
 	rm -rf .pytest_cache/
-	rm -rf htmlcov/
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
 
-build: clean
+# Version management
+bump-major:
+	@echo "📈 Bumping major version (x.0.0)..."
+	python3 scripts/version_bumper.py major
+
+bump-minor:
+	@echo "📈 Bumping minor version (x.y.0)..."
+	python3 scripts/version_bumper.py minor
+
+bump-patch:
+	@echo "📈 Bumping patch version (x.y.z)..."
+	python3 scripts/version_bumper.py patch
+
+bump-version:
+	@echo "📈 Bumping patch version automatically..."
+	python3 scripts/version_bumper.py patch
+
+build: clean bump-version
 	@echo "🔧 Installing build tools..."
 	pip install --upgrade build
 	@echo "🏗️  Building package..."

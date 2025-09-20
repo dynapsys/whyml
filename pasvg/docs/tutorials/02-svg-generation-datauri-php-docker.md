@@ -345,7 +345,7 @@ structure:
           fill: "white"
           font-family: "Arial, sans-serif"
           font-size: "12"
-        content: "© 2024 {{app_title}}. Generated with WhyML."
+        content: "© 2025 {{app_title}}. Generated with WhyML."
       
       # Metadata display
       - tag: "text"

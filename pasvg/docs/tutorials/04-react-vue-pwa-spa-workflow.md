@@ -91,7 +91,7 @@ components:
   footer:
     type: "content"
     props:
-      copyright: "© 2024 {{app_name}}"
+      copyright: "© 2025 {{app_name}}"
       links:
         - { href: "/privacy", label: "Privacy" }
         - { href: "/terms", label: "Terms" }
