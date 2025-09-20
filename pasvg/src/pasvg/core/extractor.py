@@ -11,7 +11,7 @@ from typing import Dict, List, Optional
 from pasvg.core.models import (
     PASVGMetadata, SourceFile, ExtractionResult, FileType
 )
-from pasvg.utils.file_utils import FileUtils
+from pasvg.utils.file_utils import FileOperations, FileScanner, FileValidator
 from pasvg.generators.build_script_generator import BuildScriptGenerator
 
 
@@ -22,6 +22,9 @@ class Extractor:
         self.namespaces = {
             'pasvg': 'http://whyml.org/pasvg/1.0'
         }
+        self.file_ops = FileOperations()
+        self.file_scanner = FileScanner()
+        self.file_validator = FileValidator()
         self.file_utils = FileUtils()
         self.build_generator = BuildScriptGenerator()
     

@@ -161,7 +161,8 @@ class TestFileUtils:
         # Should find 3 non-hidden files
         assert len(files) == 3
         
-        filenames = [f.name for f in files]
+        # Get just the filenames from the paths to check for inclusion
+        filenames = [os.path.basename(f.filename) for f in files]
         assert "file1.py" in filenames
         assert "file2.js" in filenames
         assert "file3.html" in filenames

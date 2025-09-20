@@ -14,7 +14,7 @@ from pasvg.core.models import (
 )
 from pasvg.importers.markdown_importer import MarkdownImporter
 from pasvg.generators.svg_renderer import SVGRenderer
-from pasvg.utils.file_utils import FileUtils
+from pasvg.utils.file_utils import FileOperations, FileScanner, FileValidator
 
 
 class Generator:
@@ -25,7 +25,9 @@ class Generator:
         self.svg_height = svg_height
         self.markdown_importer = MarkdownImporter()
         self.svg_renderer = SVGRenderer(svg_width, svg_height)
-        self.file_utils = FileUtils()
+        self.file_ops = FileOperations()
+        self.file_scanner = FileScanner()
+        self.file_validator = FileValidator()
     
     def generate_from_markdown(self, markdown_file: str, output_dir: str) -> GenerationResult:
         """Generate PASVG from markdown tutorial file."""

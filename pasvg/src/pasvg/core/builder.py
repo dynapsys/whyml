@@ -10,7 +10,7 @@ from typing import Dict, List, Optional
 from datetime import datetime
 
 from pasvg.core.models import BuildResult, PASVGMetadata
-from pasvg.utils.file_utils import FileUtils
+from pasvg.utils.file_utils import FileOperations, FileScanner, FileValidator
 
 
 class Builder:
@@ -19,7 +19,9 @@ class Builder:
     def __init__(self, work_dir: Optional[str] = None):
         self.work_dir = Path(work_dir) if work_dir else Path("./pasvg-builds")
         self.work_dir.mkdir(exist_ok=True)
-        self.file_utils = FileUtils()
+        self.file_ops = FileOperations()
+        self.file_scanner = FileScanner()
+        self.file_validator = FileValidator()
     
     def build_project(self, project_dir: Path, build_targets: List[str] = None, 
                      clean: bool = False) -> BuildResult:
