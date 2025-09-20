@@ -25,7 +25,6 @@ class Extractor:
         self.file_ops = FileOperations()
         self.file_scanner = FileScanner()
         self.file_validator = FileValidator()
-        self.file_utils = FileUtils()
         self.build_generator = BuildScriptGenerator()
     
     def extract(self, pasvg_file: str, output_dir: str) -> ExtractionResult:

@@ -29,10 +29,10 @@ install-dev:
 
 # Testing
 test:
-	pytest tests/ -v
+	PYTHONPATH=src pytest tests/ -v
 
 test-coverage:
-	pytest tests/ --cov=pasvg --cov-report=html --cov-report=term
+	PYTHONPATH=src pytest tests/ --cov=pasvg --cov-report=html --cov-report=term
 
 # Code quality
 lint:
@@ -84,7 +84,8 @@ dev-setup: install-dev
 	@echo "Run 'make example-test' to test the package"
 
 # CI/CD targets
-ci-test: install-dev lint test
+ci-test: install-dev lint
+	PYTHONPATH=src pytest tests/ -v
 
 ci-build: clean build
 

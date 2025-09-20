@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 from typing import Union, Optional, Tuple, BinaryIO, Generator
 
-from ..models import SourceFile
+from pasvg.core.models import SourceFile
 from .types import FileType, get_file_type, get_language_from_extension
 
 class FileOperations:

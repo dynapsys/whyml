@@ -4,7 +4,7 @@ File validation and path sanitization utilities.
 import re
 import os
 from pathlib import Path
-from typing import Set, List, Optional, Pattern
+from typing import Set, List, Optional, Pattern, Union
 
 class FileValidator:
     """Handles file path validation and sanitization."""
@@ -67,7 +67,7 @@ class FileValidator:
                     return False
                     
             # Check for absolute paths (if not allowed)
-            if os.path.isabs(path_str) and not self._allow_absolute_paths:
+            if os.path.isabs(path_str) and not self._allow_absolute_paths():
                 return False
                 
             return True
@@ -102,7 +102,7 @@ class FileValidator:
         # Check for reserved names
         base_name, ext = os.path.splitext(safe)
         if base_name.upper() in self.WINDOWS_RESERVED_NAMES:
-            safe = f"{base_name}_{}{ext}"
+            safe = f"{base_name}_{'file' if not ext else ext[1:]}{ext}"
             
         return safe
     
