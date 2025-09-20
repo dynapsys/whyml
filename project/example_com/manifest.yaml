@@ -1,0 +1,56 @@
+analysis:
+  content_stats:
+    headings: 1
+    images: 0
+    links: 1
+    paragraphs: 2
+    word_count: 75
+  generated_by: SimpleManifestGenerator
+  page_type: general
+  parsing_method: regex
+  seo_analysis:
+    has_description: false
+    has_h1: true
+    has_keywords: false
+    has_title: true
+imports: {}
+metadata:
+  charset: utf-8
+  domain: example.com
+  generator: WhyML Simple Manifest Generator
+  source_url: https://example.com/
+  title: Example Domain
+  viewport: width=device-width, initial-scale=1
+structure:
+  children:
+  - level: 1
+    tag: h1
+    text: Example Domain
+    type: heading
+  - tag: p
+    text: This domain is for use in illustrative examples in documents. You may use
+      this domain in literature without prior coordination or asking for permission.
+    type: paragraph
+  - tag: p
+    text: More information...
+    type: paragraph
+  - href: https://www.iana.org/domains/example
+    tag: a
+    text: More information...
+    type: link
+  class: page-container
+  tag: div
+  type: container
+styles:
+  a_link__a_visited: 'color: #38488f; text-decoration: none;'
+  body: 'background-color: #f0f0f2; margin: 0; padding: 0; font-family: -apple-system,
+    system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica,
+    Arial, sans-serif;'
+  div: 'width: 600px; margin: 5em auto; padding: 2em; background-color: #fdfdff; border-radius:
+    0.5em; box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);'
+  global: 'body { background-color: #f0f0f2; margin: 0; padding: 0; font-family: -apple-system,
+    system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica,
+    Arial, sans-serif; } div { width: 600px; margin: 5em auto; padding: 2em; background-color:
+    #fdfdff; border-radius: 0.5em; box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02); }
+    a:link, a:visited { color: #38488f; text-decoration: none; } @media (max-width:
+    700px) { div { margin: 0 auto; width: auto; } }'
