@@ -37,6 +37,36 @@ WhyML is a powerful Python package that transforms YAML manifests into multiple 
 - 🧪 **Comprehensive Testing**: Extensive test suite with 95%+ coverage
 - 🛠️ **CLI & API**: Command-line interface and FastAPI server for integration
 
+## 🚀 Quick Example: Complete Webpage Scraping & Regeneration
+
+Here's a practical example showing how WhyML can scrape a webpage, simplify its structure, and regenerate it as clean HTML from a YAML manifest:
+
+### Step 1: Scrape a webpage and generate YAML manifest
+```bash
+whyml scrape https://example.com --output scraped-manifest.yaml --simplify-structure --max-depth 5
+```
+
+### Step 2: Convert YAML manifest back to HTML
+```bash
+whyml convert scraped-manifest.yaml --to html --output regenerated.html
+```
+
+### Step 3: Compare and validate (optional)
+```bash
+whyml scrape https://example.com --test-conversion --output-html regenerated.html
+```
+
+**📁 Complete Example Files:**
+- [`examples/1/README.md`](examples/1/README.md) - Detailed workflow documentation
+- [`examples/1/scraped-manifest.yaml`](examples/1/scraped-manifest.yaml) - Generated YAML manifest
+- [`examples/1/regenerated.html`](examples/1/regenerated.html) - Clean HTML output
+
+**🎯 What This Achieves:**
+- Converts complex webpage to maintainable YAML structure
+- Simplifies HTML while preserving semantic meaning
+- Enables easy customization through template variables
+- Supports regeneration to multiple formats (HTML, React, Vue, PHP)
+
 ## Installation
 
 ```bash
