@@ -162,30 +162,43 @@ class VueConverter(BaseConverter):
         
         # Reactive data
         for key, value in interactions.items():
-            if key.startswith('data') or key.startswith('state'):
-                var_name = key.replace('data', '').replace('state', '').lower()
-                if var_name:
-                    initial_value = 'null'
-                    component_parts.append(f"    const {var_name} = ref({initial_value});")
+            if key.startswith('data_') or key.startswith('state_'):
+                var_name = key.replace('data_', '').replace('state_', '').lower()
+                if var_name and isinstance(value, str):
+                    if value.startswith('ref('):
+                        # Extract initial value from ref(value) -> value
+                        initial_value = value[4:-1]  # Remove 'ref(' and ')'
+                        component_parts.append(f"    const {var_name} = ref({initial_value});")
+                    else:
+                        # Default ref initialization
+                        component_parts.append(f"    const {var_name} = ref({value});")
         
-        # Interaction handler methods
-        for key, handler_name in interactions.items():
-            component_parts.append(f"    const {handler_name} = () => {{")  
-            component_parts.append(f"      // TODO: Implement {handler_name} logic")
-            component_parts.append(f"    }};")
-            component_parts.append("")
+        # Methods and computed properties
+        for key, value in interactions.items():
+            if key.startswith('method_'):
+                method_name = key.replace('method_', '')
+                if isinstance(value, str):
+                    # Generate method with the actual code
+                    component_parts.append(f"    const {method_name} = () => {{")
+                    component_parts.append(f"      {value}")
+                    component_parts.append(f"    }};")
+                    component_parts.append("")
         
         # Return statement
         return_items = []
+        
+        # Add reactive data variables
         for key in interactions.keys():
-            if key.startswith('data') or key.startswith('state'):
-                var_name = key.replace('data', '').replace('state', '').lower()
+            if key.startswith('data_') or key.startswith('state_'):
+                var_name = key.replace('data_', '').replace('state_', '').lower()
                 if var_name:
                     return_items.append(var_name)
         
-        # Add all interaction handlers to return statement
-        for key, handler_name in interactions.items():
-            return_items.append(handler_name)
+        # Add methods
+        for key in interactions.keys():
+            if key.startswith('method_'):
+                method_name = key.replace('method_', '')
+                return_items.append(method_name)
         
         if return_items:
             component_parts.append(f"    return {{ {', '.join(return_items)} }};")
@@ -258,6 +271,9 @@ class VueConverter(BaseConverter):
                         attributes['class'] = nested_value
                     elif nested_key in ['id', 'src', 'href', 'alt', 'title']:
                         attributes[nested_key] = nested_value
+                    elif nested_key.startswith('@') or nested_key.startswith(':'):
+                        # Handle Vue directives like @click, :class, etc.
+                        attributes[nested_key] = nested_value
                     elif nested_key == 'onClick':
                         # Handle onClick interactions for Vue @click directives
                         interaction_handler = self._get_interaction_handler(nested_value)
@@ -307,6 +323,9 @@ class VueConverter(BaseConverter):
                 attributes['class'] = value
             elif key in ['id', 'src', 'href', 'alt', 'title']:
                 attributes[key] = value
+            elif key.startswith('@') or key.startswith(':'):
+                # Handle Vue directives like @click, :class, etc.
+                attributes[key] = value
             elif self._is_html_element(key):
                 tag_name = key
                 if isinstance(value, dict):
@@ -322,6 +341,9 @@ class VueConverter(BaseConverter):
                         elif nested_key == 'class':
                             attributes['class'] = nested_value
                         elif nested_key in ['id', 'src', 'href', 'alt', 'title']:
+                            attributes[nested_key] = nested_value
+                        elif nested_key.startswith('@') or nested_key.startswith(':'):
+                            # Handle Vue directives like @click, :class, etc.
                             attributes[nested_key] = nested_value
                         elif nested_key == 'style':
                             if nested_value in styles:

@@ -308,7 +308,17 @@ class ReactConverter(BaseConverter):
         import_lines = []
         
         # React imports
-        react_import = ', '.join(sorted(self.react_imports))
+        react_imports_sorted = sorted(self.react_imports)
+        default_imports = [imp for imp in react_imports_sorted if imp == 'React']
+        named_imports = [imp for imp in react_imports_sorted if imp != 'React']
+        
+        import_parts = []
+        if default_imports:
+            import_parts.append('React')
+        if named_imports:
+            import_parts.append('{ ' + ', '.join(named_imports) + ' }')
+        
+        react_import = ', '.join(import_parts)
         import_lines.append(f"import {react_import} from 'react';")
         
         # External library imports
@@ -429,7 +439,7 @@ class ReactConverter(BaseConverter):
             body_parts.append("")
         
         # JSX return
-        jsx_content = self._convert_structure_to_jsx(structure, styles, 1)
+        jsx_content = self._convert_structure_to_jsx(structure, styles, interactions, 1)
         body_parts.append("  return (")
         body_parts.append(f"    {jsx_content}")
         body_parts.append("  );")
@@ -459,12 +469,16 @@ class ReactConverter(BaseConverter):
         # From interactions
         for key, value in interactions.items():
             if key.startswith('state'):
-                state_name = key.replace('state', '').lower()
+                state_name = key.replace('state_', '').lower()
                 if isinstance(value, dict):
                     initial_value = value.get('initial', 'null')
                 else:
-                    # Handle string values directly (e.g., 'true', 'useState(0)')
-                    initial_value = value if isinstance(value, str) else 'null'
+                    # Extract initial value from useState call if present
+                    if isinstance(value, str) and value.startswith('useState('):
+                        # Extract value from useState(value) -> value
+                        initial_value = value[9:-1]  # Remove 'useState(' and ')'
+                    else:
+                        initial_value = value if isinstance(value, str) else 'null'
                 hooks.append(f"const [{state_name}, set{state_name.capitalize()}] = useState({initial_value});")
         
         # From structure analysis
@@ -478,6 +492,21 @@ class ReactConverter(BaseConverter):
         """Generate useEffect hooks."""
         hooks = []
         
+        # Handle effect_* interactions
+        for key, value in interactions.items():
+            if key.startswith('effect_'):
+                effect_name = key.replace('effect_', '')
+                if isinstance(value, str) and value.startswith('useEffect('):
+                    # Extract useEffect content and dependencies
+                    effect_content = value[10:-1]  # Remove 'useEffect(' and ')'
+                    hooks.append(f"useEffect({effect_content});")
+                else:
+                    # Generate basic useEffect for the effect
+                    hooks.append("useEffect(() => {")
+                    hooks.append(f"  {value}")
+                    hooks.append("}, []);")
+        
+        # Legacy support for onMount/onUnmount
         if 'onMount' in interactions:
             mount_code = interactions['onMount']
             hooks.append("useEffect(() => {")
@@ -499,9 +528,28 @@ class ReactConverter(BaseConverter):
         handlers = []
         
         for key, value in interactions.items():
-            if key.startswith('handle') or key.startswith('on'):
+            # Skip state and effect hooks - they are not event handlers
+            if key.startswith('state_') or key.startswith('effect_'):
+                continue
+                
+            # Handle all interaction mappings, not just those starting with 'handle'/'on'
+            if isinstance(value, str):
+                # Skip React hook definitions
+                if value.startswith('useState(') or value.startswith('useEffect('):
+                    continue
+                    
+                # If value is already a handler name (like 'handleButtonClick'), use it
+                handler_name = value if value.startswith('handle') else f"handle{value.capitalize()}"
+                
+                # Generate a simple handler function
+                handlers.append(f"const {handler_name} = () => {{")
+                handlers.append("  // TODO: Implement handler logic")
+                handlers.append("};")
+                handlers.append("")
+            elif key.startswith('handle') or key.startswith('on'):
+                # Backward compatibility for direct handler definitions
                 handler_name = key if key.startswith('handle') else f"handle{key.capitalize()}"
-                handler_code = value if isinstance(value, str) else str(value)
+                handler_code = str(value)
                 
                 handlers.append(f"const {handler_name} = () => {{")
                 handlers.append(f"  {handler_code}")
@@ -547,14 +595,14 @@ class ReactConverter(BaseConverter):
             # Return other types as-is
             return structure
     
-    def _convert_structure_to_jsx(self, structure: Any, styles: Dict[str, str], indent: int = 0) -> str:
+    def _convert_structure_to_jsx(self, structure: Any, styles: Dict[str, str], interactions: Dict[str, Any], indent: int = 0) -> str:
         """Convert manifest structure to JSX."""
         if isinstance(structure, dict):
-            return self._convert_element_to_jsx(structure, styles, indent)
+            return self._convert_element_to_jsx(structure, styles, interactions, indent)
         elif isinstance(structure, list):
             jsx_elements = []
             for i, item in enumerate(structure):
-                jsx = self._convert_structure_to_jsx(item, styles, indent)
+                jsx = self._convert_structure_to_jsx(item, styles, interactions, indent)
                 jsx_elements.append(jsx)
             return '{[\n' + ',\n'.join(jsx_elements) + '\n]}'
         elif isinstance(structure, str):
@@ -568,7 +616,7 @@ class ReactConverter(BaseConverter):
         else:
             return str(structure)
     
-    def _convert_element_to_jsx(self, element: Dict[str, Any], styles: Dict[str, str], indent: int) -> str:
+    def _convert_element_to_jsx(self, element: Dict[str, Any], styles: Dict[str, str], interactions: Dict[str, Any], indent: int) -> str:
         """Convert a single element to JSX."""
         # Extract element information
         tag_name = None
@@ -598,12 +646,21 @@ class ReactConverter(BaseConverter):
                     # Inline style object
                     props['style'] = self._convert_inline_style(value)
             elif key == 'class':
-                props['className'] = value
+                # Handle CSS class - check if CSS modules are enabled
+                if self.css_framework == 'css-modules' and value in styles:
+                    props['className'] = f"{{styles.{value}}}"
+                else:
+                    props['className'] = value
             elif key in ['id', 'src', 'href', 'alt', 'title', 'type', 'placeholder']:
                 props[key] = value
             elif key.startswith('on'):
-                # Event handler
-                handler_name = f"handle{key[2:].capitalize()}"
+                # Event handler - use interactions mapping if available
+                if isinstance(value, str) and value in interactions:
+                    # Use mapped handler name from interactions (e.g., button_click -> handleButtonClick)
+                    handler_name = interactions[value]
+                else:
+                    # Generate default handler name
+                    handler_name = f"handle{key[2:].capitalize()}"
                 props[key] = f"{{{handler_name}}}"
             elif self._is_html_element(key):
                 tag_name = key
@@ -629,7 +686,7 @@ class ReactConverter(BaseConverter):
             # Element with children
             children_jsx = []
             for child in children:
-                child_jsx = self._convert_structure_to_jsx(child, styles, indent + 1)
+                child_jsx = self._convert_structure_to_jsx(child, styles, interactions, indent + 1)
                 children_jsx.append(child_jsx)
             
             if len(children_jsx) == 1:

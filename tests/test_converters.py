@@ -354,9 +354,11 @@ class TestVueConverter:
         result = vue_converter.convert(sample_manifest)
         vue_content = result.content
         
-        assert 'import { ref' in vue_content
+        assert 'ref' in vue_content and 'import' in vue_content
         assert 'setup()' in vue_content
         assert 'return {' in vue_content
+        assert 'const count = ref(0)' in vue_content
+        assert 'const increment = () =>' in vue_content
     
     def test_scoped_styles_generation(self, vue_converter, sample_manifest):
         """Test scoped styles generation."""

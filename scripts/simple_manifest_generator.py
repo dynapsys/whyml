@@ -104,21 +104,54 @@ class SimpleManifestGenerator:
         return 'utf-8'  # Default
     
     def _extract_styles(self, html: str) -> Dict[str, Any]:
-        """Extract basic CSS styles."""
+        """Extract basic CSS styles in converter-compatible format."""
         styles = {}
         
         # Extract inline styles
         style_blocks = re.findall(r'<style[^>]*>(.*?)</style>', html, re.IGNORECASE | re.DOTALL)
         if style_blocks:
             combined_css = '\n'.join(style_blocks)
-            styles['inline'] = self._clean_css(combined_css)
+            cleaned_css = self._clean_css(combined_css)
+            
+            # Convert to converter-compatible format
+            # Instead of {inline: 'css'}, create individual selectors
+            if cleaned_css:
+                # Create a simplified structure that converters can handle
+                styles['global'] = cleaned_css  # Single string for all CSS
+                
+                # Also try to extract some basic selectors for better compatibility
+                basic_selectors = self._extract_basic_selectors(cleaned_css)
+                styles.update(basic_selectors)
         
         # Extract external stylesheets
         link_matches = re.findall(r'<link[^>]+rel=["\']?stylesheet["\']?[^>]+href=["\']([^"\']*)["\']', html, re.IGNORECASE)
         if link_matches:
-            styles['external'] = [urljoin(self.url, link) for link in link_matches]
+            # Convert list of URLs to semicolon-separated string for converter compatibility
+            external_urls = [urljoin(self.url, link) for link in link_matches]
+            styles['external'] = '; '.join(external_urls)
         
         return styles
+    
+    def _extract_basic_selectors(self, css: str) -> Dict[str, str]:
+        """Extract basic CSS selectors from CSS string."""
+        selectors = {}
+        
+        # Try to extract simple CSS rules
+        # This is a basic implementation that works with common patterns
+        css_rules = re.findall(r'([^{]+)\{([^}]+)\}', css, re.DOTALL)
+        
+        for selector, rules in css_rules[:10]:  # Limit to first 10 rules to avoid overwhelming
+            # Clean selector and rules
+            selector = selector.strip()
+            rules = rules.strip()
+            
+            if selector and rules and len(selector) < 100:  # Skip overly complex selectors
+                # Create a safe key name
+                safe_key = re.sub(r'[^a-zA-Z0-9_-]', '_', selector)[:50]
+                if safe_key and not safe_key.startswith('_'):
+                    selectors[safe_key] = rules
+        
+        return selectors
     
     def _extract_structure(self, html: str) -> Dict[str, Any]:
         """Extract basic page structure."""
@@ -194,10 +227,19 @@ class SimpleManifestGenerator:
         if script_matches:
             imports['scripts'] = [urljoin(self.url, script) for script in script_matches]
         
-        # Extract inline scripts
+        # Extract inline scripts - combine into single string for compatibility
         inline_scripts = re.findall(r'<script[^>]*>(.*?)</script>', html, re.IGNORECASE | re.DOTALL)
         if inline_scripts:
-            imports['inline_scripts'] = [script.strip() for script in inline_scripts if script.strip()]
+            # Clean and combine scripts, avoiding very long content that causes converter issues
+            cleaned_scripts = []
+            for script in inline_scripts:
+                script = script.strip()
+                if script and len(script) < 10000:  # Limit script length to avoid converter issues
+                    cleaned_scripts.append(script)
+            
+            if cleaned_scripts:
+                # Convert to single string instead of list for converter compatibility
+                imports['inline_scripts'] = '\n\n'.join(cleaned_scripts)
         
         return imports
     
