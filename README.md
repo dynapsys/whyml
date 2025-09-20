@@ -74,16 +74,20 @@ Here's a practical example showing how WhyML can scrape a webpage, simplify its 
 ```bash
 whyml scrape https://example.com --output scraped-manifest.yaml --simplify-structure --max-depth 5
 ```
+![img.png](img.png)
 
 ### Step 2: Convert YAML manifest back to HTML
 ```bash
 whyml convert --from scraped-manifest.yaml --to regenerated.html --as html
 ```
+![img_2.png](img_2.png)
 
 ### Step 3: Compare and validate (optional)
 ```bash
 whyml scrape https://example.com --test-conversion --output-html regenerated.html
 ```
+![img_1.png](img_1.png)
+
 
 **📁 Complete Example Files:**
 - [`examples/1/README.md`](examples/1/README.md) - Detailed workflow documentation

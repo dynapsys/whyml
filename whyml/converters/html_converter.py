@@ -518,9 +518,32 @@ class HTMLConverter(BaseConverter):
                 # This key represents an HTML element
                 tag_name = key
                 if isinstance(value, dict):
-                    # Element with attributes and children
-                    child_html = self._convert_element_to_html(value, styles, indent + 1)
-                    content.append(child_html)
+                    # Process the element's attributes and children directly
+                    for sub_key, sub_value in value.items():
+                        if sub_key in ['text', 'content']:
+                            if isinstance(sub_value, str):
+                                processed_value = sub_value
+                                if hasattr(self, '_external_content_map') and self._external_content_map:
+                                    processed_value = self._process_external_syntax(sub_value, self._external_content_map)
+                                content.append(escape(processed_value))
+                            else:
+                                content.append(str(sub_value))
+                        elif sub_key == 'children':
+                            if isinstance(sub_value, list):
+                                for child in sub_value:
+                                    child_html = self._convert_structure_to_html(child, styles, indent + 1)
+                                    content.append(child_html)
+                            else:
+                                child_html = self._convert_structure_to_html(sub_value, styles, indent + 1)
+                                content.append(child_html)
+                        elif sub_key == 'style':
+                            if sub_value in styles:
+                                css_class = self._format_css_selector(sub_value).lstrip('.')
+                                attributes['class'] = css_class
+                            else:
+                                attributes['style'] = sub_value
+                        elif sub_key in ['class', 'id', 'src', 'href', 'alt', 'title']:
+                            attributes[sub_key] = escape(str(sub_value))
                 else:
                     # Element with text content
                     content.append(escape(str(value)))
