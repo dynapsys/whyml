@@ -39,3 +39,8 @@ wheel>=0.41.0
 jupyter>=1.0.0
 notebook>=7.0.0
 ipykernel>=6.25.0
+
+# Batch processing dependencies
+PyYAML>=6.0
+Pillow>=9.0.0
+playwright>=1.30.0

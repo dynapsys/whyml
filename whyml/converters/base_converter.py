@@ -169,6 +169,40 @@ class BaseConverter(ABC):
         """Extract metadata from manifest."""
         return manifest.get('metadata', {})
     
+    def extract_template_vars(self, manifest: Dict[str, Any]) -> Dict[str, Any]:
+        """Extract template variables from manifest."""
+        return manifest.get('template_vars', {})
+    
+    def replace_template_variables(self, content: str, template_vars: Dict[str, Any]) -> str:
+        """
+        Replace template variables in content.
+        
+        Replaces {{ variable_name }} placeholders with actual values from template_vars.
+        
+        Args:
+            content: Content string containing template placeholders
+            template_vars: Dictionary of variable names to values
+            
+        Returns:
+            Content with template variables replaced
+        """
+        import re
+        
+        if not template_vars:
+            return content
+        
+        def replace_var(match):
+            var_name = match.group(1).strip()
+            if var_name in template_vars:
+                return str(template_vars[var_name])
+            else:
+                # Keep placeholder if variable not found
+                return match.group(0)
+        
+        # Replace {{ variable_name }} with actual values
+        pattern = r'\{\{\s*([^}]+)\s*\}\}'
+        return re.sub(pattern, replace_var, content)
+    
     def extract_imports(self, manifest: Dict[str, Any]) -> Dict[str, List[str]]:
         """Extract imports from manifest."""
         imports = manifest.get('imports', {})

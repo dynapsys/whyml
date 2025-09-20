@@ -89,8 +89,13 @@ class ReactConverter(BaseConverter):
             metadata = self.extract_metadata(manifest)
             styles = self.extract_styles(manifest)
             imports = self.extract_imports(manifest)
+            template_vars = self.extract_template_vars(manifest)
             structure = manifest.get('structure', {})
             interactions = manifest.get('interactions', {})
+            
+            # Replace template variables in structure BEFORE JSX conversion
+            if template_vars:
+                structure = self._replace_template_vars_in_structure(structure, template_vars)
             
             # Generate component name
             component_name = self._generate_component_name(metadata)
@@ -118,6 +123,10 @@ class ReactConverter(BaseConverter):
             jsx_content = self._combine_sections(
                 imports_section, interfaces, styles_section, component_code
             )
+            
+            # Replace template variables ({{ hero_text }} -> "Welcome to Our Amazing Product")
+            if template_vars:
+                jsx_content = self.replace_template_variables(jsx_content, template_vars)
             
             # Apply optimizations
             if self.optimize_output:
@@ -519,6 +528,24 @@ class ReactConverter(BaseConverter):
         
         self.walker.walk(structure, extract_callback)
         return state_vars
+    
+    def _replace_template_vars_in_structure(self, structure: Any, template_vars: Dict[str, str]) -> Any:
+        """Replace template variables in structure before JSX conversion."""
+        if isinstance(structure, dict):
+            # Process dictionary recursively
+            result = {}
+            for key, value in structure.items():
+                result[key] = self._replace_template_vars_in_structure(value, template_vars)
+            return result
+        elif isinstance(structure, list):
+            # Process list recursively
+            return [self._replace_template_vars_in_structure(item, template_vars) for item in structure]
+        elif isinstance(structure, str):
+            # Replace template variables in strings
+            return self.replace_template_variables(structure, template_vars)
+        else:
+            # Return other types as-is
+            return structure
     
     def _convert_structure_to_jsx(self, structure: Any, styles: Dict[str, str], indent: int = 0) -> str:
         """Convert manifest structure to JSX."""

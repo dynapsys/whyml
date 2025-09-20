@@ -78,6 +78,7 @@ class HTMLConverter(BaseConverter):
             metadata = self.extract_metadata(manifest)
             styles = self.extract_styles(manifest)
             imports = self.extract_imports(manifest)
+            template_vars = self.extract_template_vars(manifest)
             structure = manifest.get('structure', {})
             variables = manifest.get('variables', {})
             config = manifest.get('config', {})
@@ -95,6 +96,10 @@ class HTMLConverter(BaseConverter):
             
             # Combine into complete HTML document
             html_content = self._generate_document(head_html, body_html)
+            
+            # Replace template variables ({{ hero_text }} -> "Welcome to Our Amazing Product")
+            if template_vars:
+                html_content = self.replace_template_variables(html_content, template_vars)
             
             # Apply optimizations
             if self.optimize_output:

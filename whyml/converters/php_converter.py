@@ -81,6 +81,7 @@ class PHPConverter(BaseConverter):
             metadata = self.extract_metadata(manifest)
             styles = self.extract_styles(manifest)
             imports = self.extract_imports(manifest)
+            template_vars = self.extract_template_vars(manifest)
             structure = manifest.get('structure', {})
             interactions = manifest.get('interactions', {})
             
@@ -97,6 +98,10 @@ class PHPConverter(BaseConverter):
             php_content = self._combine_class_sections(
                 class_header, properties, constructor, methods
             )
+            
+            # Replace template variables ({{ hero_text }} -> "Welcome to Our Amazing Product")
+            if template_vars:
+                php_content = self.replace_template_variables(php_content, template_vars)
             
             # Apply optimizations
             if self.optimize_output:

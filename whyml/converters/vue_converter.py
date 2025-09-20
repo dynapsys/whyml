@@ -51,17 +51,26 @@ class VueConverter(BaseConverter):
             
             metadata = self.extract_metadata(manifest)
             styles = self.extract_styles(manifest)
+            template_vars = self.extract_template_vars(manifest)
             structure = manifest.get('structure', {})
-            interactions = manifest.get('interactions', {})
+            self.interactions = manifest.get('interactions', {})  # Store interactions for access in methods
+            
+            # Replace template variables in structure BEFORE Vue conversion
+            if template_vars:
+                structure = self._replace_template_vars_in_structure(structure, template_vars)
             
             component_name = self._generate_component_name(metadata)
-            self._analyze_structure_for_imports(structure, interactions)
+            self._analyze_structure_for_imports(structure, self.interactions)
             
             template_section = self._generate_template_section(structure, styles)
-            script_section = self._generate_script_section(component_name, metadata, interactions)
+            script_section = self._generate_script_section(component_name, metadata, self.interactions)
             style_section = self._generate_style_section(styles)
             
             vue_content = self._combine_sfc_sections(template_section, script_section, style_section)
+            
+            # Replace template variables ({{ hero_text }} -> "Welcome to Our Amazing Product")
+            if template_vars:
+                vue_content = self.replace_template_variables(vue_content, template_vars)
             
             if self.optimize_output:
                 vue_content = self.optimize_code(vue_content)
@@ -118,10 +127,20 @@ class VueConverter(BaseConverter):
         else:
             script_parts.append('<script>')
         
+        # Always import defineComponent for Vue 3
+        vue_imports = set(['defineComponent'])
+        
+        # Add ref import if we have interactions (for reactive data or handlers)
+        if interactions:
+            vue_imports.add('ref')
+            
+        # Add any other imports from analysis
         if self.vue_imports:
-            vue_import = ', '.join(sorted(self.vue_imports))
-            script_parts.append(f"import {{ {vue_import} }} from 'vue';")
-            script_parts.append("")
+            vue_imports.update(self.vue_imports)
+            
+        vue_import = ', '.join(sorted(vue_imports))
+        script_parts.append(f"import {{ {vue_import} }} from 'vue';")
+        script_parts.append("")
         
         if self.use_composition_api:
             component_code = self._generate_composition_api_component(component_name, interactions)
@@ -149,6 +168,13 @@ class VueConverter(BaseConverter):
                     initial_value = 'null'
                     component_parts.append(f"    const {var_name} = ref({initial_value});")
         
+        # Interaction handler methods
+        for key, handler_name in interactions.items():
+            component_parts.append(f"    const {handler_name} = () => {{")  
+            component_parts.append(f"      // TODO: Implement {handler_name} logic")
+            component_parts.append(f"    }};")
+            component_parts.append("")
+        
         # Return statement
         return_items = []
         for key in interactions.keys():
@@ -156,6 +182,10 @@ class VueConverter(BaseConverter):
                 var_name = key.replace('data', '').replace('state', '').lower()
                 if var_name:
                     return_items.append(var_name)
+        
+        # Add all interaction handlers to return statement
+        for key, handler_name in interactions.items():
+            return_items.append(handler_name)
         
         if return_items:
             component_parts.append(f"    return {{ {', '.join(return_items)} }};")
@@ -201,6 +231,58 @@ class VueConverter(BaseConverter):
     
     def _convert_element_to_vue_template(self, element: Dict[str, Any], styles: Dict[str, str], indent: int) -> str:
         """Convert a single element to Vue template."""
+        # Check if this element is a simple HTML element structure
+        html_keys = [key for key in element.keys() if self._is_html_element(key)]
+        
+        if len(html_keys) == 1 and len(element) == 1:
+            # This is a single HTML element structure like { h1: { text: "...", class: "..." } }
+            tag_name = html_keys[0]
+            element_data = element[tag_name]
+            
+            # Process the element data directly instead of recursive call
+            indent_str = '  ' * indent
+            attributes = {}
+            children = []
+            text_content = None
+            
+            if isinstance(element_data, dict):
+                for nested_key, nested_value in element_data.items():
+                    if nested_key in ['text', 'content']:
+                        text_content = nested_value
+                    elif nested_key == 'children':
+                        if isinstance(nested_value, list):
+                            children.extend(nested_value)
+                        else:
+                            children.append(nested_value)
+                    elif nested_key == 'class':
+                        attributes['class'] = nested_value
+                    elif nested_key in ['id', 'src', 'href', 'alt', 'title']:
+                        attributes[nested_key] = nested_value
+                    elif nested_key == 'onClick':
+                        # Handle onClick interactions for Vue @click directives
+                        interaction_handler = self._get_interaction_handler(nested_value)
+                        if interaction_handler:
+                            attributes['@click'] = interaction_handler
+                    elif nested_key == 'style':
+                        if nested_value in styles:
+                            attributes['class'] = nested_value
+                        else:
+                            attributes[':style'] = f"'{nested_value}'"
+            else:
+                text_content = element_data
+            
+            attrs_str = self._format_vue_attributes(attributes)
+            
+            if text_content is not None:
+                content = escape(str(text_content))
+                return f"{indent_str}<{tag_name}{attrs_str}>{content}</{tag_name}>"
+            elif children:
+                children_templates = [self._convert_structure_to_vue_template(child, styles, indent + 1) for child in children]
+                children_str = '\n'.join(children_templates)
+                return f"{indent_str}<{tag_name}{attrs_str}>\n{children_str}\n{indent_str}</{tag_name}>"
+            else:
+                return f"{indent_str}<{tag_name}{attrs_str}></{tag_name}>"
+        
         indent_str = '  ' * indent
         
         tag_name = 'div'
@@ -228,7 +310,24 @@ class VueConverter(BaseConverter):
             elif self._is_html_element(key):
                 tag_name = key
                 if isinstance(value, dict):
-                    children.append(value)
+                    # Process the nested element structure
+                    for nested_key, nested_value in value.items():
+                        if nested_key in ['text', 'content']:
+                            text_content = nested_value
+                        elif nested_key == 'children':
+                            if isinstance(nested_value, list):
+                                children.extend(nested_value)
+                            else:
+                                children.append(nested_value)
+                        elif nested_key == 'class':
+                            attributes['class'] = nested_value
+                        elif nested_key in ['id', 'src', 'href', 'alt', 'title']:
+                            attributes[nested_key] = nested_value
+                        elif nested_key == 'style':
+                            if nested_value in styles:
+                                attributes['class'] = nested_value
+                            else:
+                                attributes[':style'] = f"'{nested_value}'"
                 else:
                     text_content = value
         
@@ -246,7 +345,13 @@ class VueConverter(BaseConverter):
     
     def _is_html_element(self, name: str) -> bool:
         """Check if name is a valid HTML element."""
-        return name.lower() in {'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'a', 'img', 'button', 'input', 'textarea', 'select', 'form', 'table', 'tr', 'td', 'th'}
+        return name.lower() in {
+            'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
+            'ul', 'ol', 'li', 'a', 'img', 'button', 'input', 'textarea', 'select', 'form', 
+            'table', 'tr', 'td', 'th', 'thead', 'tbody', 'tfoot',
+            'section', 'article', 'header', 'footer', 'nav', 'aside', 'main',
+            'figure', 'figcaption', 'details', 'summary', 'time', 'mark', 'code', 'pre'
+        }
     
     def _format_vue_attributes(self, attributes: Dict[str, Any]) -> str:
         """Format Vue template attributes."""
@@ -280,6 +385,12 @@ class VueConverter(BaseConverter):
         style_lines.append("</style>")
         return '\n'.join(style_lines)
     
+    def _get_interaction_handler(self, interaction_key: str) -> str:
+        """Get the Vue interaction handler for a given interaction key."""
+        if hasattr(self, 'interactions') and interaction_key in self.interactions:
+            return self.interactions[interaction_key]
+        return None
+    
     def _combine_sfc_sections(self, template: str, script: str, style: str) -> str:
         """Combine SFC sections into complete Vue file."""
         sections = [template, script]
@@ -294,3 +405,21 @@ class VueConverter(BaseConverter):
             parts.append(f"Description: {description}")
         comment_content = "\n".join(f"  {part}" for part in parts)
         return f"<!--\n{comment_content}\n-->"
+    
+    def _replace_template_vars_in_structure(self, structure: Any, template_vars: Dict[str, str]) -> Any:
+        """Replace template variables in structure before Vue conversion."""
+        if isinstance(structure, dict):
+            # Process dictionary recursively
+            result = {}
+            for key, value in structure.items():
+                result[key] = self._replace_template_vars_in_structure(value, template_vars)
+            return result
+        elif isinstance(structure, list):
+            # Process list recursively
+            return [self._replace_template_vars_in_structure(item, template_vars) for item in structure]
+        elif isinstance(structure, str):
+            # Replace template variables in strings
+            return self.replace_template_variables(structure, template_vars)
+        else:
+            # Return other types as-is
+            return structure
