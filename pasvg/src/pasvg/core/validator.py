@@ -138,13 +138,23 @@ class Validator:
             return None
         
         metadata_dict = {}
-        for child in metadata_elem:
+        # Helper to process a child element into dict
+        def process_child(child):
             tag_name = child.tag.split('}')[-1] if '}' in child.tag else child.tag
             # Map project-name to name for compatibility
             if tag_name == 'project-name':
                 metadata_dict['name'] = child.text or ''
             else:
                 metadata_dict[tag_name.replace('-', '_')] = child.text or ''
+        
+        for child in metadata_elem:
+            tag_name = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+            if tag_name == 'project':
+                # Dive into project element to extract its fields
+                for sub in child:
+                    process_child(sub)
+            else:
+                process_child(child)
         
         if not metadata_dict.get('name'):
             result.add_error("Project name is required in metadata")

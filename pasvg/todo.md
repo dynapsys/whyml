@@ -15,3 +15,7 @@ i zawartosci z pomijaniem plikow data uri i rozpoznawaniem formatow typu html, x
 projekty przechowywane w pliku svg powinny być możliwe do exportowania do folderu
 i z niego powino być mozliwe np generowanie artefaktow potrzebnych w  trakcie budowania np apk, pwa, itd
 zapropnuj Jak połaczyć możliwość generowania artefaktów z whyml z projektem pasvg?
+
+
+jak w ogóle pracować od poczaątku z rozwiązaniem, narzędziem pasvg, aby utworzyć przykładowy projekt nie znając tego rozwiązania?
+czy da się je uprościć? dodać nowe funkcje ułatwiające wygenerowanie poporawnego manifestu whyml oraz paczki pasvg w pliku svg i kolejnych artefaktów jak apk, deb, html?

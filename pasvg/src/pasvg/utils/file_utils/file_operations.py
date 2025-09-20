@@ -89,6 +89,44 @@ class FileOperations:
         except (OSError, IOError, ValueError, base64.binascii.Error):
             return False
     
+    def is_binary_file(self, file_path: Union[str, Path]) -> bool:
+        """
+        Check if a file is binary.
+        
+        Args:
+            file_path: Path to the file
+            
+        Returns:
+            bool: True if the file is binary, False otherwise
+        """
+        try:
+            with open(file_path, 'rb') as f:
+                # Read the first few bytes to check for binary content
+                chunk = f.read(1024)
+                return b'\x00' in chunk
+        except (IOError, OSError):
+            return False
+    
+    def read_binary_file(self, file_path: Union[str, Path], encode_base64: bool = False) -> Optional[Union[bytes, str]]:
+        """
+        Read a binary file, optionally encoding as base64.
+        
+        Args:
+            file_path: Path to the file
+            encode_base64: Whether to encode the content as base64
+            
+        Returns:
+            File content as bytes or base64-encoded string, or None if reading fails
+        """
+        try:
+            with open(file_path, 'rb') as f:
+                content = f.read()
+                if encode_base64:
+                    return base64.b64encode(content).decode('ascii')
+                return content
+        except (IOError, OSError, ValueError):
+            return None
+    
     def copy_file(self, src: Union[str, Path], dst: Union[str, Path]) -> bool:
         """
         Copy a file from src to dst, creating directories if needed.

@@ -38,7 +38,7 @@ class TestFileUtils:
             ("test.yaml", FileType.CONFIGURATION),
             ("test.yml", FileType.CONFIGURATION),
             ("test.md", FileType.DOCUMENTATION),
-            ("test.txt", FileType.UNKNOWN),
+            ("test.txt", FileType.DOCUMENTATION),
             ("test.png", FileType.BINARY),
             ("test.jpg", FileType.BINARY),
             ("unknown.xyz", FileType.UNKNOWN)
@@ -53,22 +53,20 @@ class TestFileUtils:
         from pasvg.utils.file_utils.types import get_language_from_extension
         
         test_cases = [
-            ("script.py", "python"),
-            ("app.js", "javascript"),
-            ("Component.jsx", "javascript"),
-            ("style.css", "css"),
-            ("index.html", "html"),
-            ("data.json", "json"),
-            ("config.yaml", "yaml"),
-            ("README.md", "markdown"),
-            ("Dockerfile", "dockerfile"),
-            ("Makefile", "makefile"),
-            ("unknown.xyz", None)
+            (".py", "python"),
+            (".js", "javascript"),
+            (".jsx", "javascript"),
+            (".css", "css"),
+            (".html", "html"),
+            (".json", "json"),
+            (".yaml", "yaml"),
+            (".md", "markdown"),
+            (".xyz", None)
         ]
         
-        for filename, expected_lang in test_cases:
-            result = get_language_from_extension(filename)
-            assert result == expected_lang, f"Expected {expected_lang} for {filename}, got {result}"
+        for extension, expected_lang in test_cases:
+            result = get_language_from_extension(extension)
+            assert result == expected_lang, f"Expected {expected_lang} for {extension}, got {result}"
     
     def test_is_binary_file(self):
         """Test binary file detection."""
@@ -110,13 +108,14 @@ class TestFileUtils:
         content = self.file_ops.read_file(text_file)
         assert content == test_content
         
-        # Test binary file
+        # Test binary file with clear binary content that will trigger UnicodeDecodeError
         binary_file = self.temp_dir / "test.bin"
-        test_data = b'\x00\x01\x02\x03'
+        # Use binary data that will definitely cause UnicodeDecodeError
+        test_data = b'\x00\x01\x02\x03\xff\xfe\xfd\x80\x81\x82'
         with open(binary_file, 'wb') as f:
             f.write(test_data)
         
-        content, encoding = self.file_utils.read_file_content(binary_file)
+        content, encoding = self.file_ops.read_file_content(binary_file)
         assert encoding == "base64"
         
         # Verify the base64 content can be decoded

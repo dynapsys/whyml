@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "pasvg"
 version = "1.0.3"
 description = "Project Artifact SVG - Revolutionary single-file project distribution system"
-readme = "docs/README.md"
+readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.8"
 authors = [
