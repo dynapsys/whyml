@@ -22,10 +22,32 @@ help:
 
 # Development setup
 install:
-	pip install -e .
+	@echo "🚀 Setting up development environment..."
+	@if [ -d "venv" ]; then \
+		echo "♻️  Removing existing virtual environment..."; \
+		rm -rf venv; \
+	fi
+	@echo "🛠️  Creating new virtual environment..."
+	python3 -m venv venv
+	@echo "🔄 Upgrading pip..."
+	venv/bin/pip install --upgrade pip
+	@echo "📦 Installing package in development mode..."
+	venv/bin/pip install -e .
+	@echo "✅ Development environment ready!"
+	@echo "   Run 'source venv/bin/activate' to activate the virtual environment"
+	@echo "🧪 Verifying installation..."
+	@if venv/bin/python -c "import pasvg" &>/dev/null; then \
+		echo "✅ PASVG package is properly installed"; \
+	else \
+		echo "❌ PASVG package could not be imported"; \
+		echo "💡 Try running: source venv/bin/activate && pip install -e ."; \
+		exit 1; \
+	fi
 
-install-dev:
-	pip install -e ".[dev]"
+install-dev: install
+	@echo "📦 Installing development dependencies..."
+	venv/bin/pip install -e ".[dev]"
+	@echo "✅ Development dependencies installed!"
 
 # Testing
 test:
@@ -58,25 +80,43 @@ clean:
 	find . -type f -name "*.pyc" -delete
 
 build: clean
+	@echo "🔧 Installing build tools..."
+	pip install --upgrade build
+	@echo "🏗️  Building package..."
 	python -m build
 
 publish: build
-	python -m twine upload dist/*
+	@echo "📤 Publishing to PyPI..."
+	pip install --upgrade twine
+	twine upload dist/*
 
 publish-test: build
-	python -m twine upload --repository testpypi dist/*
+	@echo "🚀 Publishing to TestPyPI..."
+	pip install --upgrade twine
+	twine upload --repository testpypi dist/*
 
 # Example and validation
 example-test:
 	@echo "Testing PASVG package with example files..."
-	pasvg generate examples/tutorial.md examples/output/
-	pasvg extract examples/output/tutorial.pasvg.svg examples/extracted/
-	pasvg validate examples/output/tutorial.pasvg.svg
+	PYTHONPATH=src /usr/bin/python3 -m pasvg.cli generate examples/tutorial.md examples/output/
+	# Rename the generated PASVG file (which may have a dynamic name) to a fixed name for extraction
+	mv examples/output/*.pasvg.svg examples/output/tutorial.pasvg.svg || true
+	PYTHONPATH=src /usr/bin/python3 -m pasvg.cli extract examples/output/tutorial.pasvg.svg examples/extracted/
+	PYTHONPATH=src /usr/bin/python3 -m pasvg.cli validate examples/output/tutorial.pasvg.svg
 	@echo "✅ Example test completed successfully!"
 
+.PHONY: validate
 validate:
 	@echo "Validating all PASVG files..."
-	find examples/ -name "*.pasvg.svg" -exec pasvg validate {} \;
+	@if [ -d "examples" ]; then \
+		for file in $$(find examples -name "*.pasvg.svg"); do \
+			echo "Validating $$file..."; \
+			PYTHONPATH=src venv/bin/python -m pasvg.cli validate "$$file" || exit 1; \
+		done; \
+	else \
+		echo "⚠️  No examples directory found"; \
+	fi
+	@echo "✅ Validation completed!"
 
 # Development workflow
 dev-setup: install-dev
