@@ -4,7 +4,7 @@ Test cases for all format converters
 Tests for HTML, React, Vue, and PHP converters including
 conversion accuracy, output validation, and edge cases.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

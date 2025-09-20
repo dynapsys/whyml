@@ -296,25 +296,25 @@ clean:
 # Version management
 bump-major:
 	@echo "📈 Bumping major version (x.0.0)..."
-	python3 scripts/version_bumper.py major --file pyproject.toml
+	python3 pasvg/scripts/version_bumper.py major --file pyproject.toml
 
 bump-minor:
 	@echo "📈 Bumping minor version (x.y.0)..."
-	python3 scripts/version_bumper.py minor --file pyproject.toml
+	python3 pasvg/scripts/version_bumper.py minor --file pyproject.toml
 
 bump-patch:
 	@echo "📈 Bumping patch version (x.y.z)..."
-	python3 scripts/version_bumper.py patch --file pyproject.toml
+	python3 pasvg/scripts/version_bumper.py patch --file pyproject.toml
 
 bump-version:
 	@echo "📈 Bumping patch version automatically..."
-	python3 scripts/version_bumper.py patch --file pyproject.toml
+	python3 pasvg/scripts/version_bumper.py patch --file pyproject.toml
 
 build: clean
 	@echo "🔧 Installing build tools..."
 	pip install --upgrade build --break-system-packages
 	@echo "📈 Bumping patch version..."
-	python3 scripts/version_bumper.py patch --file pyproject.toml
+	python3 pasvg/scripts/version_bumper.py patch --file pyproject.toml
 	@echo "🏗️  Building package..."
 	python3 -m build
 
