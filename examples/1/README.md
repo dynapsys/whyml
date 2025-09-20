@@ -17,8 +17,37 @@ whyml scrape https://example.com --output scraped-manifest.yaml --simplify-struc
 
 ### 2. Convert YAML manifest back to HTML
 ```bash
-whyml convert scraped-manifest.yaml --to html --output regenerated.html
+whyml convert --from scraped-manifest.yaml --to regenerated.html --as html
 ```
+
+## 🚀 Easy Way to Run This Example
+
+Instead of running commands manually, use our provided scripts:
+
+### Option 1: Run with Bash Script (Recommended)
+```bash
+# From WhyML root directory
+./scripts/examples/run-example-1.sh
+```
+
+### Option 2: Run with Python Script
+```bash
+# From WhyML root directory  
+python3 scripts/examples/run-example-1.py
+```
+
+### Option 3: Run All Examples
+```bash
+# From WhyML root directory
+./scripts/run-all-examples.sh
+```
+
+These scripts will:
+- ✅ Check that WhyML is properly installed
+- ✅ Create the examples/1/ directory
+- ✅ Run all commands with correct syntax
+- ✅ Generate multiple output formats (HTML, React, Vue, PHP)
+- ✅ Show you exactly what was created and where
 
 ### 3. Compare original vs regenerated (optional)
 ```bash

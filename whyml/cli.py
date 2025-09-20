@@ -520,7 +520,7 @@ async def _test_conversion_workflow(url: str, manifest_file: str, output_html: O
             loaded_manifest = yaml.safe_load(f)
         
         # Convert to HTML
-        conversion_result = await processor.convert_manifest(loaded_manifest, 'html')
+        conversion_result = await processor.convert_to_html(loaded_manifest)
         regenerated_html = conversion_result.content
         
         # Step 3: Save regenerated HTML if output file specified

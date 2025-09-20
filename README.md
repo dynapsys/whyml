@@ -17,7 +17,36 @@
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](#testing)
 [![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing)
 
+## 📚 Table of Contents
 
+### 🚀 Getting Started
+- [🚀 Quick Example](#-quick-example-complete-webpage-scraping--regeneration) - Complete workflow demonstration
+- [⚡ Installation](#installation) - Setup and installation guide
+- [🏁 Quick Start](#quick-start) - Basic usage examples
+- [📖 Getting Started Guide](docs/getting-started.md) - Comprehensive beginner guide
+
+### 📋 Documentation
+- [📝 YAML Manifest Reference](docs/manifest-reference.md) - Complete manifest specification
+- [🔄 Converters Guide](docs/converters.md) - HTML, React, Vue, PHP conversion
+- [🕷️ Advanced Scraping](docs/advanced-scraping.md) - Web scraping features and techniques
+- [🔧 CLI Reference](docs/cli/README.md) - Command-line interface documentation
+- [🌐 API Reference](docs/api-reference.md) - Python and REST API documentation
+
+### 💡 Examples & Tutorials
+- [📁 Example 1: Complete Workflow](examples/1/README.md) - Scraping and regeneration
+- [🔬 Advanced Scraping Examples](examples/advanced-scraping/README.md) - Complex scenarios
+- [🧪 Testing Guide](docs/USER_TESTING_GUIDE.md) - Testing and validation
+
+### 🛠️ Development
+- [🚀 Production Deployment](docs/PRODUCTION_DEPLOYMENT_CHECKLIST.md) - Deployment guide
+- [🔍 CLI Scraping Reference](docs/cli/scrape.md) - Detailed scraping commands
+- [📊 Project Status](FIXES_AND_STATUS.md) - Current status and fixes
+
+### 🎯 Key Features
+- [Multi-Format Conversion](#key-features) - HTML, React, Vue, PHP output
+- [Advanced Web Scraping](#key-features) - Structure simplification and analysis
+- [Template Inheritance](#key-features) - Reusable component system
+- [Testing & Validation](#testing) - Comprehensive test suite
 
 ## Overview
 
@@ -48,7 +77,7 @@ whyml scrape https://example.com --output scraped-manifest.yaml --simplify-struc
 
 ### Step 2: Convert YAML manifest back to HTML
 ```bash
-whyml convert scraped-manifest.yaml --to html --output regenerated.html
+whyml convert --from scraped-manifest.yaml --to regenerated.html --as html
 ```
 
 ### Step 3: Compare and validate (optional)
