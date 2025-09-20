@@ -4,7 +4,7 @@ WhyML Exception Classes
 Custom exceptions for the WhyML package providing detailed error information
 for different types of failures in manifest processing and conversion.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

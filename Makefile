@@ -282,11 +282,51 @@ logs-server:
 monitor-frontend:
 	@tail -f logs/gpio-frontend.log 2>/dev/null || echo "No frontend logs found"
 
-# ==============================================================================
-# PUBLISHING
-# ==============================================================================
-publish: ## Publish project to PyPI
-	@bash scripts/publish.sh
+
+# Build and publish
+clean:
+	rm -rf build/
+	rm -rf dist/
+	rm -rf *.egg-info/
+	rm -rf .pytest_cache/
+	find . -type d -name __pycache__ -exec rm -rf {} +
+	find . -type f -name "*.pyc" -delete
+	#$(MAKE) clean
+
+# Version management
+bump-major:
+	@echo "📈 Bumping major version (x.0.0)..."
+	python3 scripts/version_bumper.py major --file pyproject.toml
+
+bump-minor:
+	@echo "📈 Bumping minor version (x.y.0)..."
+	python3 scripts/version_bumper.py minor --file pyproject.toml
+
+bump-patch:
+	@echo "📈 Bumping patch version (x.y.z)..."
+	python3 scripts/version_bumper.py patch --file pyproject.toml
+
+bump-version:
+	@echo "📈 Bumping patch version automatically..."
+	python3 scripts/version_bumper.py patch --file pyproject.toml
+
+build: clean
+	@echo "🔧 Installing build tools..."
+	pip install --upgrade build --break-system-packages
+	@echo "📈 Bumping patch version..."
+	python3 scripts/version_bumper.py patch --file pyproject.toml
+	@echo "🏗️  Building package..."
+	python3 -m build
+
+publish: build
+	@echo "📤 Publishing to PyPI..."
+	pip install --upgrade twine
+	twine upload dist/*
+
+publish-test: build
+	@echo "🚀 Publishing to TestPyPI..."
+	pip install --upgrade twine
+	twine upload --repository testpypi dist/*
 
 
 .PHONY: help install dev start test lint format build \

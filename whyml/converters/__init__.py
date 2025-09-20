@@ -4,7 +4,7 @@ Converters Package - Format conversion system for WhyML manifests
 Supports conversion to multiple web formats including HTML, React, Vue, and PHP
 with comprehensive templating and optimization features.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

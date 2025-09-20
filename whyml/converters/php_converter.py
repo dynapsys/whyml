@@ -4,7 +4,7 @@ PHP Converter - Convert YAML manifests to PHP classes and templates
 Generates modern PHP classes with templating support, HTML generation,
 and comprehensive styling integration.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

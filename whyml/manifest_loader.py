@@ -4,7 +4,7 @@ Manifest Loader - Core system for loading and resolving modular YAML manifests
 Supports URL-based loading, dependency resolution, template inheritance,
 and comprehensive caching for optimal performance.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

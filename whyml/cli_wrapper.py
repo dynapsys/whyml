@@ -5,7 +5,7 @@ Click-based CLI wrapper for testing compatibility.
 This wrapper bridges the existing argparse-based CLI to Click for test compatibility,
 allowing the extensive test suite to work without rewriting 116 tests.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

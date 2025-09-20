@@ -4,7 +4,7 @@ Manifest Processor - Core processing engine for YAML manifests
 Handles validation, template inheritance, style processing, and structure
 transformation with comprehensive schema validation and error reporting.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

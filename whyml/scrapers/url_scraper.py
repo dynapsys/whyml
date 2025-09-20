@@ -4,7 +4,7 @@ URL Scraper - Extract content and structure from web pages
 Intelligent web scraping with content extraction, structure analysis,
 and automatic YAML manifest generation from websites.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

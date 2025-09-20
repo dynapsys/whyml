@@ -4,7 +4,7 @@ WhyML Main Processor - High-level interface for WhyML functionality
 Provides a unified interface for loading, processing, and converting
 YAML manifests to various output formats.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

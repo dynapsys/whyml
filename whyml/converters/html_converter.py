@@ -4,7 +4,7 @@ HTML Converter - Convert YAML manifests to HTML with comprehensive templating
 Generates semantic HTML with CSS styling, responsive design support,
 and modern web standards compliance.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

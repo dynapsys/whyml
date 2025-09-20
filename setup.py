@@ -20,7 +20,7 @@ def read_requirements(filename):
 
 setup(
     name="whyml",
-    version="1.0.4",
+    version="1.0.5",
     description="Advanced YAML-based webpage generator with modular architecture and multi-format conversion",
     long_description=read_readme(),
     long_description_content_type="text/markdown",

@@ -4,7 +4,7 @@ WhyML: Advanced YAML-based webpage generator with modular architecture
 A comprehensive Python package for processing YAML manifests and converting them
 to various web formats including HTML, React, Vue, and PHP.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

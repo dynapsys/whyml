@@ -4,7 +4,7 @@ Vue Converter - Convert YAML manifests to Vue Single File Components (SFC)
 Generates modern Vue 3 composition API components with TypeScript support,
 reactive data, and comprehensive styling integration.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 

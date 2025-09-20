@@ -4,7 +4,7 @@ Base Converter - Abstract base class for all format converters
 Provides common functionality and interface for converting YAML manifests
 to various output formats with extensible architecture.
 
-Copyright 2024 Tom Sapletta
+Copyright 2025 Tom Sapletta
 Licensed under the Apache License, Version 2.0
 """
 
