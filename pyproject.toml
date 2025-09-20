@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "whyml"
-version = "0.1.6"
+version = "0.1.11"
 description = "A powerful AI coding assistant framework"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -23,7 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-dynamic = ["keywords", "scripts"]
+dynamic = ["scripts"]
 keywords = ["yaml", "manifest", "webpage-generator", "react", "vue", "php", "html", "converter", "modular", "web-scraper", "template-engine", "static-site"]
 
 dependencies = [
@@ -55,8 +55,8 @@ Repository = "https://github.com/dynapsys/whyml"
 Changelog = "https://github.com/dynapsys/whyml/releases"
 
 [tool.setuptools]
-package-dir = { "" = "whyml/whyml" }
-packages = { find = { where = "whyml/whyml", include = ["*"] } }
+package-dir = { "" = "." }
+packages = { find = { where = ["."], include = ["whyml*"] } }
 
 [tool.black]
 line-length = 88

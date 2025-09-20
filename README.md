@@ -1,6 +1,5 @@
 # WhyML - Advanced YAML Manifest System
 
-<div align="center">
 
 ```bash
  ██╗    ██╗██╗  ██╗██╗   ██╗███╗   ███╗██╗     
@@ -18,7 +17,7 @@
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](#testing)
 [![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing)
 
-</div>
+
 
 ## Overview
 
