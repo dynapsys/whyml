@@ -77,7 +77,13 @@ class ManifestValidator:
                 "styles": {
                     "type": "object",
                     "patternProperties": {
-                        "^[a-zA-Z_][a-zA-Z0-9_-]*$": {"type": "string"}
+                        "^[a-zA-Z_][a-zA-Z0-9_-]*$": {
+                            "oneOf": [
+                                {"type": "string"},
+                                {"type": "object"},
+                                {"type": "array"}
+                            ]
+                        }
                     }
                 },
                 "structure": {
@@ -229,8 +235,13 @@ class ManifestValidator:
         css_rule_pattern = re.compile(r'^\s*[a-zA-Z0-9._#\-\s,:\[\]()>+~*@]+\s*\{[^{}]*\}\s*$', re.DOTALL)
         
         for style_name, style_value in styles.items():
-            if not isinstance(style_value, str):
-                errors.append(f"Style '{style_name}' must be a string")
+            # Allow flexible formats: string (CSS rules), object (parsed CSS), or array (multiple styles)
+            if not isinstance(style_value, (str, dict, list)):
+                errors.append(f"Style '{style_name}' must be a string, object, or array")
+                continue
+            
+            # Skip detailed validation for objects and arrays - schema validation handles structure
+            if isinstance(style_value, (dict, list)):
                 continue
             
             # Skip validation for CSS rule blocks (selector { properties })

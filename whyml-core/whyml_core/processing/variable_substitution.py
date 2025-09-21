@@ -398,6 +398,22 @@ class VariableSubstitution:
         self.global_context.clear()
         self.context_stack.clear()
     
+    def substitute_variables(self, 
+                           manifest: Dict[str, Any], 
+                           variables: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Main variable substitution method - substitute variables in manifest.
+        
+        This is the primary interface method called by ManifestProcessor.
+        
+        Args:
+            manifest: Manifest to process
+            variables: Variables to use for substitution
+            
+        Returns:
+            Manifest with variables substituted
+        """
+        return self.substitute_in_manifest(manifest, context=variables, recursive=True)
+    
     def get_context_info(self) -> Dict[str, Any]:
         """Get information about current context state.
         
