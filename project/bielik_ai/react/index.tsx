@@ -5,20 +5,6 @@
  */
 
 import React from 'react';
-// External script: https://bielik.ai/wp-includes/js/jquery/jquery.min.js?ver=3.7.1
-// External script: https://bielik.ai/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1
-// External script: https://www.googletagmanager.com/gtag/js?id=GT-M3K6SCT4
-// External script: https://www.googletagmanager.com/gtag/js?id=G-YM3958RN9T
-// External script: https://bielik.ai/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=3.32.2
-// External script: https://bielik.ai/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=3.32.2
-// External script: https://bielik.ai/wp-includes/js/jquery/ui/core.min.js?ver=1.13.3
-// External script: https://bielik.ai/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=3.32.2
-// External script: https://bielik.ai/wp-content/plugins/metform/public/assets/lib/cute-alert/cute-alert.js?ver=4.0.6
-// External script: https://bielik.ai/wp-content/plugins/jeg-elementor-kit/assets/js/elements/fun-fact.js?ver=2.6.14
-// External script: https://bielik.ai/wp-content/plugins/jeg-elementor-kit/assets/js/elements/sticky-element.js?ver=2.6.14
-// External script: https://bielik.ai/wp-content/plugins/elementor/assets/lib/font-awesome/js/v4-shims.min.js?ver=3.32.2
-// External script: https://bielik.ai/wp-content/plugins/wp-logo-showcase/assets/vendor/jquery.actual.min.js?ver=1.5.0
-// External script: https://bielik.ai/wp-content/plugins/wp-logo-showcase/assets/js/wplogoshowcase.js?ver=1.5.0
 import styles from './styles.module.css';
 
 interface Props {
@@ -28,59 +14,196 @@ interface Props {
 
 const BIELIKAI: React.FC<Props> = (props) => {
     return (
-      <div type="container" className="page-container">
-<div type="heading">BIELIK-11B-v2</div>,
-<div type="heading">Large Language Model</div>,
-<div type="heading">Efekt pracy społeczności entuzjastów sztucznej inteligencji</div>,
-<div type="heading">Dostępny na Hugging Face</div>,
-<div type="heading">Chat Arena Porównaj modele</div>,
-<div type="heading">Email</div>,
-<div type="heading">Partnerzy i sponsorzy</div>,
-<div type="heading">Parametrów</div>,
-<div type="heading">Darmowy model</div>,
-<div type="heading">w rankingu Areny</div>,
-<div type="heading">Kontekst</div>,
-<div type="heading">Bezpieczeństwo i prywatnosć</div>,
-<div type="heading">Koszty i skalowalność</div>,
-<div type="heading">Ekosystem i Społeczność</div>,
-<div type="paragraph">Bezpieczne przetwarzaniePełna kontrolaKompaktowa moc</div>,
-<div type="paragraph">Bielik v2 opiera się na architekturze transformera, będąc modelem typu „decoder-only”, co oznacza, że do przetwarzania danych wejściowych wykorzystuje wyłącznie bloki dekodera.</div>,
-<div type="paragraph">Bielik został opracowany na bazie modelu Mistral-7B, jednak znacząco go rozbudowaliśmy, czyniąc go jednym z najpotężniejszych modeli językowych stworzonych w Polsce.</div>,
-<div type="paragraph">0 Dostępny na Hugging Face 0 Chat Arena Porównaj modele Bezpieczeństwo i prywatnosć Nasze projekty opierają się na zasadach open-source i open-science, co pozwala na transparentność oraz szeroką współpracę z globalną społecznością badawczą i technologiczną​​.</div>,
-<div type="paragraph">Lokalny LLM może być tańszy do wdrożenia i utrzymania niż korzystanie z usług takich jak OpenAI. Ponadto, opłacalność stosowania lokalnego modelu rośnie ze skalą jego wykorzystania, co jest kluczowe dla firm przetwarzających duże ilości danych lub obsługujących liczne zapytania.</div>,
-<div type="paragraph">Wzmacnianie i rozwój polskiego ekosystemu sztucznej inteligencji oraz dbanie o aktywną i zaangażowaną społeczność.</div>,
-<div type="paragraph">Wspieramy rozwój umiejętności wśród programistów, badaczy i entuzjastów AI poprzez otwartą wymianę wiedzy oraz narzędzi</div>,
-<div type="paragraph">biuro@speakleash.org.pl</div>,
-<div type="paragraph">Github X-twitter Facebook Created with Fabric.js 5.2.4 Envelope © 2025 Bielik.ai | Wszelkie prawa zastrzeżone</div>,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2024/08/Bielik_Secondary_Rabarbar-300x82.webp" alt="" />,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2024/08/image_orzel-768x597.png" alt="" />,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2024/08/image_06-768x768.png" alt="" />,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2024/08/rsz_1swords256x256_1.png" alt="" />,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2024/08/Group-27.png" alt="" />,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2024/08/Group-30.png" alt="" />,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2024/08/Group-23.png" alt="" />,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2024/08/CYFRONET_1-1024x488.png" alt="" />,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2024/08/speakleash_logo_2-Copy-modified.png" alt="" />,
-<div type="image" src="https://bielik.ai/wp-content/uploads/2025/01/deviniti-logo-footer.svg" alt="" />,
-<div type="link" href="https://bielik.ai/#content">Przejdź do treści</div>,
-<div type="link" href="https://bielik.ai/"></div>,
-<div type="link" href="http://chat.bielik.ai">Porozmawiaj z Bielikiem</div>,
-<div type="link" href="https://huggingface.co/speakleash">Created with Fabric.js 5.2.4 0 Dostępny na Hugging Face</div>,
-<div type="link" href="https://arena.speakleash.org.pl/">0 Chat Arena Porównaj modele</div>,
-<div type="link" href="mailto:biuro@speakleash.org.pl">Emailbiuro@speakleash.org.pl</div>,
-<div type="link" href="https://discord.com/invite/ZJwCMrxwT7">Jki-discord</div>,
-<div type="link" href="https://www.linkedin.com/company/speakleash/">Linkedin</div>,
-<div type="link" href="https://github.com/speakleash">Github</div>,
-<div type="link" href="https://x.com/Speak_Leash">X-twitter</div>,
-<div type="link" href="https://www.facebook.com/Speakleash/">Facebook</div>,
-<div type="link" href="https://huggingface.co/speakleash">Created with Fabric.js 5.2.4</div>,
-<div type="link" href="mailto:team@speakleash.org">Envelope</div>,
-<div type="link" href="https://www.cyfronet.pl/"></div>,
-<div type="link" href="https://speakleash.org/"></div>,
-<div type="link" href="https://bielik.ai/terms">Warunki użytkowania modelu</div>,
-<div type="link" href="https://bielik.ai/polityka-prywatnosci">Polityka Prywatności</div>,
-<div type="link" href="https://deviniti.com"></div>
-</div>
+      <main><div id="content" className="site-main post-20 page type-page status-publish has-post-thumbnail hentry"><div><div className="page-content"><div><div className="elementor elementor-20">
+<section><div className="elementor-section elementor-top-section elementor-element elementor-element-6dcbf498 elementor-section-boxed elementor-section-height-default elementor-section-height-default elementor-invisible"><div><div className="elementor-container elementor-column-gap-default">
+<div><div className="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-79ab2731"><div><div className="elementor-widget-wrap elementor-element-populated"><div><div className="elementor-element elementor-element-4213d79d elementor-widget elementor-widget-image"><div><div className="elementor-widget-container"><a><div href="/"><img><div src="https://bielik.ai/wp-content/uploads/2024/08/Bielik_Secondary_Rabarbar-300x82.webp" className="attachment-medium size-medium wp-image-104" /></img></div></a></div></div></div></div></div></div></div></div>,
+<div><div className="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-36c43e7e"><div><div className="elementor-widget-wrap" /></div></div></div>
+</div></div></div></section>,
+<section><div className="elementor-section elementor-top-section elementor-element elementor-element-4c2a1112 elementor-reverse-tablet elementor-reverse-mobile elementor-section-boxed elementor-section-height-default elementor-section-height-default"><div><div className="elementor-container elementor-column-gap-default">
+<div><div className="elementor-column elementor-col-66 elementor-top-column elementor-element elementor-element-2c42461f elementor-invisible"><div><div className="elementor-widget-wrap elementor-element-populated">
+<div><div className="elementor-element elementor-element-61446380 elementor-widget elementor-widget-jkit_heading"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-heading align- align-tablet-center align-mobile- jeg_module_20__68cfa66247475"><div><div className="heading-section-title display-inline-block"><h1><div className="heading-title">BIELIK-11B-v2</div></h1></div></div></div></div></div></div></div></div>,
+<div><div className="elementor-element elementor-element-24eea98 elementor-widget__width-initial elementor-widget elementor-widget-jkit_heading"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-heading align- align-tablet-center align-mobile- jeg_module_20_1_68cfa662486ad"><div><div className="heading-section-title display-inline-block"><h1><div className="heading-title"><span><div className="style-color"><span><div>Large Language Model</div></span></div></span></div></h1></div></div></div></div></div></div></div></div>,
+<div><div className="elementor-element elementor-element-760153c1 elementor-widget elementor-widget-text-editor"><div><div className="elementor-widget-container"><div><div className="elementor-element elementor-element-74b033eb elementor-widget elementor-widget-text-editor"><div><div className="elementor-widget-container" /></div></div></div></div></div></div></div>,
+<div><div className="elementor-element elementor-element-6ed05fb3 elementor-tablet-align-center elementor-widget elementor-widget-button"><div><div className="elementor-widget-container"><div><div className="elementor-button-wrapper"><a><div className="elementor-button elementor-button-link elementor-size-sm" href="http://chat.bielik.ai"><span><div className="elementor-button-content-wrapper"><span><div className="elementor-button-text">Porozmawiaj z Bielikiem</div></span></div></span></div></a></div></div></div></div></div></div>
+</div></div></div></div>,
+<div><div className="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-62901256"><div><div className="elementor-widget-wrap elementor-element-populated"><div><div className="elementor-element elementor-element-456f8c23 elementor-widget__width-initial elementor-widget elementor-widget-image"><div><div className="elementor-widget-container"><img><div src="https://bielik.ai/wp-content/uploads/2024/08/image_orzel-768x597.png" className="attachment-medium_large size-medium_large wp-image-287" /></img></div></div></div></div></div></div></div></div>
+</div></div></div></section>,
+<section><div className="elementor-section elementor-top-section elementor-element elementor-element-50ba09bf elementor-section-boxed elementor-section-height-default elementor-section-height-default"><div><div className="elementor-container elementor-column-gap-default"><div><div className="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-a535de9"><div><div className="elementor-widget-wrap elementor-element-populated">
+<section><div className="elementor-section elementor-inner-section elementor-element elementor-element-8ec0b25 elementor-section-full_width elementor-section-height-default elementor-section-height-default"><div><div className="elementor-container elementor-column-gap-default">
+<div><div className="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-6a6f8687 elementor-invisible"><div><div className="elementor-widget-wrap elementor-element-populated"><div><div className="elementor-element elementor-element-e0fecbe elementor-widget elementor-widget-image"><div><div className="elementor-widget-container"><img><div src="https://bielik.ai/wp-content/uploads/2024/08/image_06-768x768.png" className="attachment-medium_large size-medium_large wp-image-212" /></img></div></div></div></div></div></div></div></div>,
+<div><div className="elementor-column elementor-col-66 elementor-inner-column elementor-element elementor-element-2320fe0b elementor-invisible"><div><div className="elementor-widget-wrap elementor-element-populated">
+<div><div className="elementor-element elementor-element-7a98438a elementor-widget elementor-widget-heading"><div><div className="elementor-widget-container"><h2><div className="elementor-heading-title elementor-size-default">Efekt pracy społeczności entuzjastów sztucznej inteligencji</div></h2></div></div></div></div>,
+<div><div className="elementor-element elementor-element-20cb7e1f elementor-widget__width-initial elementor-widget elementor-widget-text-editor"><div><div className="elementor-widget-container">
+<p><div><div /></div></p>,
+<p><div>Bielik został opracowany na bazie modelu Mistral-7B, jednak znacząco go rozbudowaliśmy, czyniąc go jednym z najpotężniejszych modeli językowych stworzonych w Polsce.</div></p>
+</div></div></div></div>
+</div></div></div></div>
+</div></div></div></section>,
+<section><div className="elementor-section elementor-inner-section elementor-element elementor-element-850b9b6 elementor-section-full_width elementor-section-height-default elementor-section-height-default elementor-invisible"><div><div className="elementor-container elementor-column-gap-default">
+<div><div className="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-2febf3c0"><div><div className="elementor-widget-wrap" /></div></div></div>,
+<div><div className="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-e6fcfde"><div><div className="elementor-widget-wrap elementor-element-populated">
+<div><div className="elementor-element elementor-element-241a8fc elementor-widget elementor-widget-jkit_fun_fact"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-fun-fact align-center hover-from-left elementor-animation- jeg_module_20_2_68cfa6624cb42"><div><div className="fun-fact-inner"><div><div className="content">
+<div><div className="number-wrapper">
+<span><div className="prefix" /></span>,
+<span><div className="number">0</div></span>,
+<span><div className="suffix">mld</div></span>,
+<div />
+</div></div>,
+<h3><div className="title">Parametrów</div></h3>
+</div></div></div></div></div></div></div></div></div></div>,
+<div><div className="elementor-element elementor-element-61f60fd rm-zero elementor-widget elementor-widget-jkit_fun_fact"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-fun-fact align-center hover-from-left elementor-animation- jeg_module_20_3_68cfa6624d43c"><div><div className="fun-fact-inner"><div><div className="content">
+<div><div className="number-wrapper">
+<span><div className="prefix" /></span>,
+<span><div className="number">0</div></span>,
+<span><div className="suffix" /></span>,
+<div />
+</div></div>,
+<h3><div className="title">Darmowy model</div></h3>
+</div></div></div></div></div></div></div></div></div></div>
+</div></div></div></div>,
+<div><div className="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-7389f1b3"><div><div className="elementor-widget-wrap elementor-element-populated">
+<div><div className="elementor-element elementor-element-6eeeb40d elementor-widget elementor-widget-jkit_fun_fact"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-fun-fact align-center hover-from-left elementor-animation- jeg_module_20_4_68cfa6624dc80"><div><div className="fun-fact-inner"><div><div className="content">
+<div><div className="number-wrapper">
+<span><div className="prefix" /></span>,
+<span><div className="number">0</div></span>,
+<span><div className="suffix" /></span>
+</div></div>,
+<h3><div className="title">w rankingu Areny</div></h3>
+</div></div></div></div></div></div></div></div></div></div>,
+<div><div className="elementor-element elementor-element-bcceff1 elementor-widget elementor-widget-jkit_fun_fact"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-fun-fact align-center hover-from-left elementor-animation- jeg_module_20_5_68cfa6624e4bc"><div><div className="fun-fact-inner"><div><div className="content">
+<div><div className="number-wrapper">
+<span><div className="prefix" /></span>,
+<span><div className="number">0</div></span>,
+<span><div className="suffix">tys</div></span>,
+<div />
+</div></div>,
+<h3><div className="title">Kontekst</div></h3>
+</div></div></div></div></div></div></div></div></div></div>
+</div></div></div></div>,
+<div><div className="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-b9d3591"><div><div className="elementor-widget-wrap elementor-element-populated">
+<a><div className="elementor-element elementor-element-a13a36a link-container e-flex e-con-boxed e-con e-parent" href="https://huggingface.co/speakleash"><div><div className="e-con-inner"><div><div className="elementor-element elementor-element-813e5c7 without-number elementor-widget elementor-widget-jkit_fun_fact"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-fun-fact align-center hover-from-left elementor-animation- jeg_module_20_6_68cfa6624eccd"><div><div className="fun-fact-inner">
+<div><div className="icon elementor-animation-"><div /></div></div>,
+<div><div className="content">
+<div><div className="number-wrapper">
+<span><div className="prefix" /></span>,
+<span><div className="number">0</div></span>,
+<span><div className="suffix" /></span>
+</div></div>,
+<h2><div className="title">Dostępny na Hugging Face</div></h2>
+</div></div>
+</div></div></div></div></div></div></div></div></div></div></div></a>,
+<a><div className="elementor-element elementor-element-89aacc0 link-container e-flex e-con-boxed e-con e-parent" href="https://arena.speakleash.org.pl/"><div><div className="e-con-inner"><div><div className="elementor-element elementor-element-55e79f7 without-number elementor-widget elementor-widget-jkit_fun_fact"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-fun-fact align-center hover-from-left elementor-animation- jeg_module_20_7_68cfa6624ff9d"><div><div className="fun-fact-inner">
+<div><div className="icon elementor-animation-"><img><div src="https://bielik.ai/wp-content/uploads/2024/08/rsz_1swords256x256_1.png" className="attachment-thumbnail size-thumbnail" /></img></div></div>,
+<div><div className="content">
+<div><div className="number-wrapper">
+<span><div className="prefix" /></span>,
+<span><div className="number">0</div></span>,
+<span><div className="suffix" /></span>
+</div></div>,
+<h2><div className="title">Chat Arena Porównaj modele</div></h2>
+</div></div>
+</div></div></div></div></div></div></div></div></div></div></div></a>
+</div></div></div></div>
+</div></div></div></section>
+</div></div></div></div></div></div></div></section>,
+<section><div className="elementor-section elementor-top-section elementor-element elementor-element-77176f31 elementor-section-boxed elementor-section-height-default elementor-section-height-default"><div><div className="elementor-container elementor-column-gap-default"><div><div className="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-74297053"><div><div className="elementor-widget-wrap elementor-element-populated"><section><div className="elementor-section elementor-inner-section elementor-element elementor-element-1b6fef6c elementor-section-full_width elementor-hidden-desktop elementor-hidden-tablet elementor-hidden-mobile elementor-section-height-default elementor-section-height-default"><div><div className="elementor-container elementor-column-gap-default">
+<div><div className="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-5069c10a elementor-invisible"><div><div className="elementor-widget-wrap elementor-element-populated">
+<div><div className="elementor-element elementor-element-663a5955 jkit-equal-height-enable elementor-hidden-desktop elementor-hidden-tablet elementor-hidden-mobile elementor-widget elementor-widget-jkit_image_box"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-image-box style-default elementor-animation- jeg_module_20_8_68cfa6625317e">
+<div><div className="image-box-header elementor-animation-" /></div>,
+<div><div className="image-box-body"><div><div className="body-inner">
+<h3><div className="body-title icon-position-before">Bezpieczeństwo i prywatnosć</div></h3>,
+<div><div className="body-description"><p><div>Nasze projekty opierają się na zasadach open-source i open-science, co pozwala na transparentność oraz szeroką współpracę z globalną społecznością badawczą i technologiczną​​.</div></p></div></div>,
+<div><div className="body-button" /></div>
+</div></div></div></div>
+</div></div></div></div></div></div>,
+<div><div className="elementor-element elementor-element-235049a0 elementor-widget__width-auto elementor-widget elementor-widget-image"><div><div className="elementor-widget-container"><img><div src="https://bielik.ai/wp-content/uploads/2024/08/Group-27.png" className="attachment-full size-full wp-image-27" /></img></div></div></div></div>
+</div></div></div></div>,
+<div><div className="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-64dd2c8f elementor-invisible"><div><div className="elementor-widget-wrap elementor-element-populated">
+<div><div className="elementor-element elementor-element-65328c75 jkit-equal-height-enable elementor-widget__width-initial elementor-hidden-desktop elementor-hidden-tablet elementor-hidden-mobile elementor-widget elementor-widget-jkit_image_box"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-image-box style-default elementor-animation- jeg_module_20_9_68cfa66253b3c">
+<div><div className="image-box-header elementor-animation-" /></div>,
+<div><div className="image-box-body"><div><div className="body-inner">
+<h3><div className="body-title icon-position-before">Koszty i skalowalność</div></h3>,
+<div><div className="body-description"><p><div>Lokalny LLM może być tańszy do wdrożenia i utrzymania niż korzystanie z usług takich jak OpenAI. Ponadto, opłacalność stosowania lokalnego modelu rośnie ze skalą jego wykorzystania, co jest kluczowe dla firm przetwarzających duże ilości danych lub obsługujących liczne zapytania.</div></p></div></div>,
+<div><div className="body-button" /></div>
+</div></div></div></div>
+</div></div></div></div></div></div>,
+<div><div className="elementor-element elementor-element-49b8ed59 elementor-widget__width-auto elementor-hidden-desktop elementor-hidden-tablet elementor-hidden-mobile elementor-widget elementor-widget-image"><div><div className="elementor-widget-container"><img><div src="https://bielik.ai/wp-content/uploads/2024/08/Group-30.png" className="attachment-full size-full wp-image-28" /></img></div></div></div></div>
+</div></div></div></div>,
+<div><div className="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-aee072d elementor-invisible"><div><div className="elementor-widget-wrap elementor-element-populated">
+<div><div className="elementor-element elementor-element-6c33ef7 jkit-equal-height-enable elementor-hidden-desktop elementor-hidden-tablet elementor-hidden-mobile elementor-widget elementor-widget-jkit_image_box"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-image-box style-default elementor-animation- jeg_module_20_10_68cfa662548bc">
+<div><div className="image-box-header elementor-animation-" /></div>,
+<div><div className="image-box-body"><div><div className="body-inner">
+<h3><div className="body-title icon-position-before">Ekosystem i Społeczność</div></h3>,
+<div><div className="body-description">
+<p><div>Wzmacnianie i rozwój polskiego ekosystemu sztucznej inteligencji oraz dbanie o aktywną i zaangażowaną społeczność.</div></p>,
+<p><div>Wspieramy rozwój umiejętności wśród programistów, badaczy i entuzjastów AI poprzez otwartą wymianę wiedzy oraz narzędzi</div></p>
+</div></div>,
+<div><div className="body-button" /></div>
+</div></div></div></div>
+</div></div></div></div></div></div>,
+<div><div className="elementor-element elementor-element-38f1d65a elementor-widget__width-auto elementor-widget elementor-widget-image"><div><div className="elementor-widget-container"><img><div src="https://bielik.ai/wp-content/uploads/2024/08/Group-23.png" className="attachment-full size-full wp-image-29" /></img></div></div></div></div>
+</div></div></div></div>
+</div></div></div></section></div></div></div></div></div></div></div></section>,
+<section><div className="elementor-section elementor-top-section elementor-element elementor-element-6c22b27a elementor-section-boxed elementor-section-height-default elementor-section-height-default"><div><div className="elementor-container elementor-column-gap-default"><div><div className="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-10fcde95"><div><div className="elementor-widget-wrap elementor-element-populated">
+<section><div className="elementor-section elementor-inner-section elementor-element elementor-element-7ebff4f6 elementor-section-full_width elementor-section-height-default elementor-section-height-default"><div><div className="elementor-container elementor-column-gap-default">
+<div><div className="elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-7fc0fb39"><div><div className="elementor-widget-wrap elementor-element-populated"><div><div className="elementor-element elementor-element-651abbb4 jkit-equal-height-disable elementor-invisible elementor-widget elementor-widget-jkit_icon_box"><div><div className="elementor-widget-container"><div><div className="jeg-elementor-kit jkit-icon-box icon-position-left elementor-animation- jeg_module_20_11_68cfa66259642"><a><div href="mailto:biuro@speakleash.org.pl" className="icon-box-link"><div><div className="jkit-icon-box-wrapper hover-from-left">
+<div><div className="icon-box icon-box-header elementor-animation-"><div><div className="icon style-color"><div /></div></div></div></div>,
+<div><div className="icon-box icon-box-body">
+<h2><div className="title">Email</div></h2>,
+<p><div className="icon-box-description">biuro@speakleash.org.pl</div></p>
+</div></div>
+</div></div></div></a></div></div></div></div></div></div></div></div></div></div>,
+<div><div className="elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-239cae2c"><div><div className="elementor-widget-wrap elementor-element-populated"><div><div className="elementor-element elementor-element-7bcbd3b0 elementor-shape-circle e-grid-align-right elementor-grid-tablet-2 e-grid-align-mobile-center elementor-grid-mobile-1 elementor-grid-0 elementor-widget elementor-widget-social-icons"><div><div className="elementor-widget-container"><div><div className="elementor-social-icons-wrapper elementor-grid">
+<span><div className="elementor-grid-item"><a><div className="elementor-icon elementor-social-icon elementor-social-icon-jki-discord elementor-repeater-item-a5e322d" href="https://discord.com/invite/ZJwCMrxwT7">
+<span><div className="elementor-screen-only">Jki-discord</div></span>,
+<div />
+</div></a></div></span>,
+<span><div className="elementor-grid-item"><a><div className="elementor-icon elementor-social-icon elementor-social-icon-linkedin elementor-repeater-item-1bb6345" href="https://www.linkedin.com/company/speakleash/">
+<span><div className="elementor-screen-only">Linkedin</div></span>,
+<div />
+</div></a></div></span>,
+<span><div className="elementor-grid-item"><a><div className="elementor-icon elementor-social-icon elementor-social-icon-github elementor-repeater-item-47e5f5e" href="https://github.com/speakleash">
+<span><div className="elementor-screen-only">Github</div></span>,
+<div />
+</div></a></div></span>,
+<span><div className="elementor-grid-item"><a><div className="elementor-icon elementor-social-icon elementor-social-icon-x-twitter elementor-repeater-item-abbbcbb" href="https://x.com/Speak_Leash">
+<span><div className="elementor-screen-only">X-twitter</div></span>,
+<div />
+</div></a></div></span>,
+<span><div className="elementor-grid-item"><a><div className="elementor-icon elementor-social-icon elementor-social-icon-facebook elementor-repeater-item-e76b3c6" href="https://www.facebook.com/Speakleash/">
+<span><div className="elementor-screen-only">Facebook</div></span>,
+<div />
+</div></a></div></span>,
+<span><div className="elementor-grid-item"><a><div className="elementor-icon elementor-social-icon elementor-social-icon- elementor-repeater-item-9f2ad43" href="https://huggingface.co/speakleash">
+<span><div className="elementor-screen-only" /></span>,
+<div />
+</div></a></div></span>,
+<span><div className="elementor-grid-item"><a><div className="elementor-icon elementor-social-icon elementor-social-icon-envelope elementor-repeater-item-0f366f0" href="mailto:team@speakleash.org">
+<span><div className="elementor-screen-only">Envelope</div></span>,
+<div />
+</div></a></div></span>
+</div></div></div></div></div></div></div></div></div></div>
+</div></div></div></section>,
+<div><div className="elementor-element elementor-element-5f087443 elementor-widget-divider--view-line elementor-widget elementor-widget-divider"><div><div className="elementor-widget-container"><div><div className="elementor-divider"><span><div className="elementor-divider-separator" /></span></div></div></div></div></div></div>,
+<section><div className="elementor-section elementor-inner-section elementor-element elementor-element-80b265d elementor-section-full_width elementor-reverse-mobile elementor-section-height-default elementor-section-height-default"><div><div className="elementor-container elementor-column-gap-default">
+<div><div className="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-a407af0"><div><div className="elementor-widget-wrap elementor-element-populated"><div><div className="elementor-element elementor-element-1211840a elementor-widget elementor-widget-text-editor"><div><div className="elementor-widget-container"><p><div>©
+2025 Bielik.ai | Wszelkie prawa zastrzeżone</div></p></div></div></div></div></div></div></div></div>,
+<div><div className="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-1c4b2b1"><div><div className="elementor-widget-wrap elementor-element-populated">
+<div><div className="elementor-element elementor-element-257189f elementor-widget__width-initial elementor-widget elementor-widget-image"><div><div className="elementor-widget-container"><a><div href="https://www.cyfronet.pl/"><img><div src="https://bielik.ai/wp-content/uploads/2024/08/CYFRONET_1-1024x488.png" className="attachment-large size-large wp-image-208" /></img></div></a></div></div></div></div>,
+<div><div className="elementor-element elementor-element-369b5234 elementor-widget__width-initial elementor-widget elementor-widget-image"><div><div className="elementor-widget-container"><a><div href="https://speakleash.org/"><img><div src="https://bielik.ai/wp-content/uploads/2024/08/speakleash_logo_2-Copy-modified.png" className="attachment-full size-full wp-image-207" /></img></div></a></div></div></div></div>
+</div></div></div></div>,
+<div><div className="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-29392716"><div><div className="elementor-widget-wrap elementor-element-populated"><div><div className="elementor-element elementor-element-e468630 elementor-icon-list--layout-inline elementor-align-right elementor-mobile-align-center elementor-tablet-align-right elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list"><div><div className="elementor-widget-container"><ul><div className="elementor-icon-list-items elementor-inline-items">
+<li><div className="elementor-icon-list-item elementor-inline-item"><a><div href="/terms"><span><div className="elementor-icon-list-text">Warunki użytkowania modelu</div></span></div></a></div></li>,
+<li><div className="elementor-icon-list-item elementor-inline-item"><a><div href="/polityka-prywatnosci"><span><div className="elementor-icon-list-text">Polityka Prywatności</div></span></div></a></div></li>
+</div></ul></div></div></div></div></div></div></div></div>
+</div></div></div></section>,
+<section><div className="elementor-section elementor-inner-section elementor-element elementor-element-bbf1163 elementor-section-full_width elementor-reverse-mobile elementor-section-height-default elementor-section-height-default"><div><div className="elementor-container elementor-column-gap-default"><div><div className="elementor-column elementor-col-100 elementor-inner-column elementor-element elementor-element-fc8469d"><div><div className="elementor-widget-wrap elementor-element-populated">
+<div><div className="elementor-element elementor-element-e28a1a3 elementor-widget-divider--view-line elementor-widget elementor-widget-divider"><div><div className="elementor-widget-container"><div><div className="elementor-divider"><span><div className="elementor-divider-separator" /></span></div></div></div></div></div></div>,
+<div><div className="elementor-element elementor-element-8fb2f0e elementor-widget elementor-widget-heading"><div><div className="elementor-widget-container"><h2><div className="elementor-heading-title elementor-size-default">Partnerzy i sponsorzy</div></h2></div></div></div></div>,
+<div><div className="elementor-element elementor-element-50c4959 elementor-widget elementor-widget-shortcode"><div><div className="elementor-widget-container"><div><div className="elementor-shortcode"><div><div className="rt-container-fluid rt-wpls" id="rt-container-1280752518"><div><div className="rt-row grid-layout"><div><div className="rt-col-md-3 rt-col-sm-6 rt-col-xs-12"><div><div><div><div className="single-logo-container"><a><div href="https://deviniti.com"><img><div src="https://bielik.ai/wp-content/uploads/2025/01/deviniti-logo-footer.svg" className="wls-logo" alt="DEVINITI" title="Deviniti" /></img></div></a></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+</div></div></div></div></div></div></div></section>
+</div></div></div></div></div></div></div></section>
+</div></div></div></div></div></main>
     );
   };
 
