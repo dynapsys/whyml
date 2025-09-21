@@ -9,7 +9,7 @@ Licensed under the Apache License, Version 2.0
 """
 
 from .yaml_utils import YAMLUtils, YAMLProcessor
-from .async_utils import AsyncUtils, AsyncFileManager
+from .async_utils import AsyncUtils, AsyncFileManager, AsyncHTTPManager
 from .path_utils import PathUtils
 from .string_utils import StringUtils
 
@@ -18,6 +18,7 @@ __all__ = [
     'YAMLProcessor', 
     'AsyncUtils',
     'AsyncFileManager',
+    'AsyncHTTPManager',
     'PathUtils',
     'StringUtils'
 ]

@@ -537,7 +537,7 @@ class VueConverter(BaseConverter):
         for prop, value in properties.items():
             css_properties.append(f"  {prop}: {value};")
         
-        return f"{selector} {\n" + '\n'.join(css_properties) + "\n}"
+        return f"{selector} {{\n" + '\n'.join(css_properties) + "\n}"
     
     # Helper methods
     
@@ -546,11 +546,12 @@ class VueConverter(BaseConverter):
         # Handle Vue-specific bindings
         if name == 'class' and isinstance(value, list):
             # Class array binding
-            return f':class="[{", ".join(f\'"{cls}"\' for cls in value)}]"'
+            class_items = ", ".join(f'"{cls}"' for cls in value)
+            return f':class="[{class_items}]"'
         elif name == 'style' and isinstance(value, dict):
             # Style object binding
             style_obj = ', '.join(f"'{k}': '{v}'" for k, v in value.items())
-            return f':style="{{{{ {style_obj} }}}}"'
+            return f':style="{{{{{style_obj}}}}}"'
         elif name in ['v-if', 'v-else-if', 'v-show', 'v-for', 'v-model']:
             # Vue directives
             return f'{name}="{value}"'

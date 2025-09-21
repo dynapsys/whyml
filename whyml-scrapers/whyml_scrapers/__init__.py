@@ -16,7 +16,7 @@ from .structure_analyzer import StructureAnalyzer
 
 __version__ = "0.1.0"
 __author__ = "Tom Sapletta"
-__email__ = "tom@sapletta.pl"
+__email__ = "info@softreck.dev"
 
 __all__ = [
     'URLScraper',

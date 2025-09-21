@@ -14,6 +14,8 @@ from .processing_exceptions import (
     TemplateInheritanceError, 
     ManifestError, 
     NetworkError,
+    ProcessingError,
+    LoaderError,
     ConversionError
 )
 
@@ -26,5 +28,7 @@ __all__ = [
     'TemplateInheritanceError', 
     'ManifestError',
     'NetworkError',
+    'ProcessingError',
+    'LoaderError',
     'ConversionError'
 ]

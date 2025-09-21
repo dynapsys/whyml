@@ -20,6 +20,81 @@ import logging
 from ..exceptions import ProcessingError, NetworkError
 
 
+class AsyncHTTPManager:
+    """Async HTTP client manager with connection pooling and retry logic."""
+    
+    def __init__(self, timeout: float = 30.0, max_retries: int = 3, 
+                 connector_limit: int = 100):
+        """Initialize HTTP manager.
+        
+        Args:
+            timeout: Request timeout in seconds
+            max_retries: Maximum retry attempts
+            connector_limit: Maximum number of connections
+        """
+        self.timeout = aiohttp.ClientTimeout(total=timeout)
+        self.max_retries = max_retries
+        self.connector_limit = connector_limit
+        self.session = None
+        
+    async def __aenter__(self):
+        """Enter async context manager."""
+        connector = aiohttp.TCPConnector(limit=self.connector_limit)
+        self.session = aiohttp.ClientSession(
+            connector=connector,
+            timeout=self.timeout
+        )
+        return self
+        
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Exit async context manager."""
+        if self.session:
+            await self.session.close()
+            
+    async def get(self, url: str, headers: Optional[Dict[str, str]] = None, 
+                  **kwargs) -> aiohttp.ClientResponse:
+        """Make GET request with retry logic.
+        
+        Args:
+            url: URL to request
+            headers: Optional request headers
+            **kwargs: Additional request parameters
+            
+        Returns:
+            Response object
+            
+        Raises:
+            NetworkError: If all retries fail
+        """
+        last_error = None
+        
+        for attempt in range(self.max_retries + 1):
+            try:
+                async with self.session.get(url, headers=headers, **kwargs) as response:
+                    if response.status < 400:
+                        return response
+                    elif response.status >= 500 and attempt < self.max_retries:
+                        # Retry on server errors
+                        await asyncio.sleep(2 ** attempt)  # Exponential backoff
+                        continue
+                    else:
+                        raise NetworkError(
+                            f"HTTP {response.status}: {response.reason}",
+                            url=url,
+                            status_code=response.status
+                        )
+            except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+                last_error = e
+                if attempt < self.max_retries:
+                    await asyncio.sleep(2 ** attempt)
+                    continue
+                    
+        raise NetworkError(
+            f"Failed after {self.max_retries} retries: {str(last_error)}",
+            url=url
+        )
+
+
 class AsyncUtils:
     """Utility functions for async operations."""
     

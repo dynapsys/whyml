@@ -97,6 +97,41 @@ class NetworkError(WhyMLError):
         super().__init__(message, details)
 
 
+class ProcessingError(WhyMLError):
+    """Raised when general processing operations fail.
+    
+    This exception is raised for issues with data processing, YAML operations,
+    or other general processing tasks.
+    """
+    
+    def __init__(self, message: str, details: Optional[dict] = None):
+        """Initialize processing error.
+        
+        Args:
+            message: Human-readable error message
+            details: Additional error details
+        """
+        super().__init__(message, details or {})
+
+
+class LoaderError(WhyMLError):
+    """Raised when loading operations fail.
+    
+    This exception is raised for issues with loading manifests, files,
+    or other loading-related operations.
+    """
+    
+    def __init__(self, message: str, file_path: Optional[str] = None):
+        """Initialize loader error.
+        
+        Args:
+            message: Human-readable error message
+            file_path: Path to the file that failed to load
+        """
+        details = {'file_path': file_path} if file_path else {}
+        super().__init__(message, details)
+
+
 class ConversionError(WhyMLError):
     """Raised when format conversion fails.
     
