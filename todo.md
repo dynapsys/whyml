@@ -146,6 +146,55 @@ zrob w docs/tutorials/ kolejne przyklady jakie mozna zaimplementowac krok po kro
 
 
 
+skrypt generowac zrzut ekranu strony zrodlowej i wygenerowanych i
+stworzyc dokumentacje na koniec z porownaniem i podlinkowanymi plikami, rowniez manifestow
+Continue with a smaller test run to verify specific areas (e.g., just converter tests)
+Proceed with documenting the complete automation success since the core functionality is working
+
+
+zrob skrypt, ktory bedzie pobieral z listy z pliku konkretne strony www
+zapisywal kazda domene w osobnym folderze:
+ project/url.list.txt
+ project/[domain]/source/index.html
+ project/[domain]/source/index.png
+ project/[domain]/manifest.yaml
+ project/[domain]/html/index.html
+ project/[domain]/html/index.png
+ project/[domain]/php/index.php
+ project/[domain]/vue/index.vue
+ project/[domain]/js/index.js
+ project/[domain]/test/index.ts
+ project/[domain]/react/index.tsx
+
+
+zrob docker compose, ktory będzie uruchamiał pod kolejnym portem zaczynając 
+od 8010 kolejne podfoldery wybranego projektu, każda strona ma inne srodowisko w natywnych technologiach dla podfodleruy:
+np. html to zwykła statyczna strona, ale php to już php 8.2 itd  
+czyli dla przykładowego projektu example_com
+html = port 8011, itd...
+[html](project/example_com/html) 8011
+[js](project/example_com/js) 8012
+[php](project/example_com/php) 8013
+[react](project/example_com/react) 8014
+[source](project/example_com/source) 8015
+[ts](project/example_com/ts) 8016
+[vue](project/example_com/vue) 8017
+Dodatkowo pokaż w podsumowaniu na port 8010  ale do podgladu w iframe
+Dodatkowo strona na poczatku powinna pokazywać skrypt generowac zrzut ekranu strony zrodlowej i rowneiz w oknie iframe to co zostalo pobrane do source
+Celem tego rozwiaznaia jest podsumowanie działania rozwiazania do konkwersji strony html na inne formaty, aby wiuzalnie ocenić
+
+
+
+
+zrob refaktoryzacje paczki w folderze whyml
+podziel większe pliki na mniejsze, podziel jak reużywalne komponenty, aby bylo łatwiej rozwiazywac problemy i rozbudowwywać funkcjonalność whyml
+stworz dodatkowe komponenty, wykorzystującye whyml, które będą osobną paczką python wykorzystującą whyml
+stworz oddzielne paczki w taki sposob aby były ze sobą komplementarne, bez duplikacji funkcji, odpowiedzialności
+
+
+
+
+
 ***
 
 ### Prompt 1: Rozszerzenia interoperacyjności i standardów OCI  

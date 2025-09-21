@@ -16,14 +16,14 @@ import tempfile
 from typing import Any, Dict, List, Optional, Union, Tuple
 from pathlib import Path
 
-from .manifest_loader import ManifestLoader
-from .manifest_processor import ManifestProcessor
-from .converters import (
+from whyml_core.loading.manifest_loader import ManifestLoader
+from whyml_core.processing.manifest_processor import ManifestProcessor
+from whyml_core.exceptions import WhyMLError, ConversionError
+from whyml_converters import (
     HTMLConverter, ReactConverter, VueConverter, PHPConverter,
     ConversionResult
 )
-from .scrapers import URLScraper, WebpageAnalyzer
-from .exceptions import WhyMLError, ConversionError
+from whyml_scrapers import URLScraper, WebpageAnalyzer
 from .caddy import CaddyConfig
 from .generators import (
     enhance_for_spa, enhance_for_pwa, generate_service_worker,

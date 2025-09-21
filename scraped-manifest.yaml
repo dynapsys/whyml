@@ -2,7 +2,7 @@ metadata:
   title: Example Domain
   description: Content from Example Domain - scraped from example.com
   source_url: https://example.com
-  extracted_at: '2025-09-21T13:58:33.818581'
+  extracted_at: '2025-09-21T15:14:30.136203'
 styles:
   element_body: 'body { background-color: #f0f0f2; margin: 0; padding: 0; font-family:
     -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica

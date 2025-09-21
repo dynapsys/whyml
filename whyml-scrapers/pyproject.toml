@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "whyml-scrapers"
+version = "0.1.0"
+description = "WhyML Scrapers - Advanced web scraping functionality for WhyML ecosystem"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Tom Sapletta", email = "tom@sapletta.pl"}
+]
+maintainers = [
+    {name = "Tom Sapletta", email = "tom@sapletta.pl"}
+]
+keywords = ["web-scraping", "html-parsing", "content-extraction", "whyml", "scrapers"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Text Processing :: Markup :: HTML",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "whyml-core>=0.1.0",
+    "beautifulsoup4>=4.12.0",
+    "aiohttp>=3.8.0",
+    "lxml>=4.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "coverage>=7.0.0",
+]
+docs = [
+    "sphinx>=6.0.0",
+    "sphinx-rtd-theme>=1.2.0",
+    "myst-parser>=1.0.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/dynapsys/whyml"
+"Repository" = "https://github.com/dynapsys/whyml"
+"Documentation" = "https://github.com/dynapsys/whyml/blob/main/README.md"
+"Issue Tracker" = "https://github.com/dynapsys/whyml/issues"
+
+[tool.setuptools]
+packages = { find = { where = ["."], include = ["whyml_scrapers*"] } }
+package-dir = { "" = "." }
+
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 88
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["whyml_scrapers"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+precision = 2

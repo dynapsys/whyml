@@ -13,10 +13,10 @@ __author__ = "Tom Sapletta"
 __email__ = "info@softreck.dev"
 __license__ = "Apache-2.0"
 
-# Core imports
-from .manifest_loader import ManifestLoader
-from .manifest_processor import ManifestProcessor
-from .exceptions import (
+# Core imports from whyml-core
+from whyml_core.loading.manifest_loader import ManifestLoader
+from whyml_core.processing.manifest_processor import ManifestProcessor
+from whyml_core.exceptions import (
     WhyMLError,
     ManifestError,
     ValidationError,
@@ -24,8 +24,8 @@ from .exceptions import (
     LoaderError
 )
 
-# Converter imports
-from .converters import (
+# Converter imports from whyml-converters
+from whyml_converters import (
     HTMLConverter,
     ReactConverter,
     VueConverter,
@@ -34,8 +34,8 @@ from .converters import (
     ConversionResult
 )
 
-# Scraper imports
-from .scrapers import URLScraper, WebpageAnalyzer
+# Scraper imports from whyml-scrapers
+from whyml_scrapers import URLScraper, WebpageAnalyzer
 
 # Main processor
 from .processor import WhyMLProcessor, convert_manifest, scrape_and_convert
