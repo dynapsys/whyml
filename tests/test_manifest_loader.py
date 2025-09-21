@@ -211,7 +211,11 @@ class TestManifestLoader:
             
             # Check for either circular dependency detection or timeout
             if isinstance(exc_info.value, DependencyResolutionError):
-                assert 'Circular dependency detected' in str(exc_info.value)
+                error_msg = str(exc_info.value)
+                # Accept both types of circular dependency errors
+                assert ('Circular dependency detected' in error_msg or 
+                       'Circular template inheritance detected' in error_msg), \
+                       f"Expected circular dependency error but got: {error_msg}"
             elif isinstance(exc_info.value, asyncio.TimeoutError):
                 pytest.fail("Circular dependency detection timed out - indicates infinite recursion bug")
     

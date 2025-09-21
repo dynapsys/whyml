@@ -111,8 +111,9 @@ class ManifestValidator:
                 if section in schema["properties"]:
                     schema["required"].append(section)
         else:
-            # If no specific sections requested, use traditional requirement
-            schema["required"] = ["metadata"]
+            # If no specific sections requested, don't require any sections by default
+            # This allows for flexible manifests without forcing metadata
+            schema["required"] = []
         
         return schema
     
@@ -581,7 +582,17 @@ class ManifestProcessor:
         processed_manifest = self._process_inheritance(manifest_data)
         
         # Process template variables and config
+        # Support both 'variables' and 'template_vars' keys for flexibility
         variables = manifest_data.get('variables', {})
+        template_vars = manifest_data.get('template_vars', {})
+        variables.update(template_vars)  # Merge template_vars into variables
+        
+        # Also make metadata values available as template variables
+        metadata = manifest_data.get('metadata', {})
+        for key, value in metadata.items():
+            if key not in variables:  # Don't override explicit template_vars
+                variables[key] = value
+        
         config = manifest_data.get('config', {})
         
         # Merge context with manifest variables
@@ -959,3 +970,32 @@ class ManifestProcessor:
         else:
             # For dict input, return as-is since it's already loaded
             return manifest
+
+    def validate_manifest(self, manifest: Dict[str, Any]) -> tuple[List[str], List[str]]:
+        """
+        Validate manifest and return errors and warnings.
+        
+        Args:
+            manifest: Manifest to validate
+            
+        Returns:
+            Tuple of (errors, warnings) lists
+        """
+        errors = []
+        warnings = []
+        
+        try:
+            # Use the validator to check the manifest
+            validation_result = self.validator.validate(manifest)
+            
+            # If validation passes, no errors
+            if validation_result:
+                return errors, warnings
+            else:
+                errors.append("Manifest validation failed")
+                return errors, warnings
+                
+        except Exception as e:
+            # If validation raises exception, treat as error
+            errors.append(f"Validation error: {str(e)}")
+            return errors, warnings

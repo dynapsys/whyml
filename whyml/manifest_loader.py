@@ -507,8 +507,24 @@ class ManifestLoader:
         if extends_url:
             # Resolve the extends URL relative to the base URL
             resolved_extends_url = self._resolve_url(extends_url, base_url)
-            parent_loaded = await self.load_manifest(resolved_extends_url)
-            parent_expanded = await self.expand_manifest(parent_loaded.content, resolved_extends_url)
+            
+            # Check for circular inheritance before loading
+            if resolved_extends_url in loading_chain:
+                raise DependencyError(
+                    "Circular template inheritance detected",
+                    circular_dependencies=loading_chain + [resolved_extends_url]
+                )
+            
+            # Load parent with extended loading chain
+            parent_loaded = await self.load_manifest(
+                resolved_extends_url,
+                loading_chain=loading_chain
+            )
+            parent_expanded = await self.expand_manifest(
+                parent_loaded.content, 
+                resolved_extends_url,
+                loading_chain + [resolved_extends_url]
+            )
             
             # Merge parent into current (parent provides defaults)
             expanded = self._merge_manifests(parent_expanded, expanded)

@@ -446,14 +446,15 @@ class TestManifestProcessor:
     def test_processor_configuration(self):
         """Test ManifestProcessor configuration options."""
         processor = ManifestProcessor(
-            enable_validation=False,
-            template_engine='jinja2',
-            style_optimization=True
+            strict_validation=False,
+            requested_sections=['metadata', 'structure']
         )
         
-        assert processor.enable_validation == False
-        assert processor.template_engine == 'jinja2'
-        assert processor.style_optimization == True
+        assert processor.strict_validation == False
+        assert processor.requested_sections == ['metadata', 'structure']
+        assert processor.validator is not None
+        assert processor.template_processor is not None
+        assert processor.style_processor is not None
     
     def test_custom_template_functions(self, processor):
         """Test custom template functions."""

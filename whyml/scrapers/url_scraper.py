@@ -564,12 +564,12 @@ class URLScraper:
         return analysis
     
     def _detect_page_type(self, soup: BeautifulSoup) -> str:
-        """Detect the type of page (blog, landing, e-commerce, etc.)."""
+        """Detect the type of page (blog, landing, ecommerce, etc.)."""
         # Check for common page type indicators
         if soup.find('article') or soup.find('.post-content') or soup.find('.entry-content'):
             return 'blog'
         elif soup.find('.product') or soup.find('.price') or soup.find('.add-to-cart'):
-            return 'e-commerce'
+            return 'ecommerce'
         elif soup.find('form', action=re.compile(r'contact|subscribe')):
             return 'landing'
         elif soup.find('.portfolio') or soup.find('.gallery'):
@@ -788,3 +788,33 @@ class URLScraper:
             return [self._apply_general_simplification(item) for item in structure if item]
         else:
             return structure
+
+    def _calculate_similarity(self, html1: str, html2: str) -> float:
+        """Calculate content similarity between two HTML strings."""
+        try:
+            # Parse both HTML strings
+            soup1 = BeautifulSoup(html1, 'html.parser')
+            soup2 = BeautifulSoup(html2, 'html.parser')
+            
+            # Extract text content
+            text1 = soup1.get_text().strip().lower()
+            text2 = soup2.get_text().strip().lower()
+            
+            # Simple similarity calculation using common words
+            words1 = set(text1.split())
+            words2 = set(text2.split())
+            
+            if not words1 and not words2:
+                return 1.0  # Both empty
+            elif not words1 or not words2:
+                return 0.0  # One empty
+            
+            # Calculate Jaccard similarity
+            intersection = len(words1.intersection(words2))
+            union = len(words1.union(words2))
+            
+            return intersection / union if union > 0 else 0.0
+            
+        except Exception as e:
+            logger.warning(f"Error calculating similarity: {e}")
+            return 0.0
