@@ -23,16 +23,19 @@ class BaseConverter(ABC):
     
     def __init__(self, 
                  template_processor: Optional[TemplateProcessor] = None,
-                 validator: Optional[ManifestValidator] = None):
+                 validator: Optional[ManifestValidator] = None,
+                 optimize_output: bool = True):
         """Initialize base converter.
         
         Args:
             template_processor: Optional template processor instance
             validator: Optional manifest validator instance
+            optimize_output: Whether to optimize the generated output
         """
         self.template_processor = template_processor or TemplateProcessor()
         self.validator = validator or ManifestValidator()
         self.variable_substitution = VariableSubstitution(self.template_processor)
+        self.optimize_output = optimize_output
         
         # Converter-specific settings
         self.output_format = self._get_output_format()

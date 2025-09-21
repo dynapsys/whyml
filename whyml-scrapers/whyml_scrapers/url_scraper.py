@@ -31,13 +31,27 @@ class URLScraper:
     def __init__(self, 
                  timeout: float = 30.0,
                  max_retries: int = 3,
-                 user_agent: str = None):
+                 user_agent: str = None,
+                 extract_styles: bool = True,
+                 extract_scripts: bool = False,
+                 max_depth: Optional[int] = None,
+                 flatten_containers: bool = False,
+                 simplify_structure: bool = False,
+                 preserve_semantic_tags: bool = True,
+                 sections: Optional[List[str]] = None):
         """Initialize URL scraper.
         
         Args:
             timeout: Request timeout in seconds
             max_retries: Maximum number of retries
             user_agent: Custom user agent string
+            extract_styles: Whether to extract CSS styles
+            extract_scripts: Whether to extract JavaScript
+            max_depth: Maximum nesting depth for structure simplification
+            flatten_containers: Whether to flatten container divs
+            simplify_structure: Whether to apply structure simplification
+            preserve_semantic_tags: Whether to preserve semantic HTML5 elements
+            sections: Only extract specific sections (None = all sections)
         """
         self.timeout = timeout
         self.max_retries = max_retries
@@ -46,10 +60,33 @@ class URLScraper:
             "+https://github.com/dynapsys/whyml)"
         )
         
+        # Advanced scraping options
+        self.extract_styles = extract_styles
+        self.extract_scripts = extract_scripts
+        self.max_depth = max_depth
+        self.flatten_containers = flatten_containers
+        self.simplify_structure = simplify_structure
+        self.preserve_semantic_tags = preserve_semantic_tags
+        self.sections = sections
+        
         # Initialize analyzers
         self.webpage_analyzer = WebpageAnalyzer()
         self.content_extractor = ContentExtractor()
         self.structure_analyzer = StructureAnalyzer()
+        
+        # HTTP session for async context manager
+        self.session = None
+    
+    async def __aenter__(self):
+        """Async context manager entry."""
+        self.session = AsyncHTTPManager()
+        await self.session.__aenter__()
+        return self
+    
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Async context manager exit."""
+        if self.session:
+            await self.session.__aexit__(exc_type, exc_val, exc_tb)
     
     async def scrape_to_manifest(self, 
                                 url: str,
@@ -348,7 +385,7 @@ class URLScraper:
         """Extract Twitter Card metadata."""
         twitter_data = {}
         
-        twitter_tags = soup.find_all('meta', name=lambda x: x and x.startswith('twitter:'))
+        twitter_tags = soup.find_all('meta', attrs={'name': lambda x: x and x.startswith('twitter:')})
         for tag in twitter_tags:
             name = tag['name'][8:]  # Remove 'twitter:' prefix
             content = tag.get('content')
@@ -356,6 +393,35 @@ class URLScraper:
                 twitter_data[name] = StringUtils.clean_text(content)
         
         return twitter_data
+    
+    def clean_manifest(self, manifest: Dict[str, Any]) -> Dict[str, Any]:
+        """Clean and optimize manifest data.
+        
+        Args:
+            manifest: Raw manifest data
+            
+        Returns:
+            Cleaned manifest data
+        """
+        # Remove empty values and normalize structure
+        cleaned = {}
+        
+        for key, value in manifest.items():
+            if value is not None:
+                if isinstance(value, dict):
+                    # Recursively clean nested dictionaries
+                    cleaned_value = {k: v for k, v in value.items() if v is not None and v != ""}
+                    if cleaned_value:
+                        cleaned[key] = cleaned_value
+                elif isinstance(value, list):
+                    # Clean lists by removing empty items
+                    cleaned_value = [item for item in value if item is not None and item != ""]
+                    if cleaned_value:
+                        cleaned[key] = cleaned_value
+                elif value != "":
+                    cleaned[key] = value
+        
+        return cleaned
     
     def _find_main_content(self, soup: BeautifulSoup) -> Optional[Tag]:
         """Find main content container."""

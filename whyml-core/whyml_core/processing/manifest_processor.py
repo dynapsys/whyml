@@ -81,7 +81,8 @@ class ManifestProcessor:
                 if not validation_result.is_valid:
                     raise ValidationError(
                         f"Manifest validation failed: {validation_result.errors}",
-                        details={'errors': validation_result.errors}
+                        errors=validation_result.errors,
+                        warnings=validation_result.warnings
                     )
             
             # Step 2: Resolve inheritance if enabled
@@ -118,7 +119,8 @@ class ManifestProcessor:
                 if not final_validation.is_valid:
                     raise ValidationError(
                         f"Final manifest validation failed: {final_validation.errors}",
-                        details={'errors': final_validation.errors}
+                        errors=final_validation.errors,
+                        warnings=final_validation.warnings
                     )
             
             return processed_data
@@ -167,7 +169,8 @@ class ManifestProcessor:
         if not validation_result.is_valid:
             raise ValidationError(
                 f"Manifest validation failed: {validation_result.errors}",
-                details={'errors': validation_result.errors}
+                errors=validation_result.errors,
+                warnings=validation_result.warnings
             )
         return True
     

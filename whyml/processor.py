@@ -281,7 +281,7 @@ class WhyMLProcessor:
         
         async with scraper:
             # Scrape the URL
-            manifest = await scraper.scrape_url(url)
+            manifest = await scraper.scrape_to_manifest(url)
             
             # Clean and optimize
             cleaned_manifest = scraper.clean_manifest(manifest)

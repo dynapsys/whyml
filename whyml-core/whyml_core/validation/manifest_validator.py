@@ -149,6 +149,29 @@ class ManifestValidator:
         
         return errors, warnings
     
+    def validate_manifest(self, manifest: Dict[str, Any]):
+        """Validate manifest and return validation results with manifest info.
+        
+        Args:
+            manifest: Manifest dictionary to validate
+            
+        Returns:
+            ValidationResult object with is_valid, errors, warnings attributes
+        """
+        errors, warnings = self.validate(manifest)
+        
+        # Create a simple object with the expected attributes
+        class ValidationResult:
+            def __init__(self, errors, warnings, manifest_keys, requested_sections):
+                self.is_valid = len(errors) == 0
+                self.errors = errors
+                self.warnings = warnings
+                self.manifest_keys = manifest_keys
+                self.requested_sections = requested_sections
+                self.sections_validated = requested_sections or manifest_keys
+        
+        return ValidationResult(errors, warnings, list(manifest.keys()), self.requested_sections)
+    
     def validate_and_raise(self, manifest: Dict[str, Any]) -> None:
         """Validate manifest and raise exception if errors found.
         
