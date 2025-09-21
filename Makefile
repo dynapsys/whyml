@@ -139,12 +139,6 @@ setup-tls: ## Setup TLS certificates for production
 	./scripts/setup-tls.sh
 
 ## Utility Commands
-clean: ## Clean build artifacts and temporary files
-	@echo "$(BLUE)Cleaning build artifacts...$(NC)"
-	rm -rf node_modules/.cache
-	rm -rf output/*
-	rm -rf dist/
-	./scripts/clean.sh
 
 backup: ## Backup manifests and configurations
 	@echo "$(BLUE)Creating backup...$(NC)"
@@ -265,7 +259,7 @@ venv-setup:
 # ==============================================================================
 
 # Build Docker containers
-build:
+build-docker:
 	@echo "🔨 Building EDPMT Docker containers..."
 	docker-compose -f examples/docker/docker-compose.yml build
 	@echo "✅ Build complete"
@@ -329,7 +323,7 @@ publish-test: build
 	twine upload --repository testpypi dist/*
 
 
-.PHONY: help install dev start test lint format build \
+.PHONY: help install dev start test lint format build build-docker \
         docker-build docker-run docker-push docker-clean \
         compose-up compose-down compose-logs compose-restart \
         manifest-validate manifest-convert manifest-bundle manifest-examples \

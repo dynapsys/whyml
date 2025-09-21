@@ -1,0 +1,138 @@
+# Docker Compose file for WhyML Multi-Technology Stack Demo
+
+services:
+  # Summary Dashboard on port 8010
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dashboard
+    ports:
+      - "8010:80"
+    volumes:
+      - ./project:/app/project:ro
+    depends_on:
+      - html-service
+      - js-service
+      - php-service
+      - react-service
+      - source-service
+      - ts-service
+      - vue-service
+    networks:
+      - whyml-network
+
+  # HTML Static Content - Port 8011
+  html-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.html
+    ports:
+      - "8011:80"
+    volumes:
+      - ./project/example_com/html:/usr/share/nginx/html:ro
+    networks:
+      - whyml-network
+
+  # JavaScript/Node.js - Port 8012
+  js-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.nodejs
+    ports:
+      - "8012:3000"
+    volumes:
+      - ./project/example_com/js:/app:ro
+    working_dir: /app
+    command: node server.js
+    networks:
+      - whyml-network
+
+  # PHP 8.2 - Port 8013
+  php-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.php
+    ports:
+      - "8013:80"
+    volumes:
+      - ./project/example_com/php:/var/www/html:ro
+    networks:
+      - whyml-network
+
+  # React - Port 8014
+  react-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.react
+    ports:
+      - "8014:3000"
+    volumes:
+      - ./project/example_com/react:/app:ro
+    working_dir: /app
+    command: npm start
+    networks:
+      - whyml-network
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  # Source (Original) - Port 8015
+  source-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.html
+    ports:
+      - "8015:80"
+    volumes:
+      - ./project/example_com/source:/usr/share/nginx/html:ro
+    networks:
+      - whyml-network
+
+  # TypeScript - Port 8016
+  ts-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.typescript
+    ports:
+      - "8016:3000"
+    volumes:
+      - ./project/example_com/ts:/app:ro
+    working_dir: /app
+    command: npm start
+    networks:
+      - whyml-network
+
+  # Vue.js - Port 8017
+  vue-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.vue
+    ports:
+      - "8017:3000"
+    volumes:
+      - ./project/example_com/vue:/app:ro
+    working_dir: /app
+    command: npm run serve
+    networks:
+      - whyml-network
+
+  # Screenshot service for generating screenshots
+  screenshot-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.screenshot
+    ports:
+      - "8018:3000"
+    volumes:
+      - ./project:/app/project
+    networks:
+      - whyml-network
+
+networks:
+  whyml-network:
+    driver: bridge
+
+volumes:
+  node_modules_js:
+  node_modules_react:
+  node_modules_ts:
+  node_modules_vue:

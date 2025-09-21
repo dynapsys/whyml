@@ -80,7 +80,7 @@ whyml scrape https://example.com --output scraped-manifest.yaml --simplify-struc
 ```bash
 whyml convert --from scraped-manifest.yaml --to regenerated.html --as html
 ```
-![img_2.png](img_2.png)
+![structure](structure.png)
 
 ### Step 3: Compare and validate (optional)
 ```bash
