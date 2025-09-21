@@ -28,9 +28,9 @@ keywords = ["yaml", "manifest", "webpage-generator", "react", "vue", "php", "htm
 
 dependencies = [
     # Core WhyML modular packages
-    "whyml-core>=1.0.0",
-    "whyml-converters>=1.0.0", 
-    "whyml-scrapers>=1.0.0",
+    "whyml-core>=0.1.0",
+    "whyml-converters>=0.1.0", 
+    "whyml-scrapers>=0.1.0",
     
     # Core dependencies
     "pyyaml>=6.0",
