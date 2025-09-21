@@ -315,7 +315,7 @@ class WhyMLProcessor:
                             simplify_structure=simplify_structure,
                             preserve_semantic_tags=preserve_semantic_tags
                         )
-                        analysis = analyzer.analyze_webpage(soup, url)
+                        analysis = await analyzer.analyze_webpage(url, soup)
                         processed_manifest['analysis'] = analysis
             
             return processed_manifest

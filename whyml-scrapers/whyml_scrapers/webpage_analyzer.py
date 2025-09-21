@@ -19,9 +19,26 @@ from whyml_core.utils import StringUtils
 class WebpageAnalyzer:
     """Comprehensive webpage analyzer for content and structure assessment."""
     
-    def __init__(self):
-        """Initialize webpage analyzer."""
-        pass
+    def __init__(self, 
+                 max_depth: Optional[int] = None,
+                 flatten_containers: bool = False,
+                 simplify_structure: bool = False,
+                 preserve_semantic_tags: bool = True,
+                 sections: Optional[List[str]] = None):
+        """Initialize webpage analyzer.
+        
+        Args:
+            max_depth: Maximum depth for analysis (optional)
+            flatten_containers: Whether to flatten container structures
+            simplify_structure: Whether to simplify HTML structure
+            preserve_semantic_tags: Whether to preserve semantic HTML tags
+            sections: Specific sections to analyze (optional)
+        """
+        self.max_depth = max_depth
+        self.flatten_containers = flatten_containers
+        self.simplify_structure = simplify_structure
+        self.preserve_semantic_tags = preserve_semantic_tags
+        self.sections = sections or []
     
     async def analyze_page(self, url: str, soup: BeautifulSoup) -> Dict[str, Any]:
         """Perform comprehensive page analysis.
@@ -43,6 +60,18 @@ class WebpageAnalyzer:
         }
         
         return analysis
+    
+    async def analyze_webpage(self, url: str, soup: BeautifulSoup) -> Dict[str, Any]:
+        """Analyze webpage - alias for analyze_page method.
+        
+        Args:
+            url: Source URL
+            soup: Parsed HTML
+            
+        Returns:
+            Complete analysis results
+        """
+        return await self.analyze_page(url, soup)
     
     def _detect_page_type(self, soup: BeautifulSoup) -> str:
         """Detect page type based on content patterns."""

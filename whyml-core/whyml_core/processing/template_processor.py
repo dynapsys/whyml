@@ -328,6 +328,86 @@ class TemplateProcessor:
         """
         self.env.filters[name] = filter_func
     
+    def process_templates(self, 
+                        manifest: Dict[str, Any], 
+                        variables: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Main template processing method - process templates in manifest.
+        
+        This is the primary interface method called by ManifestProcessor.
+        
+        Args:
+            manifest: Manifest to process
+            variables: Variables to use for template processing
+            
+        Returns:
+            Manifest with templates processed
+        """
+        if not variables:
+            variables = {}
+            
+        result = {}
+        
+        # Process each section of the manifest
+        for key, value in manifest.items():
+            if isinstance(value, str):
+                # Process string values with template substitution
+                result[key] = self.substitute_template_variables(value, variables)
+            elif isinstance(value, dict):
+                # Recursively process dictionary values
+                result[key] = self._process_dict_templates(value, variables)
+            elif isinstance(value, list):
+                # Process list values
+                result[key] = self._process_list_templates(value, variables)
+            else:
+                # Keep other types as-is
+                result[key] = value
+                
+        return result
+    
+    def _process_dict_templates(self, data: Dict[str, Any], variables: Dict[str, Any]) -> Dict[str, Any]:
+        """Process templates in dictionary data.
+        
+        Args:
+            data: Dictionary to process
+            variables: Template variables
+            
+        Returns:
+            Dictionary with templates processed
+        """
+        result = {}
+        for key, value in data.items():
+            if isinstance(value, str):
+                result[key] = self.substitute_template_variables(value, variables)
+            elif isinstance(value, dict):
+                result[key] = self._process_dict_templates(value, variables)
+            elif isinstance(value, list):
+                result[key] = self._process_list_templates(value, variables)
+            else:
+                result[key] = value
+        return result
+    
+    def _process_list_templates(self, data: list, variables: Dict[str, Any]) -> list:
+        """Process templates in list data.
+        
+        Args:
+            data: List to process
+            variables: Template variables
+            
+        Returns:
+            List with templates processed
+        """
+        result = []
+        for item in data:
+            if isinstance(item, str):
+                result.append(self.substitute_template_variables(item, variables))
+            elif isinstance(item, dict):
+                result.append(self._process_dict_templates(item, variables))
+            elif isinstance(item, list):
+                result.append(self._process_list_templates(item, variables))
+            else:
+                result.append(item)
+        return result
+    
     def add_custom_global(self, name: str, value: Any) -> None:
         """Add a custom global to the template environment.
         
