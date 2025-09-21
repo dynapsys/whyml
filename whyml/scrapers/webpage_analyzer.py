@@ -145,9 +145,9 @@ class WebpageAnalyzer:
                 
                 # Map specific types to broader categories where appropriate
                 if result_type == 'product':
-                    return 'ecommerce'
+                    return 'e-commerce'
                 elif result_type == 'ecommerce':
-                    return 'ecommerce'
+                    return 'e-commerce'
                 
                 return result_type
             else:

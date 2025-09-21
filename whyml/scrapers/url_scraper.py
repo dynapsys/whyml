@@ -150,7 +150,7 @@ class URLScraper:
             
             return manifest
             
-        except aiohttp.ClientError as e:
+        except (aiohttp.ClientError, asyncio.TimeoutError, TimeoutError) as e:
             raise NetworkError(f"Failed to fetch URL: {e}", url=url)
         except Exception as e:
             raise ConversionError(f"Failed to scrape URL: {e}", source_format="html", target_format="yaml")
@@ -275,7 +275,8 @@ class URLScraper:
         # Extract CSS classes and their styles (basic extraction)
         style_tags = soup.find_all('style')
         for style_tag in style_tags:
-            css_content = style_tag.string
+            # Use get_text() instead of string to handle nested content better
+            css_content = style_tag.get_text()
             if css_content:
                 parsed_styles = self._parse_css_content(css_content)
                 styles.update(parsed_styles)
@@ -286,20 +287,42 @@ class URLScraper:
         """Parse CSS content and extract class-based styles."""
         styles = {}
         
+        # Clean up CSS content first
+        css_content = css_content.strip()
+        if not css_content:
+            return styles
+            
         # Simple CSS parsing (could be enhanced with a proper CSS parser)
-        css_rules = re.findall(r'([^{]+)\{([^}]+)\}', css_content, re.DOTALL)
+        # Updated regex to handle whitespace better and capture all selectors
+        css_rules = re.findall(r'([^{]+?)\s*\{\s*([^}]+?)\s*\}', css_content, re.DOTALL)
         
         for selector, rules in css_rules:
             selector = selector.strip()
             rules = rules.strip()
             
-            # Convert CSS selector to manifest style name
+            if not selector or not rules:
+                continue
+                
+            # Handle class selectors
             if selector.startswith('.'):
-                style_name = selector[1:].replace('-', '_').replace(' ', '_')
-                if style_name and style_name.isidentifier():
+                class_name = selector[1:].strip()
+                # Clean class name for use as identifier
+                style_name = re.sub(r'[^a-zA-Z0-9_]', '_', class_name)
+                if style_name and style_name.replace('_', '').isalnum():
                     # Clean up CSS rules
                     cleaned_rules = '; '.join(rule.strip() for rule in rules.split(';') if rule.strip())
-                    styles[style_name] = cleaned_rules
+                    if cleaned_rules:
+                        styles[style_name] = cleaned_rules
+            # Handle element selectors and other types - store as complete CSS rule blocks
+            else:
+                # Convert selector to a valid style name
+                style_name = re.sub(r'[^a-zA-Z0-9_]', '_', selector.strip())
+                if style_name and style_name.replace('_', '').isalnum():
+                    cleaned_rules = '; '.join(rule.strip() for rule in rules.split(';') if rule.strip())
+                    if cleaned_rules:
+                        # Store as complete CSS rule block with proper braces
+                        complete_css_rule = f"{selector.strip()} {{ {cleaned_rules}; }}"
+                        styles[f"element_{style_name}"] = complete_css_rule
         
         return styles
     
@@ -566,13 +589,18 @@ class URLScraper:
     def _detect_page_type(self, soup: BeautifulSoup) -> str:
         """Detect the type of page (blog, landing, ecommerce, etc.)."""
         # Check for common page type indicators
-        if soup.find('article') or soup.find('.post-content') or soup.find('.entry-content'):
+        if (soup.find('article') or 
+            soup.find(class_='post-content') or 
+            soup.find(class_='entry-content')):
             return 'blog'
-        elif soup.find('.product') or soup.find('.price') or soup.find('.add-to-cart'):
-            return 'ecommerce'
+        elif (soup.find(class_='product') or 
+              soup.find(class_='price') or 
+              soup.find(class_='add-to-cart')):
+            return 'e-commerce'
         elif soup.find('form', action=re.compile(r'contact|subscribe')):
             return 'landing'
-        elif soup.find('.portfolio') or soup.find('.gallery'):
+        elif (soup.find(class_='portfolio') or 
+              soup.find(class_='gallery')):
             return 'portfolio'
         elif soup.find('nav', class_=re.compile(r'main|primary')):
             return 'website'
@@ -614,7 +642,8 @@ class URLScraper:
             'max_nesting_depth': max_depth,
             'total_elements': len(soup.find_all()),
             'div_count': len(soup.find_all('div')),
-            'semantic_elements': len(soup.find_all(['article', 'section', 'header', 'footer', 'main', 'nav', 'aside']))
+            'semantic_elements': len(soup.find_all(['article', 'section', 'header', 'footer', 'main', 'nav', 'aside'])),
+            'simplification_applied': self.simplify_structure or self.flatten_containers or (self.max_depth is not None)
         }
     
     def _analyze_seo(self, soup: BeautifulSoup) -> Dict[str, Any]:
@@ -695,27 +724,41 @@ class URLScraper:
     def _limit_depth(self, structure: Any, max_depth: int, current_depth: int = 0) -> Any:
         """Limit structure nesting to maximum depth."""
         if current_depth >= max_depth:
-            if isinstance(structure, dict) and len(structure) == 1:
-                # If single element at max depth, extract its text content
-                key, value = next(iter(structure.items()))
-                if isinstance(value, dict) and 'text' in value:
-                    return {key: {'text': value['text']}}
-                elif isinstance(value, str):
-                    return {key: {'text': value}}
-            return {}
+            # At max depth, stop processing children and extract essential content
+            if isinstance(structure, dict):
+                result = {}
+                # Only keep non-dict values (like text, attributes) but skip children
+                for key, value in structure.items():
+                    if key != 'children' and not isinstance(value, dict):
+                        result[key] = value
+                    elif key == 'text':
+                        result[key] = value
+                    elif isinstance(value, dict) and 'text' in value:
+                        # Extract text from nested structures
+                        result['text'] = value['text']
+                
+                # If we don't have any content, provide a placeholder
+                if not result:
+                    result = {'text': 'content'}
+                
+                return result
+            else:
+                return structure
         
         if isinstance(structure, dict):
             limited = {}
             for key, value in structure.items():
-                if key == 'children':
-                    limited_children = self._limit_depth(value, max_depth, current_depth + 1)
-                    if limited_children:
-                        limited[key] = limited_children
+                if isinstance(value, dict):
+                    # For any dict value, process it with incremented depth
+                    limited_value = self._limit_depth(value, max_depth, current_depth + 1)
+                    if limited_value:
+                        limited[key] = limited_value
                 else:
+                    # Keep non-dict values as-is
                     limited[key] = value
             return limited
         elif isinstance(structure, list):
-            return [self._limit_depth(item, max_depth, current_depth) for item in structure if self._limit_depth(item, max_depth, current_depth)]
+            return [self._limit_depth(item, max_depth, current_depth) for item in structure]
         else:
             return structure
     

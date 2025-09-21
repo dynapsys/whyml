@@ -30,6 +30,15 @@ except ImportError:
         def __init__(self, maxsize, ttl):
             self._cache = {}
             self._maxsize = maxsize
+            self._ttl = ttl
+            
+        @property
+        def maxsize(self):
+            return self._maxsize
+            
+        @property
+        def ttl(self):
+            return self._ttl
             
         def get(self, key, default=None):
             return self._cache.get(key, default)
@@ -54,6 +63,7 @@ from .exceptions import (
     ManifestError, 
     DependencyError, 
     CacheError,
+    NetworkError,
     handle_yaml_error
 )
 
@@ -280,7 +290,9 @@ class ManifestLoader:
                     )
                 return await response.text()
         except aiohttp.ClientError as e:
-            raise LoaderError(f"Network error loading manifest: {e}", url=url)
+            raise NetworkError(f"Network error loading manifest: {e}", url=url)
+        except Exception as e:
+            raise NetworkError(f"Network error loading manifest: {e}", url=url)
     
     async def _load_from_file(self, file_path: str) -> str:
         """Load content from a file."""

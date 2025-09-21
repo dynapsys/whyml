@@ -232,7 +232,8 @@ class TestManifestLoader:
         }))
         mock_get.return_value.__aenter__.return_value = mock_response
         
-        result = await loader.load_manifest('https://example.com/manifest.yaml')
+        async with loader:
+            result = await loader.load_manifest('https://example.com/manifest.yaml')
         
         assert result is not None
         assert result.content['metadata']['title'] == 'Remote Component'
@@ -243,8 +244,9 @@ class TestManifestLoader:
         """Test handling of network errors."""
         mock_get.side_effect = Exception("Network error")
         
-        with pytest.raises(NetworkError):
-            await loader.load_manifest('https://example.com/manifest.yaml')
+        async with loader:
+            with pytest.raises(NetworkError):
+                await loader.load_manifest('https://example.com/manifest.yaml')
     
     @pytest.mark.asyncio
     async def test_template_variable_resolution(self, loader, temp_manifest_dir):

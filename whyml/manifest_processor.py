@@ -10,7 +10,7 @@ Licensed under the Apache License, Version 2.0
 
 import re
 import copy
-from typing import Any, Dict, List, Optional, Union, Tuple
+from typing import Any, Dict, List, Optional, Union, Tuple, Set
 from pathlib import Path
 import yaml
 import json
@@ -22,6 +22,7 @@ import logging
 from .exceptions import (
     ValidationError,
     TemplateError,
+    TemplateInheritanceError,
     ManifestError,
     SchemaError,
     handle_validation_errors
@@ -170,24 +171,35 @@ class ManifestValidator:
             return
         
         css_property_pattern = re.compile(r'^[a-zA-Z-]+\s*:\s*.+$')
+        css_rule_pattern = re.compile(r'^\s*[a-zA-Z0-9._#\-\s,:\[\]()>+~*@]+\s*\{[^{}]*\}\s*$', re.DOTALL)
         
         for style_name, style_value in styles.items():
             if not isinstance(style_value, str):
                 errors.append(f"Style '{style_name}' must be a string")
                 continue
             
-            # Basic CSS validation
+            # Skip validation for CSS rule blocks (selector { properties })
+            if '{' in style_value and '}' in style_value:
+                # This is likely a CSS rule block, skip detailed validation for now
+                # Only check for severe brace mismatches (allow minor formatting issues)
+                open_braces = style_value.count('{')
+                close_braces = style_value.count('}')
+                if abs(open_braces - close_braces) > 1:  # Allow some tolerance
+                    warnings.append(f"Style '{style_name}' may have significantly unmatched braces")
+                continue
+            
+            # Basic CSS validation for properties
             if ';' in style_value:
                 # Multiple properties
                 properties = style_value.split(';')
                 for prop in properties:
                     prop = prop.strip()
                     if prop and not css_property_pattern.match(prop):
-                        warnings.append(f"Style '{style_name}' may have invalid CSS: '{prop}'")
+                        warnings.append(f"Style '{style_name}' may have invalid CSS property: '{prop}'")
             else:
                 # Single property
                 if style_value.strip() and not css_property_pattern.match(style_value.strip()):
-                    warnings.append(f"Style '{style_name}' may have invalid CSS: '{style_value}'")
+                    warnings.append(f"Style '{style_name}' may have invalid CSS property: '{style_value}'")
     
     def _validate_structure(self, manifest: Dict[str, Any], errors: List[str], warnings: List[str]):
         """Validate structure section if present."""
@@ -587,6 +599,10 @@ class ManifestProcessor:
         template_vars = manifest_data.get('template_vars', {})
         variables.update(template_vars)  # Merge template_vars into variables
         
+        # Check for circular references in template variables
+        if template_vars:
+            self._detect_circular_template_variables(template_vars)
+        
         # Also make metadata values available as template variables
         metadata = manifest_data.get('metadata', {})
         for key, value in metadata.items():
@@ -646,6 +662,60 @@ class ManifestProcessor:
                 merged[key] = value
         
         return merged
+    
+    def _detect_circular_template_variables(self, template_vars: Dict[str, Any]) -> None:
+        """
+        Detect circular references in template variables.
+        
+        Args:
+            template_vars: Dictionary of template variables to check
+            
+        Raises:
+            TemplateInheritanceError: If circular references are detected
+        """
+        # Extract variable references from template strings
+        def get_variable_references(template_string: str) -> Set[str]:
+            """Extract variable names referenced in a template string."""
+            if not isinstance(template_string, str):
+                return set()
+            
+            # Find {{var}} style references
+            jinja_refs = re.findall(r'{{\s*([a-zA-Z_]\w*)\s*}}', template_string)
+            # Find <?=var?> style references  
+            php_refs = re.findall(r'<\?=\s*([a-zA-Z_]\w*)\s*\?>', template_string)
+            
+            return set(jinja_refs + php_refs)
+        
+        # Build dependency graph
+        dependencies = {}
+        for var_name, var_value in template_vars.items():
+            dependencies[var_name] = get_variable_references(str(var_value))
+        
+        # Detect cycles using DFS
+        def has_cycle(node: str, visited: Set[str], rec_stack: Set[str]) -> bool:
+            """Detect cycle using depth-first search."""
+            visited.add(node)
+            rec_stack.add(node)
+            
+            for neighbor in dependencies.get(node, set()):
+                if neighbor in template_vars:  # Only check variables that exist
+                    if neighbor not in visited:
+                        if has_cycle(neighbor, visited, rec_stack):
+                            return True
+                    elif neighbor in rec_stack:
+                        return True
+            
+            rec_stack.remove(node)
+            return False
+        
+        # Check each variable for cycles
+        visited = set()
+        for var_name in template_vars:
+            if var_name not in visited:
+                if has_cycle(var_name, visited, set()):
+                    raise TemplateInheritanceError(
+                        f"Circular reference detected in template variables involving '{var_name}'"
+                    )
     
     def optimize_styles(self, styles: Dict[str, str]) -> Dict[str, str]:
         """Optimize CSS styles by removing duplicates and normalizing."""

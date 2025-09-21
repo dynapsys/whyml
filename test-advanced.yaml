@@ -1,34 +1,3 @@
-metadata:
-  title: Example Domain
-  description: Content from Example Domain - scraped from example.com
-  source_url: https://example.com
-  extracted_at: '2025-09-21T13:58:33.818581'
-styles:
-  element_body: 'body { background-color: #f0f0f2; margin: 0; padding: 0; font-family:
-    -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica
-    Neue", Helvetica, Arial, sans-serif; };'
-  element_div: 'div { width: 600px; margin: 5em auto; padding: 2em; background-color:
-    #fdfdff; border-radius: 0.5em; box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02); };'
-  element_a_link__a_visited: 'a:link, a:visited { color: #38488f; text-decoration:
-    none; };'
-  element__media__max_width__700px_: '@media (max-width: 700px) { div { margin: 0
-    auto; width: auto; };'
-structure:
-  body:
-    children:
-      div:
-        children:
-        - h1:
-            text: Example Domain
-        - p:
-            text: "This domain is for use in illustrative examples in documents. You\
-              \ may use this\n    domain in literature without prior coordination\
-              \ or asking for permission."
-        - p:
-            children:
-              a:
-                href: https://www.iana.org/domains/example
-                text: More information...
 analysis:
   page_type: general
   layout_structure:
@@ -120,9 +89,9 @@ analysis:
     complexity_score: 7.8
     simplification_applied: true
     simplification_details:
-      max_depth_limit: 5
-      flatten_containers: false
-      simplify_structure: true
+      max_depth_limit: null
+      flatten_containers: true
+      simplify_structure: false
       preserve_semantic_tags: true
   accessibility:
     images_with_alt: 0

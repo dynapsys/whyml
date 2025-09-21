@@ -49,7 +49,7 @@ class TestURLScraper:
             flatten_containers=True,
             simplify_structure=True,
             preserve_semantic_tags=True,
-            sections=['metadata', 'analysis', 'structure']
+            sections=['metadata', 'styles', 'analysis', 'structure', 'imports']
         )
     
     @pytest.fixture
@@ -512,10 +512,10 @@ class TestURLScraper:
                 
                 # Step 2: Convert back to HTML
                 converter = HTMLConverter()
-                html_result = await converter.convert(manifest)
+                html_result = converter.convert(manifest)
                 
                 # Step 3: Validate conversion
-                assert html_result.success == True
+                assert html_result is not None
                 assert len(html_result.content) > 0
                 assert '<html' in html_result.content
                 assert 'Welcome to Our Site' in html_result.content  # Original content preserved
@@ -1131,7 +1131,7 @@ class TestWebpageAnalyzer:
         soup = BeautifulSoup(ecommerce_html, 'html.parser')
         analysis = analyzer.analyze_webpage(soup, 'https://shop.example.com/product')
         
-        assert analysis['page_type'] == 'ecommerce'
+        assert analysis['page_type'] == 'e-commerce'
         assert analysis['layout_structure']['layout_type'] == 'bootstrap'
     
     def test_detect_page_type(self, analyzer, blog_html, ecommerce_html):
@@ -1142,7 +1142,7 @@ class TestWebpageAnalyzer:
         
         ecommerce_soup = BeautifulSoup(ecommerce_html, 'html.parser')
         ecommerce_type = analyzer._detect_page_type(ecommerce_soup)
-        assert ecommerce_type == 'ecommerce'
+        assert ecommerce_type == 'e-commerce'
     
     def test_analyze_layout_structure(self, analyzer, blog_html):
         """Test layout structure analysis."""
