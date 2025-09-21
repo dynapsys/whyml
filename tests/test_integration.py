@@ -614,6 +614,69 @@ class TestEndToEndWorkflows:
 class TestWhyMLProcessorIntegration:
     """Test the main WhyMLProcessor class integration."""
     
+    @pytest.fixture
+    def temp_project_dir(self):
+        """Create a temporary project directory with manifests."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            project_path = Path(temp_dir)
+            
+            # Create project structure
+            manifests_dir = project_path / 'manifests'
+            output_dir = project_path / 'output'
+            manifests_dir.mkdir()
+            output_dir.mkdir()
+            
+            # Landing page component (needed for the test)
+            landing_page = {
+                'metadata': {
+                    'title': 'Landing Page',
+                    'description': 'Modern landing page component',
+                    'keywords': ['landing', 'marketing', 'conversion']
+                },
+                'template_vars': {
+                    'hero_text': 'Welcome to Our Amazing Product',
+                    'cta_text': 'Get Started Now'
+                },
+                'styles': {
+                    'hero': 'background: linear-gradient(135deg, #007bff, #0056b3); padding: 80px 0; text-align: center; color: white;',
+                    'cta_button': 'background: #28a745; font-size: 1.2rem; padding: 15px 30px; border-radius: 8px;'
+                },
+                'structure': {
+                    'div': {
+                        'class': 'container',
+                        'children': [
+                            {
+                                'section': {
+                                    'class': 'hero',
+                                    'children': [
+                                        {
+                                            'h1': {
+                                                'text': '{{ hero_text }}'
+                                            }
+                                        },
+                                        {
+                                            'button': {
+                                                'class': 'cta_button',
+                                                'text': '{{ cta_text }}'
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+            
+            # Write manifest file
+            (manifests_dir / 'landing-page.yaml').write_text(yaml.dump(landing_page))
+            
+            yield {
+                'project_path': project_path,
+                'manifests_dir': manifests_dir,
+                'output_dir': output_dir
+            }
+    
     def test_whyml_processor_initialization(self):
         """Test WhyMLProcessor initialization."""
         processor = WhyMLProcessor(

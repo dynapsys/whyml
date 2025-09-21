@@ -288,9 +288,9 @@ class ManifestLoader:
             async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
                 return await f.read()
         except FileNotFoundError:
-            raise LoaderError(f"Manifest file not found: {file_path}", url=file_path)
+            raise LoaderError(f"Failed to load manifest: {file_path}", url=file_path)
         except IOError as e:
-            raise LoaderError(f"Failed to read manifest file: {e}", url=file_path)
+            raise LoaderError(f"Failed to load manifest: {e}", url=file_path)
     
     async def _load_raw_content(self, url: str) -> str:
         """Load raw content from URL or file."""

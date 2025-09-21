@@ -161,12 +161,12 @@ def handle_yaml_error(yaml_error: Exception, manifest_path: str) -> ManifestErro
     if hasattr(yaml_error, 'problem_mark'):
         line_number = yaml_error.problem_mark.line + 1
         return ManifestError(
-            f"YAML parsing error: {str(yaml_error)}",
+            f"YAML parsing failed: {str(yaml_error)}",
             manifest_path=manifest_path,
             line_number=line_number
         )
     return ManifestError(
-        f"YAML parsing error: {str(yaml_error)}",
+        f"YAML parsing failed: {str(yaml_error)}",
         manifest_path=manifest_path
     )
 
