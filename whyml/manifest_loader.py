@@ -348,16 +348,9 @@ class ManifestLoader:
                                    depth: int = 0,
                                    loading_chain: List[str] = None) -> Dict[str, LoadedManifest]:
         """Recursively resolve all dependencies."""
-        if depth >= self.max_depth:
-            raise DependencyError(f"Maximum dependency depth ({self.max_depth}) exceeded")
-        
         loading_chain = loading_chain or []
-        if source_url in loading_chain:
-            raise DependencyError(
-                "Circular dependency detected",
-                circular_dependencies=loading_chain + [source_url]
-            )
         
+        # Extract dependencies from manifest
         dependencies = self._extract_dependencies(manifest)
         resolved = {}
         
@@ -400,6 +393,17 @@ class ManifestLoader:
         # Resolve the URL
         resolved_url = self._resolve_url(url)
         
+        # CRITICAL: Check for circular dependency FIRST, before any processing
+        if resolved_url in loading_chain:
+            raise DependencyError(
+                "Circular dependency detected", 
+                circular_dependencies=loading_chain + [resolved_url]
+            )
+        
+        # Check depth limit
+        if depth >= self.max_depth:
+            raise DependencyError(f"Maximum dependency depth ({self.max_depth}) exceeded")
+        
         # Check cache first
         if not options.get('ignore_cache', False):
             cached = await self.cache.get(resolved_url, options)
@@ -426,7 +430,11 @@ class ManifestLoader:
             
             # Process template inheritance if present
             if 'extends' in manifest_data:
-                manifest_data = await self.expand_manifest(manifest_data, resolved_url)
+                manifest_data = await self.expand_manifest(
+                    manifest_data, 
+                    resolved_url, 
+                    loading_chain + [resolved_url]
+                )
             
             # Resolve dependencies
             resolved_modules = await self._resolve_dependencies(
@@ -468,12 +476,18 @@ class ManifestLoader:
         
         return chain
     
-    async def expand_manifest(self, manifest: Dict[str, Any], base_url: str = None) -> Dict[str, Any]:
+    async def expand_manifest(self, manifest: Dict[str, Any], base_url: str = None, loading_chain: List[str] = None) -> Dict[str, Any]:
         """
         Expand a manifest by resolving all imports and template inheritance.
         
         This creates a fully resolved manifest with all dependencies merged.
+        
+        Args:
+            manifest: The manifest data to expand
+            base_url: Base URL for resolving relative imports
+            loading_chain: Chain of URLs being loaded (for circular dependency detection)
         """
+        loading_chain = loading_chain or []
         # Load the manifest if it's not already loaded
         if isinstance(manifest, str):
             loaded = await self.load_manifest(manifest)

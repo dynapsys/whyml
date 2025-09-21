@@ -183,8 +183,9 @@ class TestManifestLoader:
         assert 'Failed to load manifest' in str(exc_info.value)
     
     @pytest.mark.asyncio
+    @pytest.mark.timeout(10)  # 10 second timeout to prevent hanging
     async def test_circular_dependency_detection(self, loader):
-        """Test detection of circular dependencies."""
+        """Test detection of circular dependencies with timeout protection."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
             
@@ -201,10 +202,18 @@ class TestManifestLoader:
             (temp_path / 'manifest_a.yaml').write_text(yaml.dump(manifest_a))
             (temp_path / 'manifest_b.yaml').write_text(yaml.dump(manifest_b))
             
-            with pytest.raises(DependencyResolutionError) as exc_info:
-                await loader.load_manifest(str(temp_path / 'manifest_a.yaml'))
+            # Add timeout protection using asyncio.wait_for
+            with pytest.raises((DependencyResolutionError, asyncio.TimeoutError)) as exc_info:
+                await asyncio.wait_for(
+                    loader.load_manifest(str(temp_path / 'manifest_a.yaml')), 
+                    timeout=5.0
+                )
             
-            assert 'Circular dependency detected' in str(exc_info.value)
+            # Check for either circular dependency detection or timeout
+            if isinstance(exc_info.value, DependencyResolutionError):
+                assert 'Circular dependency detected' in str(exc_info.value)
+            elif isinstance(exc_info.value, asyncio.TimeoutError):
+                pytest.fail("Circular dependency detection timed out - indicates infinite recursion bug")
     
     @pytest.mark.asyncio
     @patch('aiohttp.ClientSession.get')
