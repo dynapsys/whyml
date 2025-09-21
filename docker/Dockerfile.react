@@ -1,0 +1,28 @@
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install create-react-app globally
+RUN npm install -g create-react-app
+
+# Copy package.json for React
+COPY docker/package-react.json /app/package.json
+
+# Install dependencies
+RUN npm install
+
+# Copy React configuration
+COPY docker/react-server.js /app/
+
+# Create public directory
+RUN mkdir -p /app/public
+
+# Create basic public files
+RUN echo '<!DOCTYPE html><html><head><title>React App</title></head><body><div id="root"></div></body></html>' > /app/public/index.html
+
+# Expose port 3000
+EXPOSE 3000
+
+# Start the development server
+CMD ["node", "react-server.js"]

@@ -1,0 +1,22 @@
+{
+  "name": "whyml-vue-service",
+  "version": "1.0.0",
+  "description": "Vue.js service for WhyML project",
+  "main": "vue-server.js",
+  "scripts": {
+    "start": "node vue-server.js",
+    "serve": "node vue-server.js",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "vue": "^3.2.47",
+    "@vue/cli-service": "^5.0.8"
+  },
+  "devDependencies": {
+    "@vue/cli": "^5.0.8"
+  },
+  "author": "WhyML",
+  "license": "MIT"
+}

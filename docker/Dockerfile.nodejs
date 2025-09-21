@@ -1,0 +1,20 @@
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies for a basic Express server
+RUN npm init -y && \
+    npm install express cors
+
+# Create a simple server.js file
+COPY docker/server.js /app/
+
+# Copy package.json template
+COPY docker/package-nodejs.json /app/package.json
+
+# Expose port 3000
+EXPOSE 3000
+
+# Start the application
+CMD ["node", "server.js"]

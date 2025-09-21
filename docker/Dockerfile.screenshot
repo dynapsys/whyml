@@ -1,0 +1,33 @@
+FROM node:18-alpine
+
+# Install Chromium and dependencies
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    freetype-dev \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json for screenshot service
+COPY docker/package-screenshot.json /app/package.json
+
+# Install dependencies
+RUN npm install
+
+# Copy screenshot server
+COPY docker/screenshot-server.js /app/
+
+# Set Puppeteer to use installed Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+# Expose port 3000
+EXPOSE 3000
+
+# Start the screenshot server
+CMD ["node", "screenshot-server.js"]

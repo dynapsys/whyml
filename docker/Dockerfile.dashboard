@@ -1,0 +1,18 @@
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+RUN npm init -y && \
+    npm install express cors
+
+# Copy dashboard server
+COPY docker/dashboard-server.js /app/
+COPY docker/dashboard.html /app/
+
+# Expose port 80
+EXPOSE 80
+
+# Start the dashboard server
+CMD ["node", "dashboard-server.js"]

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhyML Conversion Dashboard - Visual Technology Stack Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 2px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        .intro h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .intro p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-header {
+            padding: 20px;
+            border-left: 5px solid;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .service-info {
+            flex: 1;
+        }
+
+        .service-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .service-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .service-port {
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .service-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #d5dbdb;
+        }
+
+        .iframe-container {
+            position: relative;
+            height: 400px;
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .iframe-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .iframe-overlay:hover {
+            opacity: 0.7;
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        iframe.loaded {
+            display: block;
+        }
+
+        .source-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .source-preview h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .source-preview-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .screenshot-container {
+            text-align: center;
+        }
+
+        .screenshot {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tech-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+            
+            .intro h1 {
+                font-size: 32px;
+            }
+            
+            .source-preview-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">W</div>
+                <div>
+                    <div class="logo-text">WhyML Converter</div>
+                    <div class="subtitle">Multi-Stack Visual Comparison</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="service-count">7</div>
+                    <div class="stat-label">Technologies</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">8010-8017</div>
+                    <div class="stat-label">Port Range</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="project-name">example_com</div>
+                    <div class="stat-label">Project</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="intro">
+            <h1>Technology Stack Comparison</h1>
+            <p>
+                Visualize how the same HTML content is converted and rendered across different technology stacks. 
+                Each implementation demonstrates WhyML's capability to transform web content into native technology formats.
+            </p>
+        </div>
+
+        <div class="source-preview">
+            <h2>
+                📸 Original Source Analysis
+            </h2>
+            <div class="source-preview-content">
+                <div class="screenshot-container">
+                    <h3>Source Screenshot</h3>
+                    <div class="loading" id="source-loading">
+                        <div class="spinner"></div>
+                        Generating screenshot...
+                    </div>
+                    <img id="source-screenshot" class="screenshot" style="display: none;" alt="Source Screenshot" />
+                </div>
+                <div>
+                    <h3>Source Content Preview</h3>
+                    <div class="iframe-container">
+                        <iframe src="http://localhost:8015" title="Source Content"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="services-grid" id="services-grid">
+            <!-- Services will be loaded here -->
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 WhyML Project. Demonstrating cross-platform web conversion capabilities.</p>
+        <p>🚀 From a single HTML source to multiple technology implementations</p>
+    </footer>
+
+    <script>
+        const services = [
+            { name: 'Source (Original)', port: 8015, path: 'source', description: 'Original scraped HTML content', color: '#6c757d', tech: ['HTML', 'CSS'] },
+            { name: 'HTML Static', port: 8011, path: 'html', description: 'Static HTML generated by WhyML', color: '#e74c3c', tech: ['HTML5', 'CSS3'] },  
+            { name: 'JavaScript/Node.js', port: 8012, path: 'js', description: 'JavaScript/Node.js implementation', color: '#f1c40f', tech: ['Node.js', 'Express'] },
+            { name: 'PHP 8.2', port: 8013, path: 'php', description: 'PHP 8.2 class-based implementation', color: '#8e44ad', tech: ['PHP 8.2', 'Apache'] },
+            { name: 'React', port: 8014, path: 'react', description: 'React TSX component', color: '#61dafb', tech: ['React 18', 'TypeScript'] },
+            { name: 'TypeScript', port: 8016, path: 'ts', description: 'TypeScript implementation', color: '#3178c6', tech: ['TypeScript', 'Node.js'] },
+            { name: 'Vue.js', port: 8017, path: 'vue', description: 'Vue.js component', color: '#4fc08d', tech: ['Vue 3', 'JavaScript'] }
+        ];
+
+        function loadServices() {
+            const grid = document.getElementById('services-grid');
+            
+            services.forEach(service => {
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                
+                card.innerHTML = `
+                    <div class="service-header" style="border-left-color: ${service.color}">
+                        <div class="service-info">
+                            <div class="service-name">${service.name}</div>
+                            <div class="service-description">${service.description}</div>
+                            <div class="service-port">Port: ${service.port}</div>
+                            <div class="tech-badges">
+                                ${service.tech.map(tech => `<span class="tech-badge" style="background-color: ${service.color}">${tech}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="service-actions">
+                            <a href="http://localhost:${service.port}" target="_blank" class="btn btn-primary">
+                                🔗 Open
+                            </a>
+                            <button class="btn btn-secondary" onclick="togglePreview(${service.port}, this)">
+                                👁️ Preview
+                            </button>
+                        </div>
+                    </div>
+                    <div class="iframe-container">
+                        <div class="iframe-overlay" onclick="loadPreview(${service.port}, this)">
+                            <div class="play-button">▶️</div>
+                        </div>
+                        <iframe id="iframe-${service.port}" src="" title="${service.name}"></iframe>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function loadPreview(port, overlayElement) {
+            const iframe = document.getElementById(`iframe-${port}`);
+            const overlay = overlayElement;
+            
+            iframe.src = `http://localhost:${port}`;
+            overlay.style.display = 'none';
+            iframe.classList.add('loaded');
+
+            iframe.onload = function() {
+                // Iframe loaded successfully
+            };
+
+            iframe.onerror = function() {
+                overlay.innerHTML = '<div style="color: #e74c3c; text-align: center;"><strong>⚠️ Service Unavailable</strong><br>Port ' + port + ' is not responding</div>';
+                overlay.style.display = 'flex';
+            };
+        }
+
+        function togglePreview(port, button) {
+            const iframe = document.getElementById(`iframe-${port}`);
+            const overlay = iframe.parentElement.querySelector('.iframe-overlay');
+            
+            if (iframe.classList.contains('loaded')) {
+                iframe.classList.remove('loaded');
+                iframe.src = '';
+                overlay.style.display = 'flex';
+                button.textContent = '👁️ Preview';
+            } else {
+                loadPreview(port, overlay);
+                button.textContent = '✖️ Close';
+            }
+        }
+
+        // Load source screenshot
+        function loadSourceScreenshot() {
+            const img = document.getElementById('source-screenshot');
+            const loading = document.getElementById('source-loading');
+            
+            // Try to load screenshot from screenshot service
+            img.src = '/api/screenshot/8015';
+            img.onload = function() {
+                loading.style.display = 'none';
+                img.style.display = 'block';
+            };
+            img.onerror = function() {
+                loading.innerHTML = '📷 Screenshot service unavailable';
+            };
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadServices();
+            loadSourceScreenshot();
+            
+            // Update service count
+            document.getElementById('service-count').textContent = services.length;
+        });
+
+        // Auto-refresh every 30 seconds to check service availability
+        setInterval(function() {
+            console.log('Checking service availability...');
+        }, 30000);
+    </script>
+</body>
+</html>
