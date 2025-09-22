@@ -1,41 +1,96 @@
 metadata:
-  title: "WhyML Test App"
-  description: "Test application to verify WhyML functionality"
-  version: "1.0.0"
-  author: "WhyML Team"
-
+  source_url: https://example.com
+  title: Example Domain
 structure:
-  div:
-    class: "container"
+  tag: body
+  children:
+  - tag: div
     children:
-      - h1:
-          text: "Welcome to WhyML Test App"
-          class: "main-title"
-      - p:
-          text: "This is a test application to verify WhyML CLI functionality works correctly."
-          class: "intro"
-      - div:
-          class: "features-section"
-          children:
-            - h2:
-                text: "Features"
-                class: "section-title"
-            - ul:
-                class: "feature-list"
-                children:
-                  - li:
-                      text: "CLI Commands"
-                  - li:
-                      text: "Natural Language Conversion"
-                  - li:
-                      text: "Application Generators"
-                  - li:
-                      text: "Development Server"
-
+    - tag: h1
+      content: Example Domain
+    - tag: p
+      content: This domain is for use in illustrative examples in documents. You may
+        use this domain in literature without prior coordination or asking for permission.
+    - tag: p
+      children:
+      - tag: a
+        attributes:
+          href: https://www.iana.org/domains/example
+        content: More information...
 styles:
-  container: "width: 100%; max-width: 800px; margin: 0 auto; padding: 20px;"
-  main-title: "color: #007acc; font-family: Helvetica, Arial, sans-serif; font-size: 32px;"
-  intro: "font-family: Arial, sans-serif; color: #333; margin: 16px 0;"
-  section-title: "color: #007acc; font-family: Helvetica, Arial, sans-serif; font-size: 24px; margin-top: 24px;"
-  feature-list: "font-family: Arial, sans-serif; color: #333; padding-left: 20px;"
-  features-section: "margin-top: 20px;"
+  inline_styles: {}
+  internal_styles:
+    style_block_0:
+      body:
+        background-color: '#f0f0f2'
+        margin: '0'
+        padding: '0'
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open
+          Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+      div:
+        width: 600px
+        margin: 5em auto
+        padding: 2em
+        background-color: '#fdfdff'
+        border-radius: 0.5em
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02)
+      a:link_2:
+        color: '#38488f'
+        text-decoration: none
+      a:visited_2:
+        color: '#38488f'
+        text-decoration: none
+      '@media (max-width: 700px)':
+        ? "div {\n            margin"
+        : 0 auto
+        width: auto
+  external_stylesheets: []
+analysis:
+  page_type: unknown
+  content_stats:
+    word_count: 30
+    character_count: 220
+    paragraph_count: 2
+    heading_count: 1
+    link_count: 1
+    image_count: 0
+    list_count: 0
+    table_count: 0
+    form_count: 0
+    reading_time: 1
+  seo_analysis:
+    title_length: 14
+    meta_description_length: 0
+    has_h1: true
+    h1_count: 1
+    heading_structure:
+      h1: 1
+      h2: 0
+      h3: 0
+      h4: 0
+      h5: 0
+      h6: 0
+    alt_text_coverage: 0.0
+    internal_links: 0
+    external_links: 1
+    canonical_url: null
+    meta_robots: null
+    structured_data: []
+  accessibility:
+    has_lang_attribute: false
+    images_with_alt: 0
+    images_without_alt: 0
+    form_labels: 0
+    form_inputs: 0
+    heading_hierarchy_issues: []
+    aria_labels: 0
+    skip_links: 0
+  structure_complexity:
+    max_depth: 3
+    max_nesting_depth: 3
+    total_elements: 13
+    div_count: 1
+    semantic_elements: 0
+    nested_tables: 0
+    simplification_applied: false
+  performance_hints: []

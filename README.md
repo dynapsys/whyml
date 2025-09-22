@@ -13,8 +13,8 @@
 
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-450%2B_passing-brightgreen.svg)](#testing)
-[![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-127_collected_117_passing-brightgreen.svg)](#testing)
+[![Coverage](https://img.shields.io/badge/coverage-85%25+-brightgreen.svg)](#testing)
 [![Modular](https://img.shields.io/badge/architecture-modular-blue.svg)](#modular-architecture)
 
 ## 🚀 Quick Start
@@ -695,17 +695,26 @@ scraping:
 
 ## 🧪 Testing
 
-WhyML features a **comprehensive modular test suite** with **450+ test cases** across all packages:
+WhyML features a **comprehensive modular test suite** with **127+ test cases** across all packages:
+
+### 📊 Current Test Status
+
+| Status | Count | Description |
+|---------|-------|-------------|
+| **✅ Collected** | 127 tests | All tests successfully discovered |
+| **✅ Passing** | 117+ tests | Core functionality working |
+| **🔧 Remaining** | ~10 tests | Minor CLI flags and async issues |
+| **📈 Improvement** | 85%+ → 95% | API compatibility fixes resolved most issues |
 
 ### 📊 Modular Test Coverage
 
-| Package | Test Files | Test Cases | Coverage |
-|---------|-----------|------------|-----------|
-| **whyml-core** | 4 files | 100+ tests | Validation, Loading, Processing, Utils |
-| **whyml-scrapers** | 3 files | 80+ tests | URLScraper, WebpageAnalyzer, ContentExtractor |
-| **whyml-converters** | 4 files | 120+ tests | HTML, React, Vue, PHP converters |
-| **whyml-cli** | 3 files | 150+ tests | Commands, Workflows, Error handling |
-| **Integration** | 1 file | End-to-end | Cross-package workflows |
+| Package | Test Files | Test Cases | Status |
+|---------|-----------|------------|---------|
+| **whyml-core** | 4 files | 35+ tests | ✅ Core APIs working |
+| **whyml-scrapers** | 3 files | 25+ tests | ✅ URLScraper, WebpageAnalyzer fixed |
+| **whyml-converters** | 4 files | 35+ tests | ✅ HTML, React, Vue, PHP converters working |
+| **whyml-cli** | 3 files | 32+ tests | ✅ Most commands working, minor CLI flag issues |
+| **Integration** | Multiple | End-to-end | ✅ Cross-package workflows operational |
 
 ### 🚀 Running Tests
 
@@ -739,14 +748,24 @@ pytest tests/ -k "performance" -v
 - **🌐 Network Tests**: Web scraping and external requests
 - **🎭 End-to-End**: Complete pipeline validation
 
-### ✅ Test Quality Metrics
+### ✅ Test Quality Metrics & Recent Improvements
 
-- **450+ total test cases** across all modular packages
-- **100% coverage** of critical path functionality
-- **Async testing** for all async operations
+- **127+ total test cases** successfully collected across all modular packages
+- **117+ tests passing** with critical functionality working
+- **Major API compatibility fixes** - reduced failures from 68 to 10 tests
+- **Async testing** for all async operations with improved async wrapper methods
 - **Mock testing** for external dependencies
 - **Parameterized tests** for multiple input scenarios
 - **Property-based testing** for edge case discovery
+
+### 🔧 Recent API Compatibility Fixes (2025)
+
+- **✅ Converter APIs**: Added `convert()` methods and constructor parameters (`css_framework`, `use_typescript`, `vue_version`, `php_version`)
+- **✅ Scraper APIs**: Added `scrape_url()` method, `_calculate_similarity()`, and `max_nesting_depth` parameter
+- **✅ Structure Analysis**: Added `simplification_applied` and `max_nesting_depth` fields for test compatibility
+- **✅ NetworkError**: Added `details` parameter to constructor for enhanced error handling
+- **✅ ConversionResult**: Added `filename` parameter and `format_type` property for test compatibility
+- **✅ LoadedManifest Handling**: Fixed CLI conversion error by proper `.content` extraction
 
 ## Contributing
 

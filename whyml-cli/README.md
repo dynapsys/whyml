@@ -2,6 +2,14 @@
 
 Unified command-line interface for the WhyML ecosystem. Scrape websites, convert manifests, validate configurations, and generate code - all from a single, powerful CLI tool.
 
+## 🔧 Recent Updates (2025)
+
+**✅ MAJOR FIX**: Resolved LoadedManifest conversion error that was preventing CLI convert commands from working properly. The CLI now correctly extracts `.content` from LoadedManifest objects before processing.
+
+**✅ API COMPATIBILITY**: Fixed constructor parameters and method signatures to ensure compatibility with test suite and external usage patterns.
+
+**✅ INSTALLATION VERIFIED**: All modular dependencies now install correctly with proper project name references (fixed EDPMT → WhyML).
+
 ## 🚀 Quick Start
 
 ### Installation

@@ -2,6 +2,20 @@
 
 Advanced multi-format code generation from WhyML manifests. Convert your structured YAML manifests into production-ready HTML, React, Vue.js, and PHP applications with modern patterns and best practices.
 
+## 🔧 Recent API Updates (2025)
+
+**✅ ENHANCED COMPATIBILITY**: All converters now include synchronous `convert()` methods that wrap the existing async `convert_manifest()` methods for better test compatibility and direct usage.
+
+**✅ CONSTRUCTOR PARAMETERS**: Added expected constructor parameters:
+- **HTMLConverter**: `include_meta_tags` parameter for meta tag generation control
+- **ReactConverter**: `use_typescript` parameter for TypeScript/JSX selection  
+- **VueConverter**: `vue_version` parameter for Vue 2/3 compatibility
+- **PHPConverter**: `php_version` parameter for PHP version targeting
+
+**✅ BASE CONVERTER**: Enhanced BaseConverter to accept `css_framework`, `namespace`, `use_typescript` and other common parameters via flexible kwargs system.
+
+**✅ CONVERSION RESULT**: Added `filename` parameter and `format_type` property to ConversionResult class for enhanced compatibility.
+
 ## 🚀 Features
 
 ### Multi-Format Support

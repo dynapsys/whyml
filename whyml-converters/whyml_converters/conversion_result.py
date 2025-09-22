@@ -41,6 +41,9 @@ class ConversionResult:
     output_path: Optional[Path] = None
     """Path where the content was saved (if applicable)"""
     
+    filename: Optional[str] = None
+    """Filename for the converted content (for test compatibility)"""
+    
     def __post_init__(self):
         """Initialize default values for mutable fields."""
         if self.errors is None:
@@ -61,6 +64,11 @@ class ConversionResult:
     def has_warnings(self) -> bool:
         """Check if conversion has warnings."""
         return bool(self.warnings)
+    
+    @property
+    def format_type(self) -> str:
+        """Get format type - alias for format property for test compatibility."""
+        return self.format
     
     def add_error(self, error: str):
         """Add an error to the result."""

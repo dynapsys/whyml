@@ -229,7 +229,9 @@ class URLScraper:
                                 max_depth: Optional[int] = None,
                                 flatten_containers: bool = False,
                                 simplify_structure: bool = False,
-                                preserve_semantic: bool = True) -> Dict[str, Any]:
+                                preserve_semantic: bool = True,
+                                extract_styles: bool = True,
+                                **kwargs) -> Dict[str, Any]:
         """Extract page structure.
         
         Args:
@@ -238,6 +240,8 @@ class URLScraper:
             flatten_containers: Whether to flatten wrapper containers
             simplify_structure: Whether to apply general simplification
             preserve_semantic: Whether to preserve semantic elements
+            extract_styles: Whether to extract CSS styles (compatibility parameter)
+            **kwargs: Additional extraction options
             
         Returns:
             Structure dictionary

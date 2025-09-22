@@ -6,6 +6,18 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
 [![WhyML](https://img.shields.io/badge/ecosystem-WhyML-blue.svg)](https://github.com/dynapsys/whyml)
 
+## 🔧 Recent Scraper Updates (2025)
+
+**✅ ENHANCED URL SCRAPER**: Added `scrape_url()` method as compatibility wrapper for `scrape_to_manifest()` to ensure test compatibility and direct usage patterns.
+
+**✅ SIMILARITY CALCULATION**: Added `_calculate_similarity()` method to URLScraper for manifest comparison and testing workflows, enabling content similarity analysis.
+
+**✅ WEBPAGE ANALYZER**: Enhanced constructor with `max_nesting_depth` parameter (in addition to existing `max_depth`) and `min_content_length` for improved analysis control.
+
+**✅ STRUCTURE ANALYSIS**: Added `simplification_applied` and `max_nesting_depth` fields to structure complexity analysis results for comprehensive testing compatibility.
+
+**✅ ASYNC COMPATIBILITY**: All scraping operations maintain full async support while providing synchronous compatibility methods for testing environments.
+
 ## 🌟 Features
 
 ### 🚀 Core Components

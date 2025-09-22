@@ -6,6 +6,19 @@
 
 WhyML Core is the foundational package providing modular core functionality for WhyML manifest processing. It offers a comprehensive set of tools for validation, loading, processing, and manipulation of YAML-based manifests with advanced features like template inheritance, dependency resolution, and async operations.
 
+## 🔧 Recent Core Updates (2025)
+
+**✅ EXCEPTION SYSTEM**: Enhanced exception classes with improved constructors:
+- **NetworkError**: Added `details` parameter for comprehensive error context
+- **ValidationError**: Improved error reporting and validation result integration
+- **ProcessingError**: Enhanced processing pipeline error handling
+
+**✅ VALIDATION FRAMEWORK**: Added `ValidationResult` class to whyml-core validation module for structured validation reporting and compatibility with existing test suites.
+
+**✅ LOADEDMANIFEST HANDLING**: Improved LoadedManifest dataclass structure with proper `.content` attribute extraction patterns throughout the ecosystem.
+
+**✅ BACKWARDS COMPATIBILITY**: Maintained full backwards compatibility while adding new functionality and fixing critical CLI conversion issues.
+
 ## 🚀 Key Features
 
 - **🔍 Advanced Validation**: JSON schema validation with custom field validators and comprehensive error reporting

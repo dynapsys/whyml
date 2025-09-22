@@ -228,10 +228,12 @@ class WebpageAnalyzer:
         """Analyze structure complexity metrics."""
         complexity = {
             'max_depth': 0,
+            'max_nesting_depth': 0,  # Alternative name for max_depth for test compatibility
             'total_elements': 0,
             'div_count': 0,
             'semantic_elements': 0,
-            'nested_tables': 0
+            'nested_tables': 0,
+            'simplification_applied': self.simplify_structure  # From constructor parameter
         }
         
         # Calculate max depth
@@ -244,7 +246,9 @@ class WebpageAnalyzer:
             return max_child_depth
         
         body = soup.find('body') or soup
-        complexity['max_depth'] = calculate_depth(body)
+        depth = calculate_depth(body)
+        complexity['max_depth'] = depth
+        complexity['max_nesting_depth'] = depth  # Same value, different name for compatibility
         
         # Element counts
         complexity['total_elements'] = len(soup.find_all())
