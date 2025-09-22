@@ -100,7 +100,9 @@ class WhyMLProcessor:
             Processed manifest dictionary
         """
         async with self.loader:
-            raw_manifest = await self.loader.load_manifest(str(source), options or {})
+            loaded_manifest = await self.loader.load_manifest(str(source), options or {})
+            # Extract content from LoadedManifest before processing
+            raw_manifest = loaded_manifest.content if hasattr(loaded_manifest, 'content') else loaded_manifest
             processed_manifest = self.processor.process_manifest(raw_manifest)
             return processed_manifest
     
