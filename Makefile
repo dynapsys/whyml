@@ -36,7 +36,7 @@ start: ## Start production server
 
 test: ## Run tests
 	@echo "$(BLUE)Running tests...$(NC)"
-	python -m pytest tests/ -v
+	python3 -m pytest tests/ -v
 
 lint: ## Run linting
 	@echo "$(BLUE)Running linter...$(NC)"

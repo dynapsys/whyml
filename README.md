@@ -1,6 +1,5 @@
 # WhyML - Modular YAML Manifest Ecosystem
 
-
 ```bash
  ██╗    ██╗██╗  ██╗██╗   ██╗███╗   ███╗██╗     
  ██║    ██║██║  ██║╚██╗ ██╔╝████╗ ████║██║     
@@ -18,41 +17,44 @@
 [![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing)
 [![Modular](https://img.shields.io/badge/architecture-modular-blue.svg)](#modular-architecture)
 
-## 📚 Table of Contents
+## 🚀 Quick Start
 
-### 🚀 Getting Started
-- [🚀 Quick Example](#-quick-example-complete-webpage-scraping--regeneration) - Complete workflow demonstration
-- [⚡ Installation](#installation) - Setup and installation guide
-- [🏁 Quick Start](#quick-start) - Basic usage examples
-- [📖 Getting Started Guide](docs/getting-started.md) - Comprehensive beginner guide
+```bash
+# Install WhyML
+pip install whyml
 
-### 📋 Documentation
-- [🏗️ Modular Architecture Guide](docs/modular-architecture.md) - **NEW**: Complete modular ecosystem guide
-- [📝 YAML Manifest Reference](docs/manifest-reference.md) - Complete manifest specification
-- [🔄 Converters Guide](docs/converters.md) - HTML, React, Vue, PHP conversion
-- [🕷️ Advanced Scraping](docs/advanced-scraping.md) - Web scraping features and techniques
-- [🔧 CLI Reference](docs/cli/README.md) - Command-line interface documentation
-- [🌐 API Reference](docs/api-reference.md) - Python and REST API documentation
+# Scrape a website to YAML manifest
+whyml scrape https://example.com --output manifest.yaml
 
-### 💡 Examples & Tutorials
-- [📁 Example 1: Complete Workflow](examples/1/README.md) - Scraping and regeneration
-- [🔬 Advanced Scraping Examples](examples/advanced-scraping/README.md) - Complex scenarios
-- [🧪 Testing Guide](docs/USER_TESTING_GUIDE.md) - Testing and validation
+# Convert to multiple formats
+whyml convert manifest.yaml --format html --output result.html
+whyml convert manifest.yaml --format react --output Component.tsx
+whyml convert manifest.yaml --format vue --output Component.vue
+```
 
-### 🛠️ Development
-- [🚀 Production Deployment](docs/PRODUCTION_DEPLOYMENT_CHECKLIST.md) - Deployment guide
-- [🔍 CLI Scraping Reference](docs/cli/scrape.md) - Detailed scraping commands
-- [📊 Project Status](FIXES_AND_STATUS.md) - Current status and fixes
+## 📚 Documentation
 
-### 🎯 Key Features
-- [Multi-Format Conversion](#key-features) - HTML, React, Vue, PHP output
-- [Advanced Web Scraping](#key-features) - Structure simplification and analysis
-- [Template Inheritance](#key-features) - Reusable component system
-- [Testing & Validation](#testing) - Comprehensive test suite
+### 🏁 Getting Started
+- **[📖 Installation Guide](docs/installation.md)** - Complete setup instructions
+- **[⚡ Quick Start Guide](docs/quick-start.md)** - Get running in 5 minutes
+- **[🎯 Examples Guide](docs/examples-guide.md)** - Real-world usage examples
+- **[🌐 API Usage Guide](docs/api-usage.md)** - Python & REST API reference
+
+### 📋 Core Documentation
+- **[🏗️ Modular Architecture](docs/modular-architecture.md)** - Ecosystem overview
+- **[📝 Manifest Reference](docs/manifest-reference.md)** - YAML specification
+- **[🔄 Converters Guide](docs/converters.md)** - Multi-format conversion
+- **[🕷️ Advanced Scraping](docs/advanced-scraping.md)** - Web scraping features
+- **[🔧 CLI Reference](docs/cli/README.md)** - Command-line interface
+
+### 💡 Tutorials & Examples
+- **[📁 Complete Workflow](examples/1/README.md)** - End-to-end example
+- **[🔬 Advanced Examples](examples/advanced-scraping/README.md)** - Complex scenarios
+- **[🧪 Testing Guide](docs/USER_TESTING_GUIDE.md)** - Validation and testing
 
 ## 🏗️ Modular Architecture
 
-WhyML has been completely refactored into a **modular ecosystem** of specialized packages, providing better maintainability, testing, and deployment flexibility:
+WhyML is built as a **modular ecosystem** of specialized packages:
 
 ### 📦 Core Packages
 
@@ -62,133 +64,33 @@ WhyML has been completely refactored into a **modular ecosystem** of specialized
 - **`whyml-cli`** - Unified command-line interface
 - **`whyml`** - Main package orchestrating all modules
 
-### 🎯 Benefits of Modular Design
+### 🎯 Key Features
 
-- **🔧 Targeted Installation**: Install only the components you need
-- **🧪 Comprehensive Testing**: 450+ test cases across all modules
-- **⚡ Performance**: Optimized loading and processing
-- **🔄 Easy Maintenance**: Clear separation of concerns
-- **📈 Scalability**: Independent package updates and versioning
-
-## Overview
-
-WhyML is a powerful modular Python ecosystem that transforms YAML manifests into multiple output formats including HTML, React, Vue, and PHP. It provides a comprehensive system for component-based development with template inheritance, dependency resolution, and intelligent web scraping capabilities.
-
-### Key Features
-
-- 🚀 **Multi-Format Conversion**: Generate HTML, React (JSX/TSX), Vue (SFC), and PHP from YAML manifests
-- 🔗 **Template Inheritance**: Advanced inheritance system with dependency resolution and circular dependency detection
+- 🚀 **Multi-Format Conversion**: Generate HTML, React, Vue, and PHP from YAML manifests
+- 🔗 **Template Inheritance**: Advanced inheritance system with dependency resolution
 - 🎨 **CSS Integration**: Built-in support for CSS frameworks (Bootstrap, Tailwind, Foundation)
-- 🕷️ **Advanced Web Scraping**: Intelligent website-to-manifest conversion with:
-  - **Structure Simplification**: Reduce HTML nesting depth and flatten unnecessary containers
-  - **Selective Section Generation**: Extract only specific sections (metadata, analysis, imports, etc.)
-  - **Page Analysis**: Automatic detection of page types, SEO analysis, and accessibility metrics
-  - **Testing Workflow**: Complete scrape → YAML → HTML comparison with accuracy metrics
+- 🕷️ **Advanced Web Scraping**: Intelligent website-to-manifest conversion with structure simplification
 - ⚡ **Async Processing**: High-performance asynchronous manifest loading and processing
-- 🧪 **Comprehensive Testing**: Extensive test suite with 95%+ coverage
+- 🧪 **Comprehensive Testing**: Extensive test suite with modular architecture
 - 🛠️ **CLI & API**: Command-line interface and FastAPI server for integration
 
-## 🚀 Quick Example: Complete Webpage Scraping & Regeneration
+**📖 [Read the complete Modular Architecture Guide →](docs/modular-architecture.md)**
 
-Here's a practical example showing how WhyML can scrape a webpage, simplify its structure, and regenerate it as clean HTML from a YAML manifest:
+## ⚡ Quick Example
 
-### Step 1: Scrape a webpage and generate YAML manifest
-```bash
-whyml scrape https://example.com --output scraped-manifest.yaml --simplify-structure --max-depth 5
-```
-![img.png](img.png)
-
-### Step 2: Convert YAML manifest back to HTML
-```bash
-whyml convert --from scraped-manifest.yaml --to regenerated.html --as html
-```
-![structure](structure.png)
-
-### Step 3: Compare and validate (optional)
-```bash
-whyml scrape https://example.com --test-conversion --output-html regenerated.html
-```
-![img_1.png](img_1.png)
-
-
-**📁 Complete Example Files:**
-- [`examples/1/README.md`](examples/1/README.md) - Detailed workflow documentation
-- [`examples/1/scraped-manifest.yaml`](examples/1/scraped-manifest.yaml) - Generated YAML manifest
-- [`examples/1/regenerated.html`](examples/1/regenerated.html) - Clean HTML output
-
-**🎯 What This Achieves:**
-- Converts complex webpage to maintainable YAML structure
-- Simplifies HTML while preserving semantic meaning
-- Enables easy customization through template variables
-- Supports regeneration to multiple formats (HTML, React, Vue, PHP)
-
-## Installation
-
-### 🚀 Complete Ecosystem (Recommended)
+Transform any website into maintainable YAML and regenerate it in multiple formats:
 
 ```bash
-# Install complete WhyML ecosystem
-pip install whyml
+# Scrape a website to YAML manifest
+whyml scrape https://example.com --output manifest.yaml
+
+# Convert to multiple formats
+whyml convert manifest.yaml --format html --output result.html
+whyml convert manifest.yaml --format react --output Component.tsx
+whyml convert manifest.yaml --format vue --output Component.vue
 ```
 
-This installs all modular packages: `whyml-core`, `whyml-scrapers`, `whyml-converters`, and `whyml-cli`.
-
-### 📦 Modular Installation (Targeted)
-
-Install only the components you need:
-
-```bash
-# Core functionality only
-pip install whyml-core
-
-# Core + web scraping
-pip install whyml-core whyml-scrapers  
-
-# Core + format conversion  
-pip install whyml-core whyml-converters
-
-# CLI interface (includes all dependencies)
-pip install whyml-cli
-
-# Custom combination
-pip install whyml-core whyml-converters whyml-cli
-```
-
-### 🔧 Development Installation
-
-```bash
-git clone https://github.com/dynapsys/whyml.git
-cd whyml
-pip install -e .
-
-# Install all modular packages in development mode
-pip install -e ./whyml-core
-pip install -e ./whyml-scrapers  
-pip install -e ./whyml-converters
-pip install -e ./whyml-cli
-```
-
-## Quick Start
-
-### 🚀 Complete Ecosystem Usage
-
-```python
-import asyncio
-from whyml import WhyMLProcessor
-
-async def main():
-    processor = WhyMLProcessor()
-    
-    # Convert YAML manifest to HTML
-    html_result = await processor.convert_to_html('path/to/manifest.yaml')
-    html_result.save_to_file('output.html')
-    
-    # Convert to React component
-    react_result = await processor.convert_to_react('path/to/manifest.yaml')
-    react_result.save_to_file('Component.tsx')
-
-asyncio.run(main())
-```
+**📖 [View Complete Examples Guide →](docs/examples-guide.md)**
 
 ### 📦 Modular Usage
 

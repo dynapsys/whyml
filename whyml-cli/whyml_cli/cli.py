@@ -413,3 +413,42 @@ For more help on a specific command:
             'available_commands': self.get_available_commands(),
             'version': self._get_version()
         }
+
+
+def main():
+    """Main CLI entry point for testing compatibility."""
+    import sys
+    
+    # Create CLI instance
+    cli = WhyMLCLI()
+    
+    # Parse command line arguments
+    if len(sys.argv) < 2:
+        cli._print_error("No command specified. Use 'scrape', 'convert', 'validate', 'generate', or 'info'")
+        return 1
+    
+    command = sys.argv[1]
+    args = sys.argv[2:]
+    
+    try:
+        # Execute command based on first argument
+        if command == 'scrape':
+            return asyncio.run(cli.run_async(['scrape'] + args))
+        elif command == 'convert':
+            return asyncio.run(cli.run_async(['convert'] + args))
+        elif command == 'validate':
+            return asyncio.run(cli.run_async(['validate'] + args))
+        elif command == 'generate':
+            return asyncio.run(cli.run_async(['generate'] + args))
+        elif command == 'info':
+            return asyncio.run(cli.run_async(['info'] + args))
+        else:
+            cli._print_error(f"Unknown command: {command}")
+            return 1
+    except Exception as e:
+        cli._print_error(f"Command failed: {e}")
+        return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())

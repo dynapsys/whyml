@@ -11,9 +11,11 @@ Licensed under the Apache License, Version 2.0
 from .manifest_validator import ManifestValidator
 from .schema_loader import SchemaLoader
 from .field_validators import FieldValidators
+from .validation_result import ValidationResult
 
 __all__ = [
     'ManifestValidator',
     'SchemaLoader', 
-    'FieldValidators'
+    'FieldValidators',
+    'ValidationResult'
 ]

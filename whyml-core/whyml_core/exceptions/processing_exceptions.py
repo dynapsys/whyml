@@ -155,3 +155,69 @@ class ConversionError(WhyMLError):
             details['target_format'] = target_format
         
         super().__init__(message, details)
+
+
+class ManifestLoadingError(LoaderError):
+    """Raised when manifest loading specifically fails.
+    
+    This is an alias for LoaderError with specific context for manifest loading.
+    """
+    pass
+
+
+class ManifestProcessingError(ProcessingError):
+    """Raised when manifest processing specifically fails.
+    
+    This is an alias for ProcessingError with specific context for manifest processing.
+    """
+    pass
+
+
+class DependencyResolutionError(WhyMLError):
+    """Raised when dependency resolution fails.
+    
+    This exception is raised when there are issues resolving manifest dependencies,
+    circular dependencies, or missing dependencies.
+    """
+    
+    def __init__(self, message: str, dependency_path: Optional[str] = None,
+                 dependency_chain: Optional[list] = None):
+        """Initialize dependency resolution error.
+        
+        Args:
+            message: Human-readable error message
+            dependency_path: Path to the problematic dependency
+            dependency_chain: Chain of dependencies that caused the error
+        """
+        details = {}
+        if dependency_path:
+            details['dependency_path'] = dependency_path
+        if dependency_chain:
+            details['dependency_chain'] = dependency_chain
+        
+        super().__init__(message, details)
+
+
+class ConfigurationError(WhyMLError):
+    """Raised when configuration-related errors occur.
+    
+    This exception is raised for issues with configuration files,
+    invalid configuration values, or missing configuration.
+    """
+    
+    def __init__(self, message: str, config_key: Optional[str] = None,
+                 config_value: Optional[str] = None):
+        """Initialize configuration error.
+        
+        Args:
+            message: Human-readable error message
+            config_key: Configuration key that caused the error
+            config_value: Configuration value that caused the error
+        """
+        details = {}
+        if config_key:
+            details['config_key'] = config_key
+        if config_value:
+            details['config_value'] = config_value
+        
+        super().__init__(message, details)

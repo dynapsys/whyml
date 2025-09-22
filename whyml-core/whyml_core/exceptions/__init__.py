@@ -16,7 +16,11 @@ from .processing_exceptions import (
     NetworkError,
     ProcessingError,
     LoaderError,
-    ConversionError
+    ConversionError,
+    ManifestLoadingError,
+    ManifestProcessingError,
+    DependencyResolutionError,
+    ConfigurationError
 )
 
 __all__ = [
@@ -30,5 +34,9 @@ __all__ = [
     'NetworkError',
     'ProcessingError',
     'LoaderError',
-    'ConversionError'
+    'ConversionError',
+    'ManifestLoadingError',
+    'ManifestProcessingError',
+    'DependencyResolutionError',
+    'ConfigurationError'
 ]
