@@ -1,11 +1,11 @@
 #!/bin/bash
 
-echo "📦 Installing EDPMT in development mode..."
+echo "📦 Installing WhyML in development mode..."
 echo "🔍 Checking setuptools..."
 python3 -c "import setuptools" 2>/dev/null || pip3 install setuptools --user 2>/dev/null || pip3 install setuptools --break-system-packages 2>/dev/null
-echo "🔧 Installing EDPMT..."
+echo "🔧 Installing WhyML..."
 # First, try to uninstall any existing installation to avoid conflicts
-pip3 uninstall edpmt -y 2>/dev/null || true
+pip3 uninstall whyml -y 2>/dev/null || true
 echo "📦 Performing clean installation..."
 pip3 install -e . --user 2>/dev/null || pip3 install -e . --break-system-packages 2>/dev/null || { \
     echo "⚠️  Standard installation failed. Trying alternative methods..."; \
@@ -23,21 +23,21 @@ pip3 install -e . --user 2>/dev/null || pip3 install -e . --break-system-package
     }; \
 }
 echo "🧪 Verifying installation..."
-# Check if edpmt can be imported
-python3 -c "import edpmt; print('✅ EDPMT module imported successfully')" 2>/dev/null || { \
+# Check if whyml can be imported
+python3 -c "import whyml; print('✅ WhyML module imported successfully')" 2>/dev/null || { \
     echo "❌ Installation verification failed - module cannot be imported"; \
     echo "💡 Additional troubleshooting:"; \
     echo "   1. Check Python version: python3 --version"; \
     echo "   2. Check pip version: pip3 --version"; \
-    echo "   3. Check installation location: pip3 show edpmt"; \
+    echo "   3. Check installation location: pip3 show whyml"; \
     echo "   4. Try reinstalling with: pip3 install -e . --force-reinstall --user"; \
     exit 1; \
 }
 echo "🎯 Testing CLI entry points..."
-which edpmt >/dev/null && echo "✅ CLI available at: $$(which edpmt)" || { \
+which whyml >/dev/null && echo "✅ CLI available at: $$(which whyml)" || { \
     echo "⚠️  CLI not in PATH"; \
     echo "💡 Try: export PATH=$$HOME/.local/bin:$$PATH"; \
-    echo "💡 Or use full path: $$(python3 -c 'import site; print(site.USER_BASE + "/bin")')/edpmt"; \
+    echo "💡 Or use full path: $$(python3 -c 'import site; print(site.USER_BASE + "/bin")')/whyml"; \
 }
 # Additional check for version attribute
-python3 -c "import edpmt; print(hasattr(edpmt, '__version__') and f'✅ EDPMT version: {edpmt.__version__}' or '⚠️  Version attribute not found')" 2>/dev/null || true
+python3 -c "import whyml; print(hasattr(whyml, '__version__') and f'✅ WhyML version: {whyml.__version__}' or '⚠️  Version attribute not found')" 2>/dev/null || true

@@ -209,38 +209,38 @@ install:
 
 # Install with all optional dependencies
 install-all:
-	@echo "📦 Installing EDPMT with all dependencies..."
+	@echo "📦 Installing WhyML with all dependencies..."
 	pip install -e .[all]
-	@echo "✅ EDPMT with all dependencies installed"
+	@echo "✅ WhyML with all dependencies installed"
 
 # Development setup using PYTHONPATH (no installation required)
 dev-setup:
-	@echo "🛠️  Setting up EDPMT for development using PYTHONPATH..."
+	@echo "🛠️  Setting up WhyML for development using PYTHONPATH..."
 	@echo "📁 Project root: $$(pwd)"
 	@echo "🐍 Python version: $$(python3 --version)"
-	@echo "📝 Testing EDPMT import..."
-	@PYTHONPATH="$$(pwd):$$PYTHONPATH" python3 -c "import edpmt; print(f'✅ EDPMT {edpmt.__version__} loaded via PYTHONPATH')" || { \
-		echo "❌ EDPMT import failed"; \
+	@echo "📝 Testing WhyML import..."
+	@PYTHONPATH="$$(pwd):$$PYTHONPATH" python3 -c "import whyml; print(f'✅ WhyML {whyml.__version__} loaded via PYTHONPATH')" || { \
+		echo "❌ WhyML import failed"; \
 		echo "💡 Make sure you're in the correct directory: $$(pwd)"; \
 		exit 1; \
 	}
 	@echo "🎯 Creating CLI wrapper script..."
 	@mkdir -p bin
-	@echo '#!/bin/bash' > bin/edpmt
-	@echo 'export PYTHONPATH="'"$$(pwd)"':$$PYTHONPATH"' >> bin/edpmt
-	@echo 'python3 -m edpmt.cli "$$@"' >> bin/edpmt
-	@chmod +x bin/edpmt
+	@echo '#!/bin/bash' > bin/whyml
+	@echo 'export PYTHONPATH="'"$$(pwd)"':$$PYTHONPATH"' >> bin/whyml
+	@echo 'python3 -m whyml.cli "$$@"' >> bin/whyml
+	@chmod +x bin/whyml
 	@echo "✅ Development setup complete!"
-	@echo "💡 To use EDPMT:"
+	@echo "💡 To use WhyML:"
 	@echo "   1. Add to PATH: export PATH=$$(pwd)/bin:$$PATH"
-	@echo "   2. Or use directly: ./bin/edpmt server --dev"
+	@echo "   2. Or use directly: ./bin/whyml convert --help"
 	@echo "   3. Or set PYTHONPATH: export PYTHONPATH=$$(pwd):$$PYTHONPATH"
 
 # Create and setup virtual environment
 venv-setup:
 	@echo "🐍 Creating virtual environment..."
 	@python3 -m venv venv --without-pip 2>/dev/null || python3 -m venv venv
-	@echo "📦 Installing EDPMT in virtual environment..."
+	@echo "📦 Installing WhyML in virtual environment..."
 	@venv/bin/python -m ensurepip --upgrade 2>/dev/null || echo "pip already available"
 	@venv/bin/pip install --upgrade pip setuptools || echo "⚠️  Pip upgrade failed, continuing..."
 	@venv/bin/pip install -e . || { \
