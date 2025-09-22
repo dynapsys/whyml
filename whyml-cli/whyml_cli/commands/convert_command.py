@@ -214,7 +214,10 @@ Examples:
         try:
             # Load and validate manifest
             self.print_info(f"Loading manifest: {args.manifest}")
-            manifest = await self.cli.load_manifest(args.manifest)
+            loaded_manifest = await self.cli.load_manifest(args.manifest)
+            
+            # Extract content from LoadedManifest object
+            manifest = loaded_manifest.content if hasattr(loaded_manifest, 'content') else loaded_manifest
             
             # Process manifest
             processing_options = {
@@ -224,7 +227,9 @@ Examples:
             }
             
             self.print_info("Processing manifest...")
-            manifest = await self.cli.process_manifest(manifest, **processing_options)
+            # Use the loaded manifest's cache_key as manifest_id if available
+            manifest_id = loaded_manifest.cache_key if hasattr(loaded_manifest, 'cache_key') else None
+            manifest = await self.cli.process_manifest(manifest, manifest_id, **processing_options)
             
             # Prepare conversion options
             conversion_options = self._prepare_conversion_options(args)

@@ -198,22 +198,26 @@ For more help on a specific command:
             ValidationError: If manifest is invalid
             ProcessingError: If loading fails
         """
-        manifest = await self.loader.load_manifest(str(path))
+        loaded_manifest = await self.loader.load_manifest(str(path))
         
-        # Validate manifest
-        validation_result = await self.validator.validate_manifest(manifest)
+        # Extract content from LoadedManifest object if needed
+        manifest_content = loaded_manifest.content if hasattr(loaded_manifest, 'content') else loaded_manifest
+        
+        # Validate manifest content
+        validation_result = self.validator.validate_manifest(manifest_content)
         if not validation_result.is_valid:
             raise ValidationError(
                 f"Manifest validation failed: {validation_result.errors}"
             )
         
-        return manifest
+        return loaded_manifest
     
-    async def process_manifest(self, manifest: Dict[str, Any], **options) -> Dict[str, Any]:
+    async def process_manifest(self, manifest: Dict[str, Any], manifest_id: str = None, **options) -> Dict[str, Any]:
         """Process manifest with full pipeline.
         
         Args:
             manifest: Raw manifest data
+            manifest_id: Optional manifest identifier for inheritance resolution
             **options: Processing options
             
         Returns:
@@ -221,15 +225,18 @@ For more help on a specific command:
         """
         # Resolve inheritance
         if options.get('resolve_inheritance', True):
-            manifest = await self.inheritance_resolver.resolve_inheritance(manifest)
+            # Use manifest_id if provided, otherwise generate one from manifest hash
+            if manifest_id is None:
+                manifest_id = f"manifest_{hash(str(manifest))}"
+            manifest = self.inheritance_resolver.resolve_inheritance(manifest, manifest_id)
         
         # Process templates
         if options.get('process_templates', True):
-            manifest = await self.template_processor.process_templates(manifest)
+            manifest = self.template_processor.process_templates(manifest)
         
         # Substitute variables
         if options.get('substitute_variables', True):
-            manifest = await self.variable_substitution.substitute_variables(manifest)
+            manifest = self.variable_substitution.substitute_variables(manifest)
         
         return manifest
     
@@ -433,15 +440,15 @@ def main():
     try:
         # Execute command based on first argument
         if command == 'scrape':
-            return asyncio.run(cli.run_async(['scrape'] + args))
+            return asyncio.run(cli.run(['scrape'] + args))
         elif command == 'convert':
-            return asyncio.run(cli.run_async(['convert'] + args))
+            return asyncio.run(cli.run(['convert'] + args))
         elif command == 'validate':
-            return asyncio.run(cli.run_async(['validate'] + args))
+            return asyncio.run(cli.run(['validate'] + args))
         elif command == 'generate':
-            return asyncio.run(cli.run_async(['generate'] + args))
+            return asyncio.run(cli.run(['generate'] + args))
         elif command == 'info':
-            return asyncio.run(cli.run_async(['info'] + args))
+            return asyncio.run(cli.run(['info'] + args))
         else:
             cli._print_error(f"Unknown command: {command}")
             return 1
