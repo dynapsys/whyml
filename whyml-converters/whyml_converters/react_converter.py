@@ -20,12 +20,12 @@ from .base_converter import BaseConverter
 class ReactConverter(BaseConverter):
     """Advanced React/JSX converter with modern React patterns and TypeScript support."""
     
-    def __init__(self, **kwargs):
+    def __init__(self, use_typescript=False, **kwargs):
         """Initialize React converter."""
         super().__init__(**kwargs)
         self.indent_size = 2
         self.current_indent = 0
-        self.use_typescript = False
+        self.use_typescript = use_typescript
         self.component_name = "WhyMLComponent"
     
     def _get_output_format(self) -> str:
@@ -39,6 +39,21 @@ class ReactConverter(BaseConverter):
     def _supports_components(self) -> bool:
         """Check if converter supports components."""
         return True
+    
+    def convert(self, manifest: Dict[str, Any], **kwargs):
+        """Convert manifest to React - synchronous wrapper for tests."""
+        from .conversion_result import ConversionResult
+        import asyncio
+        
+        # Run async conversion
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        
+        react_content = loop.run_until_complete(self.convert_manifest(manifest, **kwargs))
+        return ConversionResult(content=react_content, format="react")
     
     async def convert_manifest(self, 
                               manifest: Dict[str, Any],

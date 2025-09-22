@@ -20,13 +20,14 @@ from .base_converter import BaseConverter
 class VueConverter(BaseConverter):
     """Advanced Vue.js converter with SFC and Composition API support."""
     
-    def __init__(self, **kwargs):
+    def __init__(self, vue_version="3", **kwargs):
         """Initialize Vue converter."""
         super().__init__(**kwargs)
         self.indent_size = 2
         self.current_indent = 0
+        self.vue_version = vue_version
         self.use_typescript = False
-        self.use_composition_api = True
+        self.use_composition_api = vue_version == "3"
         self.component_name = "WhyMLComponent"
     
     def _get_output_format(self) -> str:
@@ -40,6 +41,21 @@ class VueConverter(BaseConverter):
     def _supports_components(self) -> bool:
         """Check if converter supports components."""
         return True
+    
+    def convert(self, manifest: Dict[str, Any], **kwargs):
+        """Convert manifest to Vue - synchronous wrapper for tests."""
+        from .conversion_result import ConversionResult
+        import asyncio
+        
+        # Run async conversion
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        
+        vue_content = loop.run_until_complete(self.convert_manifest(manifest, **kwargs))
+        return ConversionResult(content=vue_content, format="vue")
     
     async def convert_manifest(self, 
                               manifest: Dict[str, Any],

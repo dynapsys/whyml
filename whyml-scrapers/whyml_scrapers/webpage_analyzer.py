@@ -21,24 +21,31 @@ class WebpageAnalyzer:
     
     def __init__(self, 
                  max_depth: Optional[int] = None,
+                 max_nesting_depth: Optional[int] = None,
                  flatten_containers: bool = False,
                  simplify_structure: bool = False,
                  preserve_semantic_tags: bool = True,
-                 sections: Optional[List[str]] = None):
+                 sections: Optional[List[str]] = None,
+                 min_content_length: int = 10):
         """Initialize webpage analyzer.
         
         Args:
-            max_depth: Maximum depth for analysis (optional)
+            max_depth: Maximum depth for analysis (optional, legacy)
+            max_nesting_depth: Maximum nesting depth for analysis (preferred)
             flatten_containers: Whether to flatten container structures
             simplify_structure: Whether to simplify HTML structure
             preserve_semantic_tags: Whether to preserve semantic HTML tags
             sections: Specific sections to analyze (optional)
+            min_content_length: Minimum content length for analysis
         """
-        self.max_depth = max_depth
+        # Use max_nesting_depth if provided, otherwise fall back to max_depth
+        self.max_depth = max_nesting_depth or max_depth
+        self.max_nesting_depth = max_nesting_depth or max_depth
         self.flatten_containers = flatten_containers
         self.simplify_structure = simplify_structure
         self.preserve_semantic_tags = preserve_semantic_tags
         self.sections = sections or []
+        self.min_content_length = min_content_length
     
     async def analyze_page(self, url: str, soup: BeautifulSoup) -> Dict[str, Any]:
         """Perform comprehensive page analysis.

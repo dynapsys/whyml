@@ -20,7 +20,7 @@ from .base_converter import BaseConverter
 class PHPConverter(BaseConverter):
     """Advanced PHP converter with modern PHP patterns and security."""
     
-    def __init__(self, **kwargs):
+    def __init__(self, php_version="8.0", **kwargs):
         """Initialize PHP converter."""
         super().__init__(**kwargs)
         self.indent_size = 4
@@ -28,7 +28,7 @@ class PHPConverter(BaseConverter):
         self.use_classes = True
         self.namespace = None
         self.use_strict_types = True
-        self.php_version = "8.0"
+        self.php_version = php_version
     
     def _get_output_format(self) -> str:
         """Get output format identifier."""
@@ -41,6 +41,21 @@ class PHPConverter(BaseConverter):
     def _supports_components(self) -> bool:
         """Check if converter supports components."""
         return True
+    
+    def convert(self, manifest: Dict[str, Any], **kwargs):
+        """Convert manifest to PHP - synchronous wrapper for tests."""
+        from .conversion_result import ConversionResult
+        import asyncio
+        
+        # Run async conversion
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        
+        php_content = loop.run_until_complete(self.convert_manifest(manifest, **kwargs))
+        return ConversionResult(content=php_content, format="php")
     
     async def convert_manifest(self, 
                               manifest: Dict[str, Any],

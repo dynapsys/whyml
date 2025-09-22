@@ -80,21 +80,22 @@ class NetworkError(WhyMLError):
     """
     
     def __init__(self, message: str, url: Optional[str] = None, 
-                 status_code: Optional[int] = None):
+                 status_code: Optional[int] = None, details: Optional[dict] = None):
         """Initialize network error.
         
         Args:
             message: Human-readable error message
             url: URL that caused the error
             status_code: HTTP status code if available
+            details: Additional error details
         """
-        details = {}
+        error_details = details or {}
         if url:
-            details['url'] = url
+            error_details['url'] = url
         if status_code:
-            details['status_code'] = status_code
+            error_details['status_code'] = status_code
         
-        super().__init__(message, details)
+        super().__init__(message, error_details)
 
 
 class ProcessingError(WhyMLError):
