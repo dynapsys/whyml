@@ -26,7 +26,6 @@ class PHPConverter(BaseConverter):
         self.indent_size = 4
         self.current_indent = 0
         self.use_classes = True
-        self.namespace = None
         self.use_strict_types = True
         self.php_version = php_version
     
@@ -50,7 +49,9 @@ class PHPConverter(BaseConverter):
         # Determine default class name from metadata title
         metadata = manifest.get('metadata', {})
         title = metadata.get('title', 'Component')
-        class_name_base = ''.join(ch for ch in title.title() if ch.isalnum()) or 'Component'
+        class_name_base = ''.join(ch for ch in title if ch.isalnum()) or 'Component'
+        if class_name_base:
+            class_name_base = class_name_base[0].upper() + class_name_base[1:]
         # Ensure suffix 'Component'
         class_name = class_name_base if class_name_base.endswith('Component') else f"{class_name_base}Component"
         
@@ -80,10 +81,10 @@ class PHPConverter(BaseConverter):
             Generated PHP content
         """
         # Configure options
-        self.use_classes = options.get('use_classes', True)
-        self.namespace = options.get('namespace')
-        self.use_strict_types = options.get('strict_types', True)
-        self.php_version = options.get('php_version', '8.0')
+        self.use_classes = options.get('use_classes', self.use_classes)
+        self.namespace = options.get('namespace', self.namespace)
+        self.use_strict_types = options.get('strict_types', self.use_strict_types)
+        self.php_version = options.get('php_version', self.php_version)
         
         # Reset indentation
         self.current_indent = 0
