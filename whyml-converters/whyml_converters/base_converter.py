@@ -292,6 +292,17 @@ class BaseConverter(ABC):
         """
         return manifest.get('imports', {})
     
+    def _extract_config(self, manifest: Dict[str, Any]) -> Dict[str, Any]:
+        """Extract configuration from manifest.
+        
+        Args:
+            manifest: WhyML manifest dictionary
+            
+        Returns:
+            Configuration dictionary
+        """
+        return manifest.get('config', {})
+    
     def _generate_unique_id(self, prefix: str = "whyml") -> str:
         """Generate unique identifier.
         

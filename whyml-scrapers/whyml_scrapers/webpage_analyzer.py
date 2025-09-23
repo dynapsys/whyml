@@ -26,7 +26,8 @@ class WebpageAnalyzer:
                  simplify_structure: bool = False,
                  preserve_semantic_tags: bool = True,
                  sections: Optional[List[str]] = None,
-                 min_content_length: int = 10):
+                 min_content_length: int = 10,
+                 analyze_accessibility: bool = True):
         """Initialize webpage analyzer.
         
         Args:
@@ -37,6 +38,7 @@ class WebpageAnalyzer:
             preserve_semantic_tags: Whether to preserve semantic HTML tags
             sections: Specific sections to analyze (optional)
             min_content_length: Minimum content length for analysis
+            analyze_accessibility: Whether to perform accessibility analysis
         """
         # Use max_nesting_depth if provided, otherwise fall back to max_depth
         self.max_depth = max_nesting_depth or max_depth
@@ -46,6 +48,7 @@ class WebpageAnalyzer:
         self.preserve_semantic_tags = preserve_semantic_tags
         self.sections = sections or []
         self.min_content_length = min_content_length
+        self.analyze_accessibility = analyze_accessibility
     
     async def analyze_page(self, url: str, soup: BeautifulSoup) -> Dict[str, Any]:
         """Perform comprehensive page analysis.

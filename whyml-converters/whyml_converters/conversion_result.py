@@ -20,8 +20,12 @@ class ConversionResult:
     content: str
     """Generated content from the conversion"""
     
-    format: str
+    format: str = None
     """Target format of the conversion (html, react, vue, php)"""
+    
+    # Support legacy format_type parameter for backward compatibility
+    format_type: str = None
+    """Legacy alias for format parameter"""
     
     success: bool = True
     """Whether the conversion was successful"""
@@ -54,6 +58,16 @@ class ConversionResult:
             self.metadata = {}
         if self.statistics is None:
             self.statistics = {}
+            
+        # Handle format_type backward compatibility
+        if self.format_type and not self.format:
+            self.format = self.format_type
+        elif self.format and not self.format_type:
+            self.format_type = self.format
+        elif not self.format and not self.format_type:
+            # Default to 'unknown' if neither is provided
+            self.format = 'unknown'
+            self.format_type = 'unknown'
     
     @property
     def has_errors(self) -> bool:

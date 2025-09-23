@@ -52,7 +52,19 @@ class HTMLConverter(BaseConverter):
             asyncio.set_event_loop(loop)
         
         html_content = loop.run_until_complete(self.convert_manifest(manifest, **kwargs))
-        return ConversionResult(content=html_content, format="html")
+        
+        # Generate filename from manifest metadata or use default
+        metadata = manifest.get('metadata', {})
+        title = metadata.get('title', 'untitled')
+        # Convert title to snake_case using slugify with underscore separator
+        snake_case_title = StringUtils.slugify(title, separator="_")
+        filename = f"{snake_case_title}.html"
+        
+        return ConversionResult(
+            content=html_content, 
+            format="html", 
+            filename=filename
+        )
     
     async def convert_manifest(self, 
                               manifest: Dict[str, Any],
@@ -173,7 +185,7 @@ class HTMLConverter(BaseConverter):
         meta_tags = []
         
         # Essential meta tags
-        meta_tags.append(self._indent() + '<meta charset="UTF-8">')
+        meta_tags.append(self._indent() + '<meta charset="utf-8">')
         meta_tags.append(self._indent() + '<meta name="viewport" content="width=device-width, initial-scale=1.0">')
         
         # Description
@@ -256,8 +268,9 @@ class HTMLConverter(BaseConverter):
                     css_rule = self._generate_css_rule(key, value)
                     css_parts.append(css_rule)
                 elif isinstance(value, str) and '{' in value and '}' in value:
-                    # Direct CSS string
-                    css_parts.append(value)
+                    # Direct CSS string - substitute variables
+                    css_with_vars = self._substitute_css_variables(value, styles)
+                    css_parts.append(css_with_vars)
         
         if css_parts:
             css_content = '\n'.join(css_parts)
@@ -266,6 +279,22 @@ class HTMLConverter(BaseConverter):
                    self._indent() + "</style>")
         
         return ""
+    
+    def _substitute_css_variables(self, css_text: str, styles: Dict[str, Any]) -> str:
+        """Substitute CSS variables with their values."""
+        import re
+        
+        # Find all var(--variable-name) patterns
+        var_pattern = r'var\(--([^)]+)\)'
+        
+        def replace_var(match):
+            var_name = match.group(1)
+            # Look for the variable in styles
+            if var_name in styles:
+                return str(styles[var_name])
+            return match.group(0)  # Return original if not found
+        
+        return re.sub(var_pattern, replace_var, css_text)
     
     def _generate_css_rule(self, selector: str, properties: Dict[str, str]) -> str:
         """Generate CSS rule from selector and properties."""

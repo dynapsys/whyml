@@ -58,10 +58,18 @@ Examples:
         
         # Scraping options
         parser.add_argument(
+            '--section',
+            action='append',
+            choices=['metadata', 'structure', 'styles', 'scripts', 'analysis', 'imports'],
+            help='Specific section to extract (can be used multiple times)'
+        )
+        
+        # Keep --sections for backward compatibility
+        parser.add_argument(
             '--sections',
             nargs='+',
             choices=['metadata', 'structure', 'styles', 'scripts', 'analysis', 'imports'],
-            help='Specific sections to extract (default: all)'
+            help='Specific sections to extract (legacy, use --section instead)'
         )
         
         parser.add_argument(
@@ -206,9 +214,16 @@ Examples:
         """Prepare scraping options from arguments."""
         options = {}
         
-        # Section selection
-        if args.sections:
-            options['sections'] = args.sections
+        # Section selection - handle both --section and --sections
+        sections = []
+        if hasattr(args, 'section') and args.section:
+            sections.extend(args.section)
+        if hasattr(args, 'sections') and args.sections:
+            sections.extend(args.sections)
+        
+        if sections:
+            # Remove duplicates while preserving order
+            options['sections'] = list(dict.fromkeys(sections))
         
         # Structure simplification
         if args.max_depth:
@@ -225,6 +240,11 @@ Examples:
         # Content extraction
         options['extract_styles'] = args.extract_styles
         options['extract_scripts'] = args.extract_scripts
+        
+        # Handle --no-styles by removing styles from sections if present
+        if not args.extract_styles and 'sections' in options:
+            if 'styles' in options['sections']:
+                options['sections'].remove('styles')
         
         if args.extract_media:
             options['extract_media'] = True

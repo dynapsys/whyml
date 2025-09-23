@@ -55,7 +55,20 @@ class VueConverter(BaseConverter):
             asyncio.set_event_loop(loop)
         
         vue_content = loop.run_until_complete(self.convert_manifest(manifest, **kwargs))
-        return ConversionResult(content=vue_content, format="vue")
+        
+        # Generate filename from manifest metadata or use default
+        metadata = manifest.get('metadata', {})
+        title = metadata.get('title', 'untitled')
+        # Convert title to snake_case using slugify with underscore separator
+        snake_case_title = StringUtils.slugify(title, separator="_")
+        component_name = kwargs.get('component_name', snake_case_title)
+        filename = f"{component_name}.vue"
+        
+        return ConversionResult(
+            content=vue_content, 
+            format="vue", 
+            filename=filename
+        )
     
     async def convert_manifest(self, 
                               manifest: Dict[str, Any],

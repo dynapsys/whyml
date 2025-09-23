@@ -143,6 +143,15 @@ class URLScraper:
         if sections is None:
             sections = ['metadata', 'structure', 'styles', 'analysis']
         
+        # Handle extract_styles flag - if False, remove styles from sections
+        if not scraping_options.get('extract_styles', True):
+            sections = [s for s in sections if s != 'styles']
+        
+        # Handle extract_scripts flag - if True, add scripts to sections
+        if scraping_options.get('extract_scripts', False):
+            if 'scripts' not in sections:
+                sections.append('scripts')
+        
         # Generate each requested section
         if 'metadata' in sections:
             manifest['metadata'] = await self._extract_metadata(url, soup)
@@ -154,6 +163,9 @@ class URLScraper:
         
         if 'styles' in sections:
             manifest['styles'] = await self._extract_styles(soup)
+        
+        if 'scripts' in sections:
+            manifest['scripts'] = await self._extract_scripts(soup)
         
         if 'analysis' in sections:
             manifest['analysis'] = await self._analyze_page(url, soup)
@@ -279,6 +291,37 @@ class URLScraper:
             Styles dictionary
         """
         return await self.content_extractor.extract_styles(soup)
+    
+    async def _extract_scripts(self, soup: BeautifulSoup) -> Dict[str, Any]:
+        """Extract JavaScript from webpage.
+        
+        Args:
+            soup: Parsed HTML
+            
+        Returns:
+            Scripts dictionary with inline and external scripts
+        """
+        scripts = {
+            'inline_scripts': [],
+            'external_scripts': []
+        }
+        
+        # Extract inline scripts
+        for script_tag in soup.find_all('script'):
+            if script_tag.string:
+                scripts['inline_scripts'].append({
+                    'content': script_tag.string.strip(),
+                    'type': script_tag.get('type', 'text/javascript')
+                })
+            elif script_tag.get('src'):
+                scripts['external_scripts'].append({
+                    'src': script_tag['src'],
+                    'type': script_tag.get('type', 'text/javascript'),
+                    'async': script_tag.has_attr('async'),
+                    'defer': script_tag.has_attr('defer')
+                })
+        
+        return scripts
     
     async def _analyze_page(self, url: str, soup: BeautifulSoup) -> Dict[str, Any]:
         """Analyze webpage characteristics.

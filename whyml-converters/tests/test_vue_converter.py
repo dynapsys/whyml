@@ -18,7 +18,7 @@ from unittest.mock import Mock, patch
 from typing import Dict, Any
 
 from whyml_converters.vue_converter import VueConverter
-from whyml_converters.base_converter import ConversionResult
+from whyml_converters.conversion_result import ConversionResult
 
 
 class TestVueConverter:

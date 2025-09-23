@@ -53,7 +53,22 @@ class ReactConverter(BaseConverter):
             asyncio.set_event_loop(loop)
         
         react_content = loop.run_until_complete(self.convert_manifest(manifest, **kwargs))
-        return ConversionResult(content=react_content, format="react")
+        
+        # Generate filename from manifest metadata or use default
+        metadata = manifest.get('metadata', {})
+        title = metadata.get('title', 'untitled')
+        component_name = kwargs.get('component_name', self._sanitize_class_name(title))
+        
+        # Choose extension based on TypeScript usage
+        use_typescript = kwargs.get('typescript', False)
+        extension = '.tsx' if use_typescript else '.jsx'
+        filename = f"{component_name}{extension}"
+        
+        return ConversionResult(
+            content=react_content, 
+            format="react", 
+            filename=filename
+        )
     
     async def convert_manifest(self, 
                               manifest: Dict[str, Any],
