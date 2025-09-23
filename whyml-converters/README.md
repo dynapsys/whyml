@@ -1,6 +1,13 @@
 # WhyML Converters
 
-Advanced multi-format code generation from WhyML manifests. Convert your structured YAML manifests into production-ready HTML, React, Vue.js, and PHP applications with modern patterns and best practices.
+[![PyPI version](https://badge.fury.io/py/whyml-converters.svg)](https://badge.fury.io/py/whyml-converters)
+[![Python Support](https://img.shields.io/pypi/pyversions/whyml-converters.svg)](https://pypi.org/project/whyml-converters/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![WhyML Ecosystem](https://img.shields.io/badge/ecosystem-WhyML-blue.svg)](https://github.com/dynapsys/whyml)
+
+**🚀 Multi-format code generation from WhyML manifests - HTML, React, Vue.js, and PHP applications**
+
+Advanced code generation system that converts structured YAML manifests into production-ready applications across multiple technologies. Built with modern patterns, best practices, and comprehensive framework support.
 
 ## 🔧 Recent API Updates (2025)
 

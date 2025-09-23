@@ -4,18 +4,18 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "whyml-cli"
-version = "0.1.0"
+version = "0.1.28"
 description = "WhyML CLI - Unified command-line interface for WhyML ecosystem"
 readme = "README.md"
 license = {text = "Apache-2.0"}
 authors = [
-    {name = "Tom Sapletta", email = "info@softreck.dev"}
+    {name = "Dynapsys Team", email = "contact@dynapsys.ai"}
 ]
 maintainers = [
-    {name = "Tom Sapletta", email = "info@softreck.dev"}
+    {name = "Dynapsys Team", email = "contact@dynapsys.ai"}
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",

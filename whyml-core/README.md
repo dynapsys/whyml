@@ -3,8 +3,11 @@
 [![PyPI version](https://badge.fury.io/py/whyml-core.svg)](https://badge.fury.io/py/whyml-core)
 [![Python Support](https://img.shields.io/pypi/pyversions/whyml-core.svg)](https://pypi.org/project/whyml-core/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![WhyML Ecosystem](https://img.shields.io/badge/ecosystem-WhyML-blue.svg)](https://github.com/dynapsys/whyml)
 
-WhyML Core is the foundational package providing modular core functionality for WhyML manifest processing. It offers a comprehensive set of tools for validation, loading, processing, and manipulation of YAML-based manifests with advanced features like template inheritance, dependency resolution, and async operations.
+**🎯 Core functionality for the WhyML ecosystem - validation, loading, processing, and manifest manipulation**
+
+WhyML Core provides the foundational infrastructure for the WhyML ecosystem, offering robust tools for YAML manifest processing, template inheritance, dependency resolution, and async operations. Built with modern Python patterns and comprehensive error handling.
 
 ## 🔧 Recent Core Updates (2025)
 
@@ -22,12 +25,11 @@ WhyML Core is the foundational package providing modular core functionality for 
 ## 🚀 Key Features
 
 - **🔍 Advanced Validation**: JSON schema validation with custom field validators and comprehensive error reporting
-- **📂 Intelligent Loading**: Async manifest loading with dependency resolution, caching, and cycle detection
-- **🔄 Template Processing**: Jinja2-powered template engine with custom filters and multi-syntax support (`{{VAR}}` and `<?=VAR?>`)
+- **📂 Intelligent Loading**: Async manifest loading with dependency resolution, caching, and cycle detection  
+- **🔄 Template Processing**: Jinja2-powered template engine with multi-syntax support (`{{VAR}}` and `<?=VAR?>`)
 - **🧬 Inheritance Resolution**: Complex template inheritance with merge strategies and conflict resolution
 - **⚡ Async Operations**: Full async/await support for file I/O, HTTP requests, and concurrent processing
 - **🛠 Rich Utilities**: YAML processing, path manipulation, string utilities, and async file management
-- **🔒 Robust Error Handling**: Comprehensive exception hierarchy with detailed error context
 
 ## 📦 Installation
 

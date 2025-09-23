@@ -1,10 +1,13 @@
 # WhyML Scrapers
 
-**🕷️ Advanced web scraping and webpage analysis components for the WhyML ecosystem**
+[![PyPI version](https://badge.fury.io/py/whyml-scrapers.svg)](https://badge.fury.io/py/whyml-scrapers)
+[![Python Support](https://img.shields.io/pypi/pyversions/whyml-scrapers.svg)](https://pypi.org/project/whyml-scrapers/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![WhyML Ecosystem](https://img.shields.io/badge/ecosystem-WhyML-blue.svg)](https://github.com/dynapsys/whyml)
 
-[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org)
-[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
-[![WhyML](https://img.shields.io/badge/ecosystem-WhyML-blue.svg)](https://github.com/dynapsys/whyml)
+**🕷️ Advanced web scraping and webpage analysis for the WhyML ecosystem**
+
+Comprehensive web scraping and analysis toolkit that converts websites into structured WhyML manifests. Features intelligent content extraction, structure simplification, and advanced webpage analysis with SEO and accessibility auditing.
 
 ## 🔧 Recent Scraper Updates (2025)
 

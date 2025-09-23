@@ -1,6 +1,13 @@
 # WhyML CLI
 
-Unified command-line interface for the WhyML ecosystem. Scrape websites, convert manifests, validate configurations, and generate code - all from a single, powerful CLI tool.
+[![PyPI version](https://badge.fury.io/py/whyml-cli.svg)](https://badge.fury.io/py/whyml-cli)
+[![Python Support](https://img.shields.io/pypi/pyversions/whyml-cli.svg)](https://pypi.org/project/whyml-cli/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![WhyML Ecosystem](https://img.shields.io/badge/ecosystem-WhyML-blue.svg)](https://github.com/dynapsys/whyml)
+
+**🔧 Unified command-line interface for the WhyML ecosystem**
+
+Comprehensive CLI tool that provides unified access to web scraping, manifest conversion, validation, and code generation across the entire WhyML ecosystem. Built for developers, automation workflows, and production deployments.
 
 ## 🔧 Recent Updates (2025)
 
