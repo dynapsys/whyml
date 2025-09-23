@@ -47,15 +47,23 @@ class PHPConverter(BaseConverter):
         from .conversion_result import ConversionResult
         import asyncio
         
-        # Run async conversion
+        # Determine default class name from metadata title
+        metadata = manifest.get('metadata', {})
+        title = metadata.get('title', 'Component')
+        class_name_base = ''.join(ch for ch in title.title() if ch.isalnum()) or 'Component'
+        # Ensure suffix 'Component'
+        class_name = class_name_base if class_name_base.endswith('Component') else f"{class_name_base}Component"
+        
+        # Run async conversion with class_name passed through
         try:
             loop = asyncio.get_event_loop()
         except RuntimeError:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
         
-        php_content = loop.run_until_complete(self.convert_manifest(manifest, **kwargs))
-        return ConversionResult(content=php_content, format="php")
+        php_content = loop.run_until_complete(self.convert_manifest(manifest, class_name=class_name, **kwargs))
+        filename = f"{class_name}.php"
+        return ConversionResult(content=php_content, format="php", filename=filename)
     
     async def convert_manifest(self, 
                               manifest: Dict[str, Any],
@@ -571,6 +579,21 @@ class PHPConverter(BaseConverter):
         utility_methods.append(f'{self._indent()}}}')
         utility_methods.append(f'{self._indent()}return empty($formatted) ? "" : " " . implode(" ", $formatted);')
         
+        self._decrease_indent()
+        utility_methods.append(f'{self._indent()}}}')
+        
+        utility_methods.append("")
+        
+        # Data setter to demonstrate typed array parameter
+        utility_methods.append(f'{self._indent()}/**')
+        utility_methods.append(f'{self._indent()} * Set component data')
+        utility_methods.append(f'{self._indent()} * @param array $data Data array')
+        utility_methods.append(f'{self._indent()} * @return void')
+        utility_methods.append(f'{self._indent()} */')
+        utility_methods.append(f'{self._indent()}protected function setData(array $data): void')
+        utility_methods.append(f'{self._indent()}{{')
+        self._increase_indent()
+        utility_methods.append(f'{self._indent()}// In a full implementation, this would store $data for rendering')
         self._decrease_indent()
         utility_methods.append(f'{self._indent()}}}')
         

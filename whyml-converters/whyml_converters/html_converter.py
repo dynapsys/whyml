@@ -267,10 +267,30 @@ class HTMLConverter(BaseConverter):
                 if isinstance(value, dict):
                     css_rule = self._generate_css_rule(key, value)
                     css_parts.append(css_rule)
-                elif isinstance(value, str) and '{' in value and '}' in value:
-                    # Direct CSS string - substitute variables
-                    css_with_vars = self._substitute_css_variables(value, styles)
-                    css_parts.append(css_with_vars)
+                elif isinstance(value, str):
+                    css_text = value.strip()
+                    if '{' in css_text and '}' in css_text:
+                        # Full CSS block - substitute variables
+                        css_with_vars = self._substitute_css_variables(css_text, styles)
+                        css_parts.append(css_with_vars)
+                    elif ':' in css_text:
+                        # Treat as declaration list; build rule for selector
+                        # Prefix '.' for bare class-like selectors
+                        selector = key
+                        if not selector.startswith(('.', '#')):
+                            selector = f'.{selector}'
+                        # Parse declarations into dict
+                        properties = {}
+                        for decl in css_text.split(';'):
+                            decl = decl.strip()
+                            if not decl:
+                                continue
+                            if ':' in decl:
+                                prop, val = decl.split(':', 1)
+                                properties[prop.strip()] = val.strip()
+                        if properties:
+                            css_rule = self._generate_css_rule(selector, properties)
+                            css_parts.append(css_rule)
         
         if css_parts:
             css_content = '\n'.join(css_parts)
