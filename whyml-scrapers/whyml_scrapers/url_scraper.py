@@ -139,38 +139,48 @@ class URLScraper:
         # Generate manifest sections
         manifest = {}
         
-        # Determine sections to include
-        if sections is None:
-            sections = ['metadata', 'structure', 'styles', 'analysis']
+        # Determine sections to include, honoring instance defaults when not provided
+        effective_sections = sections if sections is not None else self.sections
+        if effective_sections is None:
+            effective_sections = ['metadata', 'structure', 'styles', 'analysis']
         
-        # Handle extract_styles flag - if False, remove styles from sections
-        if not scraping_options.get('extract_styles', True):
-            sections = [s for s in sections if s != 'styles']
+        # Resolve effective extraction flags (method options override instance defaults)
+        effective_extract_styles = scraping_options.get('extract_styles', self.extract_styles)
+        effective_extract_scripts = scraping_options.get('extract_scripts', self.extract_scripts)
         
-        # Handle extract_scripts flag - if True, add scripts to sections
-        if scraping_options.get('extract_scripts', False):
-            if 'scripts' not in sections:
-                sections.append('scripts')
+        # Apply styles/scripts flags to sections
+        if not effective_extract_styles:
+            effective_sections = [s for s in effective_sections if s != 'styles']
+        if effective_extract_scripts and 'scripts' not in effective_sections:
+            effective_sections.append('scripts')
         
         # Generate each requested section
-        if 'metadata' in sections:
+        if 'metadata' in effective_sections:
             manifest['metadata'] = await self._extract_metadata(url, soup)
         
-        if 'structure' in sections:
+        if 'structure' in effective_sections:
+            # Build structure extraction options from instance defaults when not provided
+            struct_options = {
+                'max_depth': scraping_options.get('max_depth', self.max_depth),
+                'flatten_containers': scraping_options.get('flatten_containers', self.flatten_containers),
+                'simplify_structure': scraping_options.get('simplify_structure', self.simplify_structure),
+                'preserve_semantic': scraping_options.get('preserve_semantic', self.preserve_semantic_tags),
+                'extract_styles': effective_extract_styles,
+            }
             manifest['structure'] = await self._extract_structure(
-                soup, **scraping_options
+                soup, **struct_options
             )
         
-        if 'styles' in sections:
+        if 'styles' in effective_sections and effective_extract_styles:
             manifest['styles'] = await self._extract_styles(soup)
         
-        if 'scripts' in sections:
+        if 'scripts' in effective_sections:
             manifest['scripts'] = await self._extract_scripts(soup)
         
-        if 'analysis' in sections:
+        if 'analysis' in effective_sections:
             manifest['analysis'] = await self._analyze_page(url, soup)
         
-        if 'imports' in sections:
+        if 'imports' in effective_sections:
             manifest['imports'] = await self._extract_imports(url, soup)
         
         return manifest

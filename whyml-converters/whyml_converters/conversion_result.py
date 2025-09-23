@@ -9,7 +9,7 @@ Licensed under the Apache License, Version 2.0
 """
 
 from typing import Dict, Any, List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field, InitVar
 from pathlib import Path
 
 
@@ -20,26 +20,26 @@ class ConversionResult:
     content: str
     """Generated content from the conversion"""
     
-    format: str = None
+    format: Optional[str] = None
     """Target format of the conversion (html, react, vue, php)"""
     
-    # Support legacy format_type parameter for backward compatibility
-    format_type: str = None
-    """Legacy alias for format parameter"""
+    # Accept legacy format_type in constructor without storing it directly
+    format_type: InitVar[Optional[str]] = None
+    """Legacy alias for format parameter (InitVar only)."""
     
     success: bool = True
     """Whether the conversion was successful"""
     
-    errors: List[str] = None
+    errors: List[str] = field(default_factory=list)
     """List of errors encountered during conversion"""
     
-    warnings: List[str] = None
+    warnings: List[str] = field(default_factory=list)
     """List of warnings generated during conversion"""
     
-    metadata: Optional[Dict[str, Any]] = None
+    metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
     """Additional metadata about the conversion"""
     
-    statistics: Optional[Dict[str, Any]] = None
+    statistics: Optional[Dict[str, Any]] = field(default_factory=dict)
     """Conversion statistics (processing time, content size, etc.)"""
     
     output_path: Optional[Path] = None
@@ -48,26 +48,14 @@ class ConversionResult:
     filename: Optional[str] = None
     """Filename for the converted content (for test compatibility)"""
     
-    def __post_init__(self):
-        """Initialize default values for mutable fields."""
-        if self.errors is None:
-            self.errors = []
-        if self.warnings is None:
-            self.warnings = []
-        if self.metadata is None:
-            self.metadata = {}
-        if self.statistics is None:
-            self.statistics = {}
-            
+    def __post_init__(self, format_type: Optional[str] = None):
+        """Initialize defaults and handle backward compatibility for format type."""
         # Handle format_type backward compatibility
-        if self.format_type and not self.format:
-            self.format = self.format_type
-        elif self.format and not self.format_type:
-            self.format_type = self.format
-        elif not self.format and not self.format_type:
+        if format_type and not self.format:
+            self.format = format_type
+        if not self.format:
             # Default to 'unknown' if neither is provided
             self.format = 'unknown'
-            self.format_type = 'unknown'
     
     @property
     def has_errors(self) -> bool:
@@ -81,8 +69,13 @@ class ConversionResult:
     
     @property
     def format_type(self) -> str:
-        """Get format type - alias for format property for test compatibility."""
+        """Alias for format property for test compatibility."""
         return self.format
+    
+    @format_type.setter
+    def format_type(self, value: Optional[str]):
+        """Setter to maintain compatibility when tests assign format_type directly."""
+        self.format = value or self.format
     
     def add_error(self, error: str):
         """Add an error to the result."""
@@ -124,6 +117,9 @@ class ConversionResult:
             True if saved successfully, False otherwise
         """
         try:
+            # Normalize input to Path to accept both str and Path
+            from pathlib import Path as _Path
+            file_path = _Path(file_path)
             file_path.parent.mkdir(parents=True, exist_ok=True)
             file_path.write_text(self.content, encoding='utf-8')
             self.output_path = file_path

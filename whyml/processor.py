@@ -119,12 +119,20 @@ class WhyMLProcessor:
         Returns:
             ConversionResult with HTML content
         """
+        
         if isinstance(source, dict):
             manifest = source
         else:
             manifest = await self.load_manifest(source)
         
-        return self.html_converter.convert(manifest, **kwargs)
+        # Use async conversion to avoid running a new loop inside an active loop
+        html_content = await self.html_converter.convert_manifest(manifest, **kwargs)
+        title = manifest.get('metadata', {}).get('title', 'app')
+        # Create a simple, safe filename without external utils to avoid new imports here
+        safe_title = ''.join(c if c.isalnum() or c in (' ', '-', '_') else '-' for c in title).strip().lower().replace(' ', '-')
+        filename = f"{safe_title or 'app'}.html"
+        
+        return ConversionResult(content=html_content, filename=filename, format='html')
     
     async def convert_to_react(self,
                               source: Union[str, Path, Dict[str, Any]],
@@ -144,7 +152,16 @@ class WhyMLProcessor:
         else:
             manifest = await self.load_manifest(source)
         
-        return self.react_converter.convert(manifest, **kwargs)
+        react_content = await self.react_converter.convert_manifest(manifest, **kwargs)
+        title = manifest.get('metadata', {}).get('title', 'component')
+        safe_title = ''.join(c if c.isalnum() or c in (' ', '-', '_') else '-' for c in title).strip()
+        component_name = kwargs.get('component_name', safe_title or 'WhyMLComponent')
+        component_name = ''.join(ch if ch.isalnum() else '_' for ch in component_name)
+        use_typescript = kwargs.get('typescript', False)
+        extension = 'tsx' if use_typescript else 'jsx'
+        filename = f"{component_name}.{extension}"
+        
+        return ConversionResult(content=react_content, filename=filename, format='react')
     
     async def convert_to_vue(self,
                             source: Union[str, Path, Dict[str, Any]],
@@ -164,7 +181,12 @@ class WhyMLProcessor:
         else:
             manifest = await self.load_manifest(source)
         
-        return self.vue_converter.convert(manifest, **kwargs)
+        vue_content = await self.vue_converter.convert_manifest(manifest, **kwargs)
+        title = manifest.get('metadata', {}).get('title', 'app')
+        safe_title = ''.join(c if c.isalnum() or c in (' ', '-', '_') else '-' for c in title).strip().lower().replace(' ', '-')
+        filename = f"{safe_title or 'app'}.vue"
+        
+        return ConversionResult(content=vue_content, filename=filename, format='vue')
     
     async def convert_to_php(self,
                             source: Union[str, Path, Dict[str, Any]],
@@ -184,7 +206,12 @@ class WhyMLProcessor:
         else:
             manifest = await self.load_manifest(source)
         
-        return self.php_converter.convert(manifest, **kwargs)
+        php_content = await self.php_converter.convert_manifest(manifest, **kwargs)
+        title = manifest.get('metadata', {}).get('title', 'Component')
+        class_name = ''.join(ch if ch.isalnum() else '' for ch in title.title()) or 'WhyMLComponent'
+        filename = f"{class_name}.php"
+        
+        return ConversionResult(content=php_content, filename=filename, format='php')
     
     async def convert_to_all_formats(self,
                                     source: Union[str, Path, Dict[str, Any]],
@@ -206,28 +233,37 @@ class WhyMLProcessor:
         else:
             manifest = await self.load_manifest(source)
         
-        # Convert to all formats
-        results = {}
-        
+        # Convert to all formats concurrently
+        results: Dict[str, ConversionResult] = {}
         try:
-            results['html'] = self.html_converter.convert(manifest, **kwargs)
+            html_res, react_res, vue_res, php_res = await asyncio.gather(
+                self.convert_to_html(manifest, **kwargs),
+                self.convert_to_react(manifest, **kwargs),
+                self.convert_to_vue(manifest, **kwargs),
+                self.convert_to_php(manifest, **kwargs),
+            )
+            results['html'] = html_res
+            results['react'] = react_res
+            results['vue'] = vue_res
+            results['php'] = php_res
         except Exception as e:
-            results['html'] = ConversionError(f"HTML conversion failed: {e}")
-        
-        try:
-            results['react'] = self.react_converter.convert(manifest, **kwargs)
-        except Exception as e:
-            results['react'] = ConversionError(f"React conversion failed: {e}")
-        
-        try:
-            results['vue'] = self.vue_converter.convert(manifest, **kwargs)
-        except Exception as e:
-            results['vue'] = ConversionError(f"Vue conversion failed: {e}")
-        
-        try:
-            results['php'] = self.php_converter.convert(manifest, **kwargs)
-        except Exception as e:
-            results['php'] = ConversionError(f"PHP conversion failed: {e}")
+            # If any conversion fails, try individually to collect partial results
+            try:
+                results['html'] = await self.convert_to_html(manifest, **kwargs)
+            except Exception as e_html:
+                results['html'] = ConversionError(f"HTML conversion failed: {e_html}")
+            try:
+                results['react'] = await self.convert_to_react(manifest, **kwargs)
+            except Exception as e_react:
+                results['react'] = ConversionError(f"React conversion failed: {e_react}")
+            try:
+                results['vue'] = await self.convert_to_vue(manifest, **kwargs)
+            except Exception as e_vue:
+                results['vue'] = ConversionError(f"Vue conversion failed: {e_vue}")
+            try:
+                results['php'] = await self.convert_to_php(manifest, **kwargs)
+            except Exception as e_php:
+                results['php'] = ConversionError(f"PHP conversion failed: {e_php}")
         
         # Save to output directory if specified
         if output_dir:
