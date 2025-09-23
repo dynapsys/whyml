@@ -290,7 +290,55 @@ class BaseConverter(ABC):
         Returns:
             Imports dictionary
         """
-        return manifest.get('imports', {})
+        raw_imports = manifest.get('imports', {})
+        # Normalize to a consistent dict structure used by converters
+        normalized = {
+            'stylesheets': [],
+            'scripts': [],
+            'fonts': [],
+            'images': []
+        }
+        
+        # If imports provided as a list, classify by extension
+        if isinstance(raw_imports, list):
+            for item in raw_imports:
+                if isinstance(item, str):
+                    url = item
+                    lower = url.lower()
+                    if lower.endswith(('.css')):
+                        normalized['stylesheets'].append({'href': url})
+                    elif lower.endswith(('.js')):
+                        normalized['scripts'].append({'src': url, 'type': 'text/javascript'})
+                    elif any(ext in lower for ext in ('.woff', '.woff2', '.ttf', '.otf', 'font')):
+                        normalized['fonts'].append({'url': url})
+                    elif lower.endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp')):
+                        normalized['images'].append({'url': url})
+                elif isinstance(item, dict):
+                    # Try to detect known keys
+                    if 'href' in item:
+                        normalized['stylesheets'].append(item)
+                    elif 'src' in item:
+                        normalized['scripts'].append(item)
+                    elif 'url' in item:
+                        # Heuristic: decide bucket by extension
+                        url = item['url']
+                        lower = url.lower()
+                        if lower.endswith(('.css')):
+                            normalized['stylesheets'].append({'href': url})
+                        elif lower.endswith(('.js')):
+                            normalized['scripts'].append({'src': url, 'type': 'text/javascript'})
+                        elif any(ext in lower for ext in ('.woff', '.woff2', '.ttf', '.otf', 'font')):
+                            normalized['fonts'].append({'url': url})
+                        else:
+                            normalized['images'].append({'url': url})
+        elif isinstance(raw_imports, dict):
+            # Ensure keys exist; shallow copy known lists
+            for key in normalized.keys():
+                items = raw_imports.get(key, [])
+                if isinstance(items, list):
+                    normalized[key] = items
+        
+        return normalized
     
     def _extract_config(self, manifest: Dict[str, Any]) -> Dict[str, Any]:
         """Extract configuration from manifest.

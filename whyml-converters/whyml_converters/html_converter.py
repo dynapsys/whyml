@@ -349,21 +349,40 @@ class HTMLConverter(BaseConverter):
                                element: Dict[str, Any], 
                                tag_override: Optional[str] = None) -> str:
         """Generate HTML element from structure definition."""
+        # Support short-form: {'tagname': {...}}
+        if tag_override is None and 'tag' not in element and len(element.keys()) == 1:
+            only_key = next(iter(element.keys()))
+            if only_key not in {'attributes', 'children', 'content', 'text', 'class', 'id', 'style'}:
+                tag_override = only_key
+                element = element[only_key] or {}
+        
         tag = tag_override or element.get('tag', 'div')
         
         # Handle self-closing tags
         self_closing_tags = {'img', 'br', 'hr', 'input', 'meta', 'link'}
         is_self_closing = tag in self_closing_tags
         
+        # Normalize attributes: merge direct keys like class/id/style into attributes
+        attrs = dict(element.get('attributes', {}))
+        for k in ['class', 'id', 'style', 'href', 'src', 'alt', 'title', 'name', 'type', 'value', 'placeholder', 'for', 'role']:
+            if k in element:
+                attrs[k] = element[k]
+        # Write back normalized attributes for opening tag builder
+        normalized_element = dict(element)
+        normalized_element['attributes'] = attrs
+        
         # Build opening tag
-        opening_tag = await self._build_opening_tag(tag, element)
+        opening_tag = await self._build_opening_tag(tag, normalized_element)
         
         if is_self_closing:
             return self._indent() + opening_tag
         
         # Handle content
-        content = element.get('content', '')
+        content = element.get('content', element.get('text', ''))
         children = element.get('children', [])
+        # Allow children as dict mapping tag -> def
+        if isinstance(children, dict):
+            children = [{k: v} for k, v in children.items()]
         
         if not content and not children:
             # Empty element
