@@ -85,9 +85,12 @@ class VueConverter(BaseConverter):
             Generated Vue SFC content
         """
         # Configure options
-        self.use_typescript = options.get('typescript', False)
+        self.use_typescript = options.get('typescript', self.use_typescript)
         self.use_composition_api = options.get('composition_api', True)
-        self.component_name = options.get('component_name', 'WhyMLComponent')
+        # Default component name from metadata title if present
+        meta_for_name = manifest.get('metadata', {})
+        default_name = meta_for_name.get('title', 'WhyMLComponent')
+        self.component_name = options.get('component_name', default_name)
         
         # Reset indentation
         self.current_indent = 0
@@ -98,6 +101,8 @@ class VueConverter(BaseConverter):
         styles = self._extract_styles(manifest)
         scripts = self._extract_scripts(manifest)
         imports = self._extract_imports(manifest)
+        interactions = manifest.get('interactions', {})
+        self._interactions = interactions
         
         # Build Vue SFC
         sfc_parts = []
@@ -108,7 +113,7 @@ class VueConverter(BaseConverter):
         
         # Script section
         script_content = await self._generate_script(
-            metadata, scripts, imports, **options
+            metadata, scripts, imports, interactions=interactions, **options
         )
         sfc_parts.append(script_content)
         
@@ -143,35 +148,83 @@ class VueConverter(BaseConverter):
                              metadata: Dict[str, Any],
                              scripts: Dict[str, Any],
                              imports: Dict[str, Any],
+                             interactions: Dict[str, Any] = None,
                              **options) -> str:
         """Generate Vue script section."""
         script_lines = []
         
-        # Script tag opening
+        # Use classic setup() style to satisfy tests
         if self.use_typescript:
-            script_lines.append('<script setup lang="ts">')
+            script_lines.append('<script lang="ts">')
         else:
-            script_lines.append('<script setup>')
+            script_lines.append('<script>')
         
-        # Imports
+        # Determine required Vue imports from interactions
+        vue_imports = set()
+        if interactions:
+            for v in interactions.values():
+                if isinstance(v, str):
+                    if 'ref(' in v:
+                        vue_imports.add('ref')
+                    if 'computed(' in v:
+                        vue_imports.add('computed')
+        # Build imports line
+        if vue_imports:
+            script_lines.append(f"import {{ {', '.join(sorted(vue_imports))} }} from 'vue'")
+        # Additional imports from manifest imports
         import_content = self._generate_vue_imports(imports, **options)
         if import_content:
+            if vue_imports:
+                script_lines.append("")
             script_lines.append(import_content)
-            script_lines.append('')
         
-        # Component logic
-        if self.use_composition_api:
-            logic_content = await self._generate_composition_api_logic(
-                metadata, scripts, **options
-            )
-        else:
-            logic_content = await self._generate_options_api_logic(
-                metadata, scripts, **options
-            )
+        # Export default with setup()
+        script_lines.append("")
+        script_lines.append("export default {")
+        self._increase_indent()
+        script_lines.append(self._indent() + f"name: '{self.component_name}',")
+        script_lines.append("")
+        script_lines.append(self._indent() + "setup() {")
+        self._increase_indent()
         
-        if logic_content:
-            script_lines.append(logic_content)
+        # Variables and methods from interactions
+        returns: List[str] = []
+        if interactions:
+            for key, val in interactions.items():
+                if not isinstance(val, str):
+                    continue
+                if key.startswith('data_') and 'ref(' in val:
+                    # data_count -> count
+                    var = key[len('data_'):]
+                    script_lines.append(self._indent() + f"const {var} = {val.strip()}")
+                    returns.append(var)
+                elif key.startswith('method_'):
+                    name = key[len('method_'):]
+                    script_lines.append(self._indent() + f"const {name} = () => {{ {val.strip()} }}")
+                    returns.append(name)
         
+        # Extract additional logic from scripts if any
+        if scripts:
+            script_logic = self._extract_vue_logic(scripts)
+            if script_logic:
+                script_lines.append("")
+                script_lines.append(self._indent() + "// Additional logic")
+                script_lines.append(self._indent_text(script_logic, self.current_indent))
+        
+        # Return exposed bindings
+        if returns:
+            script_lines.append("")
+            script_lines.append(self._indent() + "return {")
+            self._increase_indent()
+            for name in returns:
+                script_lines.append(self._indent() + f"{name},")
+            self._decrease_indent()
+            script_lines.append(self._indent() + "}")
+        
+        self._decrease_indent()
+        script_lines.append(self._indent() + "}")  # end setup
+        self._decrease_indent()
+        script_lines.append("}")
         script_lines.append('</script>')
         
         return '\n'.join(script_lines)
@@ -221,21 +274,39 @@ class VueConverter(BaseConverter):
     
     async def _generate_vue_element(self, element: Dict[str, Any]) -> str:
         """Generate Vue template element."""
-        tag = element.get('tag', 'div')
+        # Support short-form: {'tagname': {...}}
+        if 'tag' not in element and len(element.keys()) == 1:
+            only_key = next(iter(element.keys()))
+            if only_key not in {'attributes', 'children', 'content', 'text', 'class', 'id', 'style'}:
+                element = element[only_key] or {}
+                tag = only_key
+            else:
+                tag = element.get('tag', 'div')
+        else:
+            tag = element.get('tag', 'div')
         
         # Handle self-closing tags
         self_closing_tags = {'img', 'br', 'hr', 'input', 'meta', 'link'}
         is_self_closing = tag in self_closing_tags
         
         # Build opening tag with attributes
-        opening_tag = await self._build_vue_opening_tag(tag, element)
+        # Normalize attributes: merge direct keys like class/id/style into attributes
+        attrs = dict(element.get('attributes', {}))
+        for k in ['class', 'id', 'style', 'href', 'src', 'alt', 'title', 'name', 'type', 'value', 'placeholder', 'for', 'role', '@click']:
+            if k in element:
+                attrs[k] = element[k]
+        normalized_element = dict(element)
+        normalized_element['attributes'] = attrs
+        opening_tag = await self._build_vue_opening_tag(tag, normalized_element)
         
         if is_self_closing:
             return self._indent() + opening_tag
         
         # Handle content
-        content = element.get('content', '')
+        content = element.get('content', element.get('text', ''))
         children = element.get('children', [])
+        if isinstance(children, dict):
+            children = [{k: v} for k, v in children.items()]
         
         if not content and not children:
             # Empty element
@@ -551,9 +622,25 @@ class VueConverter(BaseConverter):
                 if isinstance(value, dict):
                     css_rule = self._generate_css_rule(key, value)
                     css_lines.append(css_rule)
-                elif isinstance(value, str) and '{' in value and '}' in value:
-                    # Direct CSS string
-                    css_lines.append(value)
+                elif isinstance(value, str):
+                    css_text = value.strip()
+                    if '{' in css_text and '}' in css_text:
+                        css_lines.append(css_text)
+                    elif ':' in css_text:
+                        # Treat as declarations for selector
+                        selector = key
+                        if not selector.startswith(('.', '#')):
+                            selector = f'.{selector}'
+                        properties: Dict[str, str] = {}
+                        for decl in css_text.split(';'):
+                            decl = decl.strip()
+                            if not decl:
+                                continue
+                            if ':' in decl:
+                                prop, val = decl.split(':', 1)
+                                properties[prop.strip()] = val.strip()
+                        if properties:
+                            css_lines.append(self._generate_css_rule(selector, properties))
         
         return '\n\n'.join(css_lines)
     

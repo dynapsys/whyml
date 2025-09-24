@@ -11,6 +11,7 @@ Licensed under the Apache License, Version 2.0
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Optional, Union
 from pathlib import Path
+import re
 
 from whyml_core.validation import ManifestValidator
 from whyml_core.processing import TemplateProcessor, VariableSubstitution
@@ -368,17 +369,24 @@ class BaseConverter(ABC):
         
         Args:
             name: Original name
-            
+        
         Returns:
             Sanitized class name
         """
-        # Remove special characters and convert to PascalCase
-        sanitized = ''.join(word.capitalize() for word in name.split() if word.isalnum())
-        
+        # Split name into alphanumeric tokens
+        tokens = re.findall(r"[A-Za-z0-9]+", name)
+        if not tokens:
+            return "Component"
+        # Preserve existing camel/pascal case in tokens; capitalize first letter only
+        parts = []
+        for tok in tokens:
+            if not tok:
+                continue
+            parts.append(tok[0].upper() + tok[1:])
+        sanitized = ''.join(parts)
         # Ensure it starts with a letter
         if sanitized and not sanitized[0].isalpha():
             sanitized = f"Component{sanitized}"
-        
         return sanitized or "Component"
     
     def _sanitize_attribute_name(self, name: str) -> str:

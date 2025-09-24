@@ -480,7 +480,10 @@ class PHPConverter(BaseConverter):
             # Process as container
             for key, value in structure.items():
                 if isinstance(value, dict):
-                    element_content = await self._generate_php_element_render(value)
+                    # Preserve tag name from key by injecting into element
+                    element_dict = dict(value)
+                    element_dict.setdefault('tag', key)
+                    element_content = await self._generate_php_element_render(element_dict)
                     structure_lines.append(element_content)
         
         structure_lines.append(f'{self._indent()}return $body;')
@@ -489,10 +492,26 @@ class PHPConverter(BaseConverter):
     
     async def _generate_php_element_render(self, element: Dict[str, Any]) -> str:
         """Generate PHP element rendering code."""
+        # Support short-form: {'tagname': {...}}
+        if 'tag' not in element and len(element.keys()) == 1:
+            only_key = next(iter(element.keys()))
+            if only_key not in {'attributes', 'children', 'content', 'text', 'class', 'id', 'style'}:
+                spec = element[only_key] or {}
+                element = dict(spec)
+                element['tag'] = only_key
         tag = element.get('tag', 'div')
-        attributes = element.get('attributes', {})
-        content = element.get('content', '')
+        
+        # Normalize attributes: merge direct keys into attributes
+        attributes = dict(element.get('attributes', {}))
+        for k in ['class', 'id', 'style', 'href', 'src', 'alt', 'title', 'name', 'type', 'value', 'placeholder', 'for', 'role']:
+            if k in element and element[k] is not None:
+                attributes[k] = element[k]
+        
+        # Normalize content and children
+        content = element.get('content', element.get('text', ''))
         children = element.get('children', [])
+        if isinstance(children, dict):
+            children = [{k: v} for k, v in children.items()]
         
         # Build attributes string
         attr_parts = []
@@ -501,7 +520,14 @@ class PHPConverter(BaseConverter):
                 if value is True:
                     attr_parts.append(name)
                 else:
+                    # Special handling for class and style values
+                    if name == 'class' and isinstance(value, list):
+                        value = ' '.join(value)
+                    elif name == 'style' and isinstance(value, dict):
+                        # Convert style dict to CSS string
+                        value = '; '.join(f"{prop}: {val}" for prop, val in value.items())
                     escaped_value = self._escape_php_string(str(value))
+                    # Inside PHP double-quoted string, HTML attribute quotes must be escaped
                     attr_parts.append(f'{name}=\\"{escaped_value}\\"')
         
         attrs_str = ' ' + ' '.join(attr_parts) if attr_parts else ''
