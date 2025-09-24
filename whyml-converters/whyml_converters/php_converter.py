@@ -52,8 +52,8 @@ class PHPConverter(BaseConverter):
         class_name_base = ''.join(ch for ch in title if ch.isalnum()) or 'Component'
         if class_name_base:
             class_name_base = class_name_base[0].upper() + class_name_base[1:]
-        # Ensure suffix 'Component'
-        class_name = class_name_base if class_name_base.endswith('Component') else f"{class_name_base}Component"
+        # Always append suffix 'Component' (tests expect duplicated suffix if present in title)
+        class_name = f"{class_name_base}Component"
         
         # Run async conversion with class_name passed through
         try:
